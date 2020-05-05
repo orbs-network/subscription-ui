@@ -7,7 +7,6 @@ interface ConnectProps {
 
 interface ConnectState extends ConnectProps {
     ethereumAvailable: boolean;
-    ethereumEnabled: boolean;
     ethereum: any;
 }
 
@@ -19,7 +18,6 @@ class Connect extends React.Component<ConnectProps, ConnectState> {
         this.state = {
             ethereum: ethereum,
             ethereumAvailable: ethereum !== undefined,
-            ethereumEnabled: false,
             onEthereumEnabled: props.onEthereumEnabled,
         }
     }
