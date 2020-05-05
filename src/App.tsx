@@ -2,9 +2,12 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import Connect from "./Connect";
+import Web3 from "web3";
 
 interface AppState {
   connected: boolean;
+  web3?: Web3;
+  account?: string;
 }
 
 class App extends React.Component<{}, AppState> {
@@ -17,9 +20,14 @@ class App extends React.Component<{}, AppState> {
     
   }
   
-  async onEthereumEnabled(enabled: boolean) {
+  async onEthereumEnabled(connected: boolean) {
+    const web3 = new Web3((window as any).ethereum);
+    const account = (await web3.eth.getAccounts())[0];
+
     this.setState({
-      connected: enabled,
+      connected,
+      web3,
+      account,
     });
   }
 
@@ -33,8 +41,8 @@ class App extends React.Component<{}, AppState> {
           <Connect onEthereumEnabled={(value: boolean) => this.onEthereumEnabled(value)}/>
         }
         {
-          this.state.connected &&
-          <p>Connected!</p>
+          this.state.connected && this.state.account &&
+          <p>Connected as {this.state.account}</p>
         }
       </div>
     );
