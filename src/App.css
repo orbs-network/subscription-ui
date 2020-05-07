@@ -28,6 +28,10 @@
   color: #61dafb;
 }
 
+.App-monospace {
+  font-family: "Lucida Console", Monaco, monospace;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
