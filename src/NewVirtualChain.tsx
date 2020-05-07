@@ -72,10 +72,7 @@ class NewVirtualChain extends React.Component<NewVirtualChainProps, NewVirtualCh
         const approveTx = await erc20.methods.approve(config.subscriptionAddress, this.state.subscriptionAmount).send({ from });
         console.log(approveTx);
 
-        const subscribeTx = await subscription.methods.subscribeForCurrentMonth(
-            web3.utils.hexToBytes("0x1"), this.state.description, this.state.subscriptionAmount,
-        ).send({ from });
-
+        const subscribeTx = await subscription.methods.subscribeForCurrentMonth("0x0000000000000000000000000000000000000000000000000000000000000001", this.state.description, 100).send({ from });
         console.log(subscribeTx);
     }
 }
