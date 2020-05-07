@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Connect from "./Connect";
 import Web3 from "web3";
@@ -11,16 +10,15 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import { Styles } from '@material-ui/core/styles/withStyles';
+import NewVirtualChain from './NewVirtualChain';
 
 interface AppState {
   connected: boolean;
   web3?: Web3;
-  account?: string;
+
+  newVirtualChain: boolean;
 }
 
 const drawerWidth = 240;
@@ -54,18 +52,17 @@ class App extends React.Component<{}, AppState> {
 
     this.state = {
       connected: false,
+      newVirtualChain: false,
     };
     
   }
   
   async onEthereumEnabled(connected: boolean) {
     const web3 = new Web3((window as any).ethereum);
-    const account = (await web3.eth.getAccounts())[0];
 
     this.setState({
       connected,
       web3,
-      account,
     });
   }
 
@@ -92,24 +89,27 @@ class App extends React.Component<{}, AppState> {
           <Toolbar />
           <div className={classes.drawerContainer}>
             <List>
-              {['New Virtual Chain', 'Existing Virtual Chain', 'Recover Virtual CHain'].map((text, index) => (
-                <ListItem button key={text}>
-                  <ListItemText primary={text} />
-                </ListItem>
-              ))}
+              <ListItem button>
+                <ListItemText primary="New Virtual Chain" onClick={() => this.setState({
+                  newVirtualChain: true,
+                })} />
+              </ListItem>
+              <ListItem button>
+                <ListItemText primary="Existing Virtual Chain" />
+              </ListItem>
+              <ListItem button>
+                <ListItemText primary="Recover Virtual CHain" />
+              </ListItem>
             </List>
           </div>
         </Drawer>
         <main className={classes.content}>
           < Toolbar />
-          {
-            this.state.connected && this.state.account &&
-            <Typography paragraph>Connected as {this.state.account}</Typography>
-          }
           { !this.state.connected &&
-            <Typography paragraph>
-              <Connect onEthereumEnabled={(value: boolean) => this.onEthereumEnabled(value)}/>
-            </Typography>
+            <Connect onEthereumEnabled={(value: boolean) => this.onEthereumEnabled(value)}/>
+          }
+          { this.state.connected && this.state.newVirtualChain &&
+            <NewVirtualChain web3={this.state.web3!} />
           }
         </main>
       </div>
