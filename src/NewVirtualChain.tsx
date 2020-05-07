@@ -2,6 +2,9 @@ import React from 'react';
 import Button from "@material-ui/core/Button"
 import Web3 from 'web3';
 import { Typography, InputLabel, TextField, Select } from '@material-ui/core';
+import ERC20ABI from "./abi/ERC20.abi.json";
+import SubscriptionABI from "./abi/Subscription.abi.json";
+import { RopstenConfig } from "./Config";
 
 interface NewVirtualChainProps {
     web3: Web3;
@@ -56,8 +59,24 @@ class NewVirtualChain extends React.Component<NewVirtualChainProps, NewVirtualCh
         )
     }
 
-    create() {
+    async create() {
         console.log(this.state)
+
+        const { web3 } = this.state;
+        const from = (await web3.eth.getAccounts())[0];
+
+        const config = RopstenConfig;
+        const erc20 = new web3.eth.Contract(ERC20ABI as any, config.erc20Address);
+        const subscription = new web3.eth.Contract(SubscriptionABI as any, config.subscriptionAddress);
+
+        const approveTx = await erc20.methods.approve(config.subscriptionAddress, this.state.subscriptionAmount).send({ from });
+        console.log(approveTx);
+
+        const subscribeTx = await subscription.methods.subscribeForCurrentMonth(
+            web3.utils.hexToBytes("0x1"), this.state.description, this.state.subscriptionAmount,
+        ).send({ from });
+
+        console.log(subscribeTx);
     }
 }
 
