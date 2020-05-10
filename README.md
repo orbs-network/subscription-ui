@@ -1,3 +1,11 @@
+# Subscription UI
+
+## Testing
+
+Go to [Orbs ERC20 on Ropsten](https://ropsten.etherscan.io/address/0xeD0Aa9A4F9e5ae9092994f4B86F6AAa89944939b) and mint yourself some tokens via `assign` method.
+
+# Create React App default README
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
