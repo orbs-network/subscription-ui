@@ -16,6 +16,8 @@ interface ConfirmationProps {
     subscribeTxHash: string;
 
     virtualChainId: string;
+
+    onSuccess: (ok: boolean) => void;
 }
 
 interface ConfirmationState {
@@ -76,6 +78,8 @@ class Confirmation extends React.Component<ConfirmationProps, ConfirmationState>
                     confirmationInterval: undefined,
                     countdownInterval: undefined,
                 })
+
+                this.props.onSuccess(this.verifySuccess());
             }
         }, 3000);
 
@@ -102,7 +106,7 @@ class Confirmation extends React.Component<ConfirmationProps, ConfirmationState>
 
     render() {
         const { countdown, approveTxStatus, subscribeTxStatus } = this.state;
-        const { approveTxHash, subscribeTxHash, virtualChainId, config, web3 } = this.props;
+        const { approveTxHash, subscribeTxHash } = this.props;
 
         return (
             <div>
@@ -114,10 +118,6 @@ class Confirmation extends React.Component<ConfirmationProps, ConfirmationState>
                 </Typography>
                 <Typography paragraph>Subscription <a href={this.getEtherscanURL(subscribeTxHash!)} target="_blank" className="App-monospace">{subscribeTxHash}</a> {subscribeTxStatus}
                 </Typography>
-                {
-                    this.verifySuccess() &&
-                    <VirtualChainMetadata virtualChainId={virtualChainId} config={config} web3={web3} />
-                }
             </div>
         );
     }

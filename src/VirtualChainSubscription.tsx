@@ -6,6 +6,7 @@ import ERC20ABI from "./abi/ERC20.abi.json";
 import SubscriptionABI from "./abi/Subscription.abi.json";
 import { Config } from "./Config";
 import Confirmation from "./Confirmation";
+import VirtualChainMetadata from "./VirtualChainMetadata";
 
 interface VirtualChainSubscriptionProps {
     web3: Web3;
@@ -16,6 +17,8 @@ interface VirtualChainSubscriptionProps {
 
     buttonLabel: string;
     subscriptionLabel: string;
+
+    onPaymentStarted?: () => void;
 }
 
 interface VirtualChainSubscriptionState {
@@ -26,6 +29,7 @@ interface VirtualChainSubscriptionState {
     subscribeTxHash?: string;
 
     validationError?: string;
+    success: boolean;
 }
 
 class VirtualChainSubscription extends React.Component<VirtualChainSubscriptionProps, VirtualChainSubscriptionState> {
@@ -35,6 +39,7 @@ class VirtualChainSubscription extends React.Component<VirtualChainSubscriptionP
         this.state = {
             description: "",
             subscriptionAmount: props.config.minimalSubscriptionAmount,
+            success: false,
         }
     }
 
@@ -86,14 +91,21 @@ class VirtualChainSubscription extends React.Component<VirtualChainSubscriptionP
                 </form>
             )
         } else {
+            const { web3, virtualChainId } = this.props;
             return (
-                <Confirmation 
-                    web3={this.props.web3} 
-                    config={config}
-                    approveTxHash={this.state.approveTxHash!}
-                    subscribeTxHash={this.state.subscribeTxHash!}
-                    virtualChainId={this.props.virtualChainId}
-                />
+                <div>
+                    <Confirmation 
+                        web3={web3} 
+                        config={config}
+                        approveTxHash={this.state.approveTxHash!}
+                        subscribeTxHash={this.state.subscribeTxHash!}
+                        virtualChainId={virtualChainId}
+                        onSuccess={(success) => this.setState({ success })}
+                    />
+                    { this.state.success &&
+                        <VirtualChainMetadata virtualChainId={virtualChainId} config={config} web3={web3} />
+                    }
+                </div>
             )
         }
     }
@@ -132,6 +144,10 @@ class VirtualChainSubscription extends React.Component<VirtualChainSubscriptionP
         batch.add(approveTx);
         batch.add(subscribeTx);
         batch.execute();
+
+        if (this.props.onPaymentStarted) {
+            this.props.onPaymentStarted();
+        }
     }
 }
 
