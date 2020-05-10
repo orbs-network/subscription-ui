@@ -96,17 +96,17 @@ class App extends React.Component<{}, AppState> {
           <Toolbar />
           <div className={classes.drawerContainer}>
             <List>
-              <ListItem button>
-                <ListItemText primary="New Virtual Chain" onClick={() => this.setState({
+              <ListItem button selected={this.state.newVirtualChain} onClick={() => this.setState({
                   newVirtualChain: true,
                   existingVirtualChain: false,
-                })} />
+                })} >
+                <ListItemText primary="New Virtual Chain"/>
               </ListItem>
-              <ListItem button>
-                <ListItemText primary="Existing Virtual Chain" onClick={() => this.setState({
+              <ListItem button selected={this.state.existingVirtualChain} onClick={() => this.setState({
                   newVirtualChain: false,
                   existingVirtualChain: true,
-                })}/>
+                })}>
+                <ListItemText primary="Existing Virtual Chain"/>
               </ListItem>
               <ListItem button>
                 <ListItemText primary="Recover Virtual Chain" />

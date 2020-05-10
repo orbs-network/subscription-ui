@@ -50,7 +50,6 @@ class NewVirtualChain extends React.Component<NewVirtualChainProps, NewVirtualCh
         if (!this.hasPendingTransactions()) {
             return (
                 <form noValidate autoComplete="off">
-                    <Typography variant="h4">New Virtual Chain</Typography>
                     <InputLabel htmlFor="description">Description</InputLabel>
                     <TextField name="description" onChange={(event) => this.setState({
                         description: event.target.value,
