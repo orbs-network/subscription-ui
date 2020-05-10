@@ -3,6 +3,10 @@ import Web3 from "web3";
 import Typography from "@material-ui/core/Typography";
 import { Config } from "./Config";
 
+const TX_CONFIRMED = "confirmed";
+const TX_PENDING = "pending";
+const TX_FAILED = "failed";
+
 interface ConfirmationProps {
     web3: Web3;
     config: Config;
@@ -26,12 +30,22 @@ class Confirmation extends React.Component<ConfirmationProps, ConfirmationState>
 
         this.state = {
             countdown: 0,
-            approveTxStatus: "pending",
-            subscribeTxStatus: "pending",
+            approveTxStatus: TX_PENDING,
+            subscribeTxStatus: TX_PENDING,
         }
     }
 
+    getTxStatus(txReceipt: {status: boolean}): string {
+        if (txReceipt) {
+            return txReceipt.status ? TX_CONFIRMED: TX_FAILED;
+        }
+
+        return TX_PENDING;
+    }
+
     componentDidMount() {
+        const { web3 } = this.props;
+
         this.setState({
             countdown: 0,
         });
@@ -43,20 +57,29 @@ class Confirmation extends React.Component<ConfirmationProps, ConfirmationState>
         }, 1000);
 
         const confirmationInterval = setInterval(async () => {
-            const approveTxReceipt = await this.props.web3.eth.getTransactionReceipt(this.props.approveTxHash);
-            const subscribeTxReceipt = await this.props.web3.eth.getTransactionReceipt(this.props.subscribeTxHash);
+            const approveTxReceipt = await web3.eth.getTransactionReceipt(this.props.approveTxHash);
+            const subscribeTxReceipt = await web3.eth.getTransactionReceipt(this.props.subscribeTxHash);
 
-            console.log("approveTxReceipt", approveTxReceipt);
-            console.log("subscribeTxReceipt", subscribeTxReceipt);
-
-            // FIXME stop polling when one of the receipts is not empty
             this.setState({
-                approveTxStatus: (approveTxReceipt && approveTxReceipt.status) ? "confirmed" : "pending",
-                subscribeTxStatus: (subscribeTxReceipt && subscribeTxReceipt.status) ? "confirmed" : "pending",
+                approveTxStatus: this.getTxStatus(approveTxReceipt),
+                subscribeTxStatus: this.getTxStatus(subscribeTxReceipt),
             });
+
+            if (approveTxReceipt && subscribeTxReceipt) {
+                clearInterval(confirmationInterval);
+                clearInterval(countdownInterval);
+
+                this.setState({
+                    confirmationInterval: undefined,
+                    countdownInterval: undefined,
+                })
+            }
         }, 3000);
 
-        this.setState({ countdownInterval, confirmationInterval });
+        this.setState({ 
+            countdownInterval,
+            confirmationInterval,
+        });
     }
 
     componentWillUnmount() {
@@ -69,18 +92,29 @@ class Confirmation extends React.Component<ConfirmationProps, ConfirmationState>
         return `https://${config.network === "mainnet" ? "" : config.network + "."}etherscan.io/tx/${txHash}`;
     }
 
+    verifySuccess() {
+        const { approveTxStatus, subscribeTxStatus } = this.state;
+        return approveTxStatus === TX_CONFIRMED && subscribeTxStatus === TX_CONFIRMED;
+    }
+
     render() {
         const { countdown, approveTxStatus, subscribeTxStatus } = this.state;
         const { approveTxHash, subscribeTxHash } = this.props;
 
         return (
             <div>
-                <Typography paragraph>Waiting for transaction confirmation for {countdown} seconds...</Typography>
+                { this.state.countdownInterval &&
+                    <Typography paragraph>Waiting for transaction confirmation for {countdown} seconds...</Typography>
+                }
 
-                <Typography paragraph>ERC20 approval <a href={this.getEtherscanURL(approveTxHash!)} target="_blank" className="App-monospace">{approveTxHash}</a> is {approveTxStatus}
+                <Typography paragraph>ERC20 approval <a href={this.getEtherscanURL(approveTxHash!)} target="_blank" className="App-monospace">{approveTxHash}</a> {approveTxStatus}
                 </Typography>
-                <Typography paragraph>Subscription <a href={this.getEtherscanURL(subscribeTxHash!)} target="_blank" className="App-monospace">{subscribeTxHash}</a> is {subscribeTxStatus}
+                <Typography paragraph>Subscription <a href={this.getEtherscanURL(subscribeTxHash!)} target="_blank" className="App-monospace">{subscribeTxHash}</a> {subscribeTxStatus}
                 </Typography>
+                {
+                    this.verifySuccess() &&
+                    <Typography paragraph>Success!</Typography>
+                }
             </div>
         );
     }

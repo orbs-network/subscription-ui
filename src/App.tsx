@@ -13,10 +13,12 @@ import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import NewVirtualChain from './NewVirtualChain';
+import { Config, RopstenConfig } from './Config';
 
 interface AppState {
   connected: boolean;
   web3?: Web3;
+  config: Config;
 
   newVirtualChain: boolean;
 }
@@ -53,6 +55,8 @@ class App extends React.Component<{}, AppState> {
     this.state = {
       connected: false,
       newVirtualChain: false,
+
+      config: RopstenConfig
     };
     
   }
@@ -109,7 +113,7 @@ class App extends React.Component<{}, AppState> {
             <Connect onEthereumEnabled={(value: boolean) => this.onEthereumEnabled(value)}/>
           }
           { this.state.connected && this.state.newVirtualChain &&
-            <NewVirtualChain web3={this.state.web3!} />
+            <NewVirtualChain web3={this.state.web3!} config={this.state.config} />
           }
         </main>
       </div>

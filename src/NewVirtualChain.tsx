@@ -4,11 +4,12 @@ import Web3 from "web3";
 import { Typography, InputLabel, TextField, Select } from '@material-ui/core';
 import ERC20ABI from "./abi/ERC20.abi.json";
 import SubscriptionABI from "./abi/Subscription.abi.json";
-import { RopstenConfig } from "./Config";
+import { Config } from "./Config";
 import Confirmation from "./Confirmation";
 
 interface NewVirtualChainProps {
     web3: Web3;
+    config: Config;
 }
 
 interface NewVirtualChainState {
@@ -17,10 +18,9 @@ interface NewVirtualChainState {
 
     approveTxHash?: string;
     subscribeTxHash?: string;
-}
 
-const DEFAULT_SUBSCRIPTION_PRICE = 6200; // fixme move to config
-const config = RopstenConfig; // lift up
+    validationError?: string;
+}
 
 class NewVirtualChain extends React.Component<NewVirtualChainProps, NewVirtualChainState> {
     constructor(props: any) {
@@ -28,7 +28,7 @@ class NewVirtualChain extends React.Component<NewVirtualChainProps, NewVirtualCh
 
         this.state = {
             description: "",
-            subscriptionAmount: DEFAULT_SUBSCRIPTION_PRICE,
+            subscriptionAmount: props.config.minimalSubscriptionAmount,
         }
     }
 
@@ -37,6 +37,16 @@ class NewVirtualChain extends React.Component<NewVirtualChainProps, NewVirtualCh
     }
 
     render() {
+        const { config } = this.props;
+
+        if (this.state.validationError) {
+            return (
+                <div>
+                    Error: {this.state.validationError}
+                </div>
+            )
+        }
+
         if (!this.hasPendingTransactions()) {
             return (
                 <form noValidate autoComplete="off">
@@ -57,9 +67,9 @@ class NewVirtualChain extends React.Component<NewVirtualChainProps, NewVirtualCh
                         })}
                         name="subscription"
                         >
-                        <option value={DEFAULT_SUBSCRIPTION_PRICE}>One month - {DEFAULT_SUBSCRIPTION_PRICE} ORBS</option>
-                        <option value={DEFAULT_SUBSCRIPTION_PRICE*2}>Two months - {DEFAULT_SUBSCRIPTION_PRICE*2} ORBS</option>
-                        <option value={DEFAULT_SUBSCRIPTION_PRICE*3}>Three months - {DEFAULT_SUBSCRIPTION_PRICE*3} ORBS</option>
+                        <option value={config.minimalSubscriptionAmount}>One month - {config.minimalSubscriptionAmount} ORBS</option>
+                        <option value={config.minimalSubscriptionAmount*2}>Two months - {config.minimalSubscriptionAmount*2} ORBS</option>
+                        <option value={config.minimalSubscriptionAmount*3}>Three months - {config.minimalSubscriptionAmount*3} ORBS</option>
                     </Select>
 
                     <br/><br/>
@@ -81,11 +91,19 @@ class NewVirtualChain extends React.Component<NewVirtualChainProps, NewVirtualCh
     async create() {
         console.log(this.state)
 
-        const { web3 } = this.props;
+        const { web3, config } = this.props;
         const from = (await web3.eth.getAccounts())[0];
 
         const erc20 = new web3.eth.Contract(ERC20ABI as any, config.erc20Address);
         const subscription = new web3.eth.Contract(SubscriptionABI as any, config.subscriptionAddress);
+
+        const orbsBalance = await erc20.methods.balanceOf(from).call();
+        if (orbsBalance < this.state.subscriptionAmount) {
+            this.setState({
+                validationError: "insufficient funds",
+            })
+            return;
+        }
 
         const approveTx = erc20.methods.approve(
             config.subscriptionAddress, 
