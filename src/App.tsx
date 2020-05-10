@@ -13,6 +13,7 @@ import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import NewVirtualChain from './NewVirtualChain';
+import ExistingVirtualChain from "./ExistingVirtualChain";
 import { Config, RopstenConfig } from './Config';
 
 interface AppState {
@@ -21,6 +22,7 @@ interface AppState {
   config: Config;
 
   newVirtualChain: boolean;
+  existingVirtualChain: boolean;
 }
 
 const drawerWidth = 240;
@@ -55,6 +57,7 @@ class App extends React.Component<{}, AppState> {
     this.state = {
       connected: false,
       newVirtualChain: false,
+      existingVirtualChain: false,
 
       config: RopstenConfig
     };
@@ -96,10 +99,14 @@ class App extends React.Component<{}, AppState> {
               <ListItem button>
                 <ListItemText primary="New Virtual Chain" onClick={() => this.setState({
                   newVirtualChain: true,
+                  existingVirtualChain: false,
                 })} />
               </ListItem>
               <ListItem button>
-                <ListItemText primary="Existing Virtual Chain" />
+                <ListItemText primary="Existing Virtual Chain" onClick={() => this.setState({
+                  newVirtualChain: false,
+                  existingVirtualChain: true,
+                })}/>
               </ListItem>
               <ListItem button>
                 <ListItemText primary="Recover Virtual Chain" />
@@ -114,6 +121,9 @@ class App extends React.Component<{}, AppState> {
           }
           { this.state.connected && this.state.newVirtualChain &&
             <NewVirtualChain web3={this.state.web3!} config={this.state.config} />
+          }
+          { this.state.connected && this.state.existingVirtualChain &&
+            <ExistingVirtualChain web3={this.state.web3!} config={this.state.config} />
           }
         </main>
       </div>

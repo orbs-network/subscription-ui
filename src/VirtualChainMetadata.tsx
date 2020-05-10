@@ -17,7 +17,7 @@ interface VirtualChainMetadataState {
 
 const SECONDS_IN_MONTH = 2592000;
 
-class VirtualChainForm extends React.Component<VirtualChainMetadataProps, VirtualChainMetadataState> {
+class VirtualChainMetadata extends React.Component<VirtualChainMetadataProps, VirtualChainMetadataState> {
     constructor(props: any) {
         super(props);
 
@@ -35,7 +35,6 @@ class VirtualChainForm extends React.Component<VirtualChainMetadataProps, Virtua
         const profile = data[1];
         const startTime = (Number(data[2]) + SECONDS_IN_MONTH) * 1000;
 
-        console.log(startTime)
         this.setState({
             description: profile,
             paidTill: startTime,
@@ -46,8 +45,8 @@ class VirtualChainForm extends React.Component<VirtualChainMetadataProps, Virtua
         const { virtualChainId } = this.props;
         const { description, paidTill } = this.state;
 
-        if (!description && !paidTill) {
-            return (<div></div>);
+        if (!description || !paidTill) {
+            return (<div>Virtual Chain ID not found</div>);
         }
 
         return (
@@ -68,4 +67,4 @@ class VirtualChainForm extends React.Component<VirtualChainMetadataProps, Virtua
 
 }
 
-export default VirtualChainForm;
+export default VirtualChainMetadata;
