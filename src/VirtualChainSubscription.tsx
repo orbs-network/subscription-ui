@@ -1,18 +1,24 @@
 import React from "react";
 import Button from "@material-ui/core/Button"
 import Web3 from "web3";
-import { Typography, InputLabel, TextField, Select } from '@material-ui/core';
+import { InputLabel, TextField, Select } from '@material-ui/core';
 import ERC20ABI from "./abi/ERC20.abi.json";
 import SubscriptionABI from "./abi/Subscription.abi.json";
 import { Config } from "./Config";
 import Confirmation from "./Confirmation";
 
-interface NewVirtualChainProps {
+interface VirtualChainSubscriptionProps {
     web3: Web3;
     config: Config;
+
+    virtualChainId: string;
+    description?: string;
+
+    buttonLabel: string;
+    subscriptionLabel: string;
 }
 
-interface NewVirtualChainState {
+interface VirtualChainSubscriptionState {
     description: string;
     subscriptionAmount: number;
 
@@ -22,7 +28,7 @@ interface NewVirtualChainState {
     validationError?: string;
 }
 
-class NewVirtualChain extends React.Component<NewVirtualChainProps, NewVirtualChainState> {
+class VirtualChainSubscription extends React.Component<VirtualChainSubscriptionProps, VirtualChainSubscriptionState> {
     constructor(props: any) {
         super(props);
 
@@ -50,14 +56,18 @@ class NewVirtualChain extends React.Component<NewVirtualChainProps, NewVirtualCh
         if (!this.hasPendingTransactions()) {
             return (
                 <form noValidate autoComplete="off">
-                    <InputLabel htmlFor="description">Description</InputLabel>
-                    <TextField name="description" onChange={(event) => this.setState({
-                        description: event.target.value,
-                    })}/>
-                    <br/>
-                    <br/>
+                    { !this.props.description &&
+                        <div>
+                            <InputLabel htmlFor="description">Description</InputLabel>
+                            <TextField name="description" onChange={(event) => this.setState({
+                                description: event.target.value,
+                            })}/>
+                            <br/>
+                            <br/>
+                        </div>
+                    }
 
-                    <InputLabel htmlFor="subscription">Initial Subscription</InputLabel>
+                <InputLabel htmlFor="subscription">{this.props.subscriptionLabel}</InputLabel>
                     <Select
                         native
                         value={this.state.subscriptionAmount}
@@ -72,7 +82,7 @@ class NewVirtualChain extends React.Component<NewVirtualChainProps, NewVirtualCh
                     </Select>
 
                     <br/><br/>
-                    <Button variant="contained" color="primary" onClick={() => this.create()}>Create</Button>
+                    <Button variant="contained" color="primary" onClick={() => this.subscribe()}>{this.props.buttonLabel}</Button>
                 </form>
             )
         } else {
@@ -82,15 +92,13 @@ class NewVirtualChain extends React.Component<NewVirtualChainProps, NewVirtualCh
                     config={config}
                     approveTxHash={this.state.approveTxHash!}
                     subscribeTxHash={this.state.subscribeTxHash!}
-                    virtualChainId="0x0000000000000000000000000000000000000000000000000000000000000001"
+                    virtualChainId={this.props.virtualChainId}
                 />
             )
         }
     }
 
-    async create() {
-        console.log(this.state)
-
+    async subscribe() {
         const { web3, config } = this.props;
         const from = (await web3.eth.getAccounts())[0];
 
@@ -113,8 +121,8 @@ class NewVirtualChain extends React.Component<NewVirtualChainProps, NewVirtualCh
         });
 
         const subscribeTx = subscription.methods.subscribeForCurrentMonth(
-            "0x0000000000000000000000000000000000000000000000000000000000000001",
-            this.state.description,
+            this.props.virtualChainId,
+            (this.state.description || this.props.description),
             this.state.subscriptionAmount
         ).send.request({ from }, (error: any, subscribeTxHash: string) => {
             this.setState({ subscribeTxHash })
@@ -127,4 +135,4 @@ class NewVirtualChain extends React.Component<NewVirtualChainProps, NewVirtualCh
     }
 }
 
-export default NewVirtualChain;
+export default VirtualChainSubscription;

@@ -12,7 +12,7 @@ import List from '@material-ui/core/List';
 import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import NewVirtualChain from './NewVirtualChain';
+import VirtualChainSubscription from './VirtualChainSubscription';
 import ExistingVirtualChain from "./ExistingVirtualChain";
 import { Config, RopstenConfig } from './Config';
 
@@ -120,7 +120,11 @@ class App extends React.Component<{}, AppState> {
             <Connect onEthereumEnabled={(value: boolean) => this.onEthereumEnabled(value)}/>
           }
           { this.state.connected && this.state.newVirtualChain &&
-            <NewVirtualChain web3={this.state.web3!} config={this.state.config} />
+            <VirtualChainSubscription web3={this.state.web3!} config={this.state.config}
+              virtualChainId="0x0000000000000000000000000000000000000000000000000000000000000001"
+              buttonLabel="Create" 
+              subscriptionLabel="Initial subscription"
+              />
           }
           { this.state.connected && this.state.existingVirtualChain &&
             <ExistingVirtualChain web3={this.state.web3!} config={this.state.config} />

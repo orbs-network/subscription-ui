@@ -8,6 +8,8 @@ interface VirtualChainMetadataProps {
     web3: Web3;
     config: Config;
     virtualChainId: string;
+
+    onMetadataUpdate?: (metadata: any) => void;
 }
 
 interface VirtualChainMetadataState {
@@ -32,11 +34,15 @@ class VirtualChainMetadata extends React.Component<VirtualChainMetadataProps, Vi
         const subscription = new web3.eth.Contract(SubscriptionABI as any, config.subscriptionAddress);
 
         const data = await subscription.methods.getSubscriptionData(virtualChainId).call();
-        const profile = data[1];
+        const description = data[1];
         const startTime = (Number(data[2]) + SECONDS_IN_MONTH) * 1000;
 
+        if (this.props.onMetadataUpdate) {
+            this.props.onMetadataUpdate({ description, startTime });
+        }
+
         this.setState({
-            description: profile,
+            description,
             paidTill: startTime,
         });
     }
