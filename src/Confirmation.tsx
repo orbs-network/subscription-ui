@@ -1,6 +1,7 @@
 import React from "react";
 import Web3 from "web3";
 import Typography from "@material-ui/core/Typography";
+import VirtualChainMetadata from "./VirtualChainMetadata";
 import { Config } from "./Config";
 
 const TX_CONFIRMED = "confirmed";
@@ -13,6 +14,8 @@ interface ConfirmationProps {
 
     approveTxHash: string;
     subscribeTxHash: string;
+
+    virtualChainId: string;
 }
 
 interface ConfirmationState {
@@ -99,7 +102,7 @@ class Confirmation extends React.Component<ConfirmationProps, ConfirmationState>
 
     render() {
         const { countdown, approveTxStatus, subscribeTxStatus } = this.state;
-        const { approveTxHash, subscribeTxHash } = this.props;
+        const { approveTxHash, subscribeTxHash, virtualChainId, config, web3 } = this.props;
 
         return (
             <div>
@@ -113,7 +116,7 @@ class Confirmation extends React.Component<ConfirmationProps, ConfirmationState>
                 </Typography>
                 {
                     this.verifySuccess() &&
-                    <Typography paragraph>Success!</Typography>
+                    <VirtualChainMetadata virtualChainId={virtualChainId} config={config} web3={web3} />
                 }
             </div>
         );

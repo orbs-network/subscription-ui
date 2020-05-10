@@ -102,7 +102,7 @@ class App extends React.Component<{}, AppState> {
                 <ListItemText primary="Existing Virtual Chain" />
               </ListItem>
               <ListItem button>
-                <ListItemText primary="Recover Virtual CHain" />
+                <ListItemText primary="Recover Virtual Chain" />
               </ListItem>
             </List>
           </div>

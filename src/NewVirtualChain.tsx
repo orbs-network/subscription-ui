@@ -83,6 +83,7 @@ class NewVirtualChain extends React.Component<NewVirtualChainProps, NewVirtualCh
                     config={config}
                     approveTxHash={this.state.approveTxHash!}
                     subscribeTxHash={this.state.subscribeTxHash!}
+                    virtualChainId="0x0000000000000000000000000000000000000000000000000000000000000001"
                 />
             )
         }
