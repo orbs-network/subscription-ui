@@ -27,6 +27,7 @@ interface VirtualChainSubscriptionState {
 
     approveTxHash?: string;
     subscribeTxHash?: string;
+    distributeTxHash?: string; // FIXME remove for v2
 
     validationError?: string;
     success: boolean;
@@ -99,6 +100,7 @@ class VirtualChainSubscription extends React.Component<VirtualChainSubscriptionP
                         config={config}
                         approveTxHash={this.state.approveTxHash!}
                         subscribeTxHash={this.state.subscribeTxHash!}
+                        distributeTxHash={this.state.distributeTxHash!}
                         virtualChainId={virtualChainId}
                         onSuccess={(success) => this.setState({ success })}
                     />
@@ -140,9 +142,17 @@ class VirtualChainSubscription extends React.Component<VirtualChainSubscriptionP
             this.setState({ subscribeTxHash })
         });
 
+        const distributeTx = subscription.methods.distributeFees()
+            .send.request({ from }, (error: any, distributeTxHash: string) => {
+                this.setState({ distributeTxHash })
+            });
+
+        (window as any).subscription = subscription;
+
         const batch = new web3.BatchRequest();
         batch.add(approveTx);
         batch.add(subscribeTx);
+        batch.add(distributeTx);
         batch.execute();
 
         if (this.props.onPaymentStarted) {

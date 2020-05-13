@@ -14,7 +14,7 @@ export const MainnetConfig: Config = {
 
 export const RopstenConfig: Config = {
     erc20Address: "0xeD0Aa9A4F9e5ae9092994f4B86F6AAa89944939b",
-    subscriptionAddress: "0x82Cb2298d456722400D9373471D5E6C401950d84",
+    subscriptionAddress: "0xe654ad79a93af035a60c66100aa95dfd2215cc51",
     network: "ropsten",
     minimalSubscriptionAmount: 100,
 }

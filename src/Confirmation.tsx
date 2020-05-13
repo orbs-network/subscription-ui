@@ -1,7 +1,6 @@
 import React from "react";
 import Web3 from "web3";
 import Typography from "@material-ui/core/Typography";
-import VirtualChainMetadata from "./VirtualChainMetadata";
 import { Config } from "./Config";
 
 const TX_CONFIRMED = "confirmed";
@@ -14,6 +13,7 @@ interface ConfirmationProps {
 
     approveTxHash: string;
     subscribeTxHash: string;
+    distributeTxHash: string; // FIXME remove for v2
 
     virtualChainId: string;
 
@@ -27,6 +27,7 @@ interface ConfirmationState {
 
     approveTxStatus: string;
     subscribeTxStatus: string;
+    distributeTxStatus: string; // FIXME remove for v2
 }
 
 class Confirmation extends React.Component<ConfirmationProps, ConfirmationState> {
@@ -37,6 +38,7 @@ class Confirmation extends React.Component<ConfirmationProps, ConfirmationState>
             countdown: 0,
             approveTxStatus: TX_PENDING,
             subscribeTxStatus: TX_PENDING,
+            distributeTxStatus: TX_PENDING,
         }
     }
 
@@ -64,13 +66,15 @@ class Confirmation extends React.Component<ConfirmationProps, ConfirmationState>
         const confirmationInterval = setInterval(async () => {
             const approveTxReceipt = await web3.eth.getTransactionReceipt(this.props.approveTxHash);
             const subscribeTxReceipt = await web3.eth.getTransactionReceipt(this.props.subscribeTxHash);
+            const distributeTxReceipt = await web3.eth.getTransactionReceipt(this.props.distributeTxHash);
 
             this.setState({
                 approveTxStatus: this.getTxStatus(approveTxReceipt),
                 subscribeTxStatus: this.getTxStatus(subscribeTxReceipt),
+                distributeTxStatus: this.getTxStatus(distributeTxReceipt),
             });
 
-            if (approveTxReceipt && subscribeTxReceipt) {
+            if (approveTxReceipt && subscribeTxReceipt && distributeTxReceipt) {
                 clearInterval(confirmationInterval);
                 clearInterval(countdownInterval);
 
@@ -100,13 +104,13 @@ class Confirmation extends React.Component<ConfirmationProps, ConfirmationState>
     }
 
     verifySuccess() {
-        const { approveTxStatus, subscribeTxStatus } = this.state;
-        return approveTxStatus === TX_CONFIRMED && subscribeTxStatus === TX_CONFIRMED;
+        const { approveTxStatus, subscribeTxStatus, distributeTxStatus } = this.state;
+        return approveTxStatus === TX_CONFIRMED && subscribeTxStatus === TX_CONFIRMED && distributeTxStatus === TX_CONFIRMED;
     }
 
     render() {
-        const { countdown, approveTxStatus, subscribeTxStatus } = this.state;
-        const { approveTxHash, subscribeTxHash } = this.props;
+        const { countdown, approveTxStatus, subscribeTxStatus, distributeTxStatus } = this.state;
+        const { approveTxHash, subscribeTxHash, distributeTxHash } = this.props;
 
         return (
             <div>
@@ -117,6 +121,8 @@ class Confirmation extends React.Component<ConfirmationProps, ConfirmationState>
                 <Typography paragraph>ERC20 approval <a href={this.getEtherscanURL(approveTxHash!)} target="_blank" className="App-monospace">{approveTxHash}</a> {approveTxStatus}
                 </Typography>
                 <Typography paragraph>Subscription <a href={this.getEtherscanURL(subscribeTxHash!)} target="_blank" className="App-monospace">{subscribeTxHash}</a> {subscribeTxStatus}
+                </Typography>
+                <Typography paragraph>Fee distribution <a href={this.getEtherscanURL(distributeTxHash!)} target="_blank" className="App-monospace">{distributeTxHash}</a> {distributeTxStatus}
                 </Typography>
             </div>
         );
