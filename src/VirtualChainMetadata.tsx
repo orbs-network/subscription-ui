@@ -65,7 +65,7 @@ class VirtualChainMetadata extends React.Component<VirtualChainMetadataProps, Vi
                 <TextField name="description" value={description} disabled></TextField>
                 <br/>
                 <br/>
-                <InputLabel htmlFor="paid-till">Paid Untill</InputLabel>
+                <InputLabel htmlFor="paid-till">Paid Until</InputLabel>
                 <TextField name="paid-till" value={new Date(paidTill)} disabled></TextField>
             </form>
         )        
