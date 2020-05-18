@@ -119,8 +119,9 @@ class VirtualChainSubscription extends React.Component<VirtualChainSubscriptionP
         const erc20 = new web3.eth.Contract(ERC20ABI as any, config.erc20Address);
         const subscription = new web3.eth.Contract(SubscriptionABI as any, config.subscriptionAddress);
 
+        const amount = this.state.subscriptionAmount * Math.pow(10, config.decimals);
         const orbsBalance = await erc20.methods.balanceOf(from).call();
-        if (orbsBalance < this.state.subscriptionAmount) {
+        if (orbsBalance < amount) {
             this.setState({
                 validationError: "insufficient funds",
             })
@@ -129,7 +130,7 @@ class VirtualChainSubscription extends React.Component<VirtualChainSubscriptionP
 
         const approveTx = erc20.methods.approve(
             config.subscriptionAddress, 
-            this.state.subscriptionAmount
+            amount
         ).send.request({ from }, (error: any, approveTxHash: string) => {
             this.setState({ approveTxHash });
         });
@@ -137,7 +138,7 @@ class VirtualChainSubscription extends React.Component<VirtualChainSubscriptionP
         const subscribeTx = subscription.methods.subscribeForCurrentMonth(
             this.props.virtualChainId,
             (this.state.description || this.props.description),
-            this.state.subscriptionAmount
+            amount
         ).send.request({ from }, (error: any, subscribeTxHash: string) => {
             this.setState({ subscribeTxHash })
         });
@@ -146,8 +147,6 @@ class VirtualChainSubscription extends React.Component<VirtualChainSubscriptionP
             .send.request({ from }, (error: any, distributeTxHash: string) => {
                 this.setState({ distributeTxHash })
             });
-
-        (window as any).subscription = subscription;
 
         const batch = new web3.BatchRequest();
         batch.add(approveTx);

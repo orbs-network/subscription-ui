@@ -3,6 +3,7 @@ export interface Config {
     subscriptionAddress: string;
     network: string;
     minimalSubscriptionAmount: number;
+    decimals: number;
 }
 
 export const MainnetConfig: Config = {
@@ -10,6 +11,7 @@ export const MainnetConfig: Config = {
     subscriptionAddress: "0x6e79DFB79CD53A2b08bC8c2852DecA7D73cD24fC",
     network: "mainnet",
     minimalSubscriptionAmount: 6200,
+    decimals: 18,
 }
 
 export const RopstenConfig: Config = {
@@ -17,4 +19,5 @@ export const RopstenConfig: Config = {
     subscriptionAddress: "0xe654ad79a93af035a60c66100aa95dfd2215cc51",
     network: "ropsten",
     minimalSubscriptionAmount: 100,
+    decimals: 0,
 }
