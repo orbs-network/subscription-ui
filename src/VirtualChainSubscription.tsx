@@ -119,11 +119,11 @@ class VirtualChainSubscription extends React.Component<VirtualChainSubscriptionP
         const erc20 = new web3.eth.Contract(ERC20ABI as any, config.erc20Address);
         const subscription = new web3.eth.Contract(SubscriptionABI as any, config.subscriptionAddress);
 
-        // @ts-ignore
-        const amount = web3.utils.toHex(web3.utils.toBN(this.state.subscriptionAmount) * web3.utils.toBN(Math.pow(10, config.decimals))) as string;
+        const amountAsNumber = this.state.subscriptionAmount * Math.pow(10, config.decimals);
+        const amount = "0x"+amountAsNumber.toString(16);
         console.log("amount to pay", amount);
         const orbsBalance = await erc20.methods.balanceOf(from).call();
-        if (orbsBalance < amount) {
+        if (orbsBalance < amountAsNumber) {
             this.setState({
                 validationError: "insufficient funds",
             })
