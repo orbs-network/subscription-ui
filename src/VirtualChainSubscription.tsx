@@ -120,7 +120,7 @@ class VirtualChainSubscription extends React.Component<VirtualChainSubscriptionP
         const subscription = new web3.eth.Contract(SubscriptionABI as any, config.subscriptionAddress);
 
         // @ts-ignore
-        const amount = (web3.utils.toBN(this.state.subscriptionAmount) * web3.utils.toBN(Math.pow(10, config.decimals))) as bigint;
+        const amount = web3.utils.toHex(web3.utils.toBN(this.state.subscriptionAmount) * web3.utils.toBN(Math.pow(10, config.decimals))) as string;
         console.log("amount to pay", amount);
         const orbsBalance = await erc20.methods.balanceOf(from).call();
         if (orbsBalance < amount) {
