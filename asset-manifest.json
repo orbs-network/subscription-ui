@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/subscription-ui/static/css/main.ae54e01d.chunk.css",
-    "main.js": "/subscription-ui/static/js/main.c5cce8c9.chunk.js",
-    "main.js.map": "/subscription-ui/static/js/main.c5cce8c9.chunk.js.map",
+    "main.js": "/subscription-ui/static/js/main.ff91a880.chunk.js",
+    "main.js.map": "/subscription-ui/static/js/main.ff91a880.chunk.js.map",
     "runtime-main.js": "/subscription-ui/static/js/runtime-main.4919c3b1.js",
     "runtime-main.js.map": "/subscription-ui/static/js/runtime-main.4919c3b1.js.map",
     "static/js/2.a66b559d.chunk.js": "/subscription-ui/static/js/2.a66b559d.chunk.js",
     "static/js/2.a66b559d.chunk.js.map": "/subscription-ui/static/js/2.a66b559d.chunk.js.map",
     "index.html": "/subscription-ui/index.html",
-    "precache-manifest.bde94757f48c2d0aa4cfd7081b33c53d.js": "/subscription-ui/precache-manifest.bde94757f48c2d0aa4cfd7081b33c53d.js",
+    "precache-manifest.9971718e7ff1a0b6fc1add46a56c8e4b.js": "/subscription-ui/precache-manifest.9971718e7ff1a0b6fc1add46a56c8e4b.js",
     "service-worker.js": "/subscription-ui/service-worker.js",
     "static/css/main.ae54e01d.chunk.css.map": "/subscription-ui/static/css/main.ae54e01d.chunk.css.map",
     "static/js/2.a66b559d.chunk.js.LICENSE.txt": "/subscription-ui/static/js/2.a66b559d.chunk.js.LICENSE.txt"
@@ -17,6 +17,6 @@
     "static/js/runtime-main.4919c3b1.js",
     "static/js/2.a66b559d.chunk.js",
     "static/css/main.ae54e01d.chunk.css",
-    "static/js/main.c5cce8c9.chunk.js"
+    "static/js/main.ff91a880.chunk.js"
   ]
 }
