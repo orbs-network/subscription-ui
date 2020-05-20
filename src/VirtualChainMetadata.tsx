@@ -33,7 +33,9 @@ class VirtualChainMetadata extends React.Component<VirtualChainMetadataProps, Vi
         const { web3, config, virtualChainId } = this.props;
         const subscription = new web3.eth.Contract(SubscriptionABI as any, config.subscriptionAddress);
 
-        const data = await subscription.methods.getSubscriptionData(virtualChainId).call();
+        const data = await subscription.methods.getSubscriptionDataByTime(
+            virtualChainId, 2020, 4,
+        ).call();
         const description = data[1];
         const startTime = (Number(data[2]) + SECONDS_IN_MONTH) * 1000;
 

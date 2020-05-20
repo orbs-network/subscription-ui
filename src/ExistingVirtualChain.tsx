@@ -59,9 +59,13 @@ class ExistingVirtualChain extends React.Component<ExistingVirtualChainProps, Ex
     }
 
     parseVirtualChainId(n: string): string {
-        const zero32Bits = "0x0000000000000000000000000000000000000000000000000000000000000000";
-        const nHex = this.props.web3.utils.numberToHex(Number(n)).slice(2);
-        return zero32Bits.slice(0, zero32Bits.length - nHex.length) + nHex
+        const { web3 } = this.props;
+        const value = web3.utils.padRight(web3.utils.fromAscii(n), 64);
+        console.log(value);
+        return value;
+        // const zero32Bits = "0x0000000000000000000000000000000000000000000000000000000000000000";
+        // const nHex = this.props.web3.utils.numberToHex(Number(n)).slice(2);
+        // return zero32Bits.slice(0, zero32Bits.length - nHex.length) + nHex
     }
 }
 
