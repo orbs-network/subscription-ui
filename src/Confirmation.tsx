@@ -1,133 +1,188 @@
 import React from "react";
 import Web3 from "web3";
 import Typography from "@material-ui/core/Typography";
-import { Config } from "./Config";
+import { IConfig } from "./configs";
 
 const TX_CONFIRMED = "confirmed";
 const TX_PENDING = "pending";
 const TX_FAILED = "failed";
 
 interface ConfirmationProps {
-    web3: Web3;
-    config: Config;
+  web3: Web3;
+  config: IConfig;
 
-    approveTxHash: string;
-    subscribeTxHash: string;
-    distributeTxHash: string; // FIXME remove for v2
+  approveTxHash: string;
+  subscribeTxHash: string;
+  distributeTxHash: string; // FIXME remove for v2
 
-    virtualChainId: string;
+  virtualChainId: string;
 
-    onSuccess: (ok: boolean) => void;
+  onSuccess: (ok: boolean) => void;
 }
 
 interface ConfirmationState {
-    countdown: number;
-    countdownInterval?: any;
-    confirmationInterval?: any;
+  countdown: number;
+  countdownInterval?: any;
+  confirmationInterval?: any;
 
-    approveTxStatus: string;
-    subscribeTxStatus: string;
-    distributeTxStatus: string; // FIXME remove for v2
+  approveTxStatus: string;
+  subscribeTxStatus: string;
+  distributeTxStatus: string; // FIXME remove for v2
 }
 
-class Confirmation extends React.Component<ConfirmationProps, ConfirmationState> {
-    constructor(props: any) {
-        super(props);
+class Confirmation extends React.Component<
+  ConfirmationProps,
+  ConfirmationState
+> {
+  constructor(props: any) {
+    super(props);
 
-        this.state = {
-            countdown: 0,
-            approveTxStatus: TX_PENDING,
-            subscribeTxStatus: TX_PENDING,
-            distributeTxStatus: TX_PENDING,
-        }
+    this.state = {
+      countdown: 0,
+      approveTxStatus: TX_PENDING,
+      subscribeTxStatus: TX_PENDING,
+      distributeTxStatus: TX_PENDING,
+    };
+  }
+
+  getTxStatus(txReceipt: { status: boolean }): string {
+    if (txReceipt) {
+      return txReceipt.status ? TX_CONFIRMED : TX_FAILED;
     }
 
-    getTxStatus(txReceipt: {status: boolean}): string {
-        if (txReceipt) {
-            return txReceipt.status ? TX_CONFIRMED: TX_FAILED;
-        }
+    return TX_PENDING;
+  }
 
-        return TX_PENDING;
-    }
+  componentDidMount() {
+    const { web3 } = this.props;
 
-    componentDidMount() {
-        const { web3 } = this.props;
+    this.setState({
+      countdown: 0,
+    });
+
+    const countdownInterval = setInterval(() => {
+      this.setState({
+        countdown: this.state.countdown + 1,
+      });
+    }, 1000);
+
+    const confirmationInterval = setInterval(async () => {
+      const approveTxReceipt = await web3.eth.getTransactionReceipt(
+        this.props.approveTxHash
+      );
+      const subscribeTxReceipt = await web3.eth.getTransactionReceipt(
+        this.props.subscribeTxHash
+      );
+      const distributeTxReceipt = await web3.eth.getTransactionReceipt(
+        this.props.distributeTxHash
+      );
+
+      this.setState({
+        approveTxStatus: this.getTxStatus(approveTxReceipt),
+        subscribeTxStatus: this.getTxStatus(subscribeTxReceipt),
+        distributeTxStatus: this.getTxStatus(distributeTxReceipt),
+      });
+
+      if (approveTxReceipt && subscribeTxReceipt && distributeTxReceipt) {
+        clearInterval(confirmationInterval);
+        clearInterval(countdownInterval);
 
         this.setState({
-            countdown: 0,
+          confirmationInterval: undefined,
+          countdownInterval: undefined,
         });
 
-        const countdownInterval = setInterval(() => {
-            this.setState({
-                countdown: this.state.countdown + 1,
-            });
-        }, 1000);
+        this.props.onSuccess(this.verifySuccess());
+      }
+    }, 3000);
 
-        const confirmationInterval = setInterval(async () => {
-            const approveTxReceipt = await web3.eth.getTransactionReceipt(this.props.approveTxHash);
-            const subscribeTxReceipt = await web3.eth.getTransactionReceipt(this.props.subscribeTxHash);
-            const distributeTxReceipt = await web3.eth.getTransactionReceipt(this.props.distributeTxHash);
+    this.setState({
+      countdownInterval,
+      confirmationInterval,
+    });
+  }
 
-            this.setState({
-                approveTxStatus: this.getTxStatus(approveTxReceipt),
-                subscribeTxStatus: this.getTxStatus(subscribeTxReceipt),
-                distributeTxStatus: this.getTxStatus(distributeTxReceipt),
-            });
+  componentWillUnmount() {
+    clearInterval(this.state.countdownInterval);
+    clearInterval(this.state.confirmationInterval);
+  }
 
-            if (approveTxReceipt && subscribeTxReceipt && distributeTxReceipt) {
-                clearInterval(confirmationInterval);
-                clearInterval(countdownInterval);
+  getEtherscanURL(txHash: string): string {
+    const { config } = this.props;
+    return `https://${
+      config.network === "mainnet" ? "" : config.network + "."
+    }etherscan.io/tx/${txHash}`;
+    return `https://${
+      config.network === "mainnet" ? "" : config.network + "."
+    }etherscan.io/tx/${txHash}`;
+  }
 
-                this.setState({
-                    confirmationInterval: undefined,
-                    countdownInterval: undefined,
-                })
+  verifySuccess() {
+    const {
+      approveTxStatus,
+      subscribeTxStatus,
+      distributeTxStatus,
+    } = this.state;
+    return (
+      approveTxStatus === TX_CONFIRMED &&
+      subscribeTxStatus === TX_CONFIRMED &&
+      distributeTxStatus === TX_CONFIRMED
+    );
+  }
 
-                this.props.onSuccess(this.verifySuccess());
-            }
-        }, 3000);
+  render() {
+    const {
+      countdown,
+      approveTxStatus,
+      subscribeTxStatus,
+      distributeTxStatus,
+    } = this.state;
+    const { approveTxHash, subscribeTxHash, distributeTxHash } = this.props;
 
-        this.setState({ 
-            countdownInterval,
-            confirmationInterval,
-        });
-    }
+    return (
+      <div>
+        {this.state.countdownInterval && (
+          <Typography paragraph>
+            Waiting for transaction confirmation for {countdown} seconds...
+          </Typography>
+        )}
 
-    componentWillUnmount() {
-        clearInterval(this.state.countdownInterval);
-        clearInterval(this.state.confirmationInterval);
-    }
-
-    getEtherscanURL(txHash: string): string {
-        const { config } = this.props;
-        return `https://${config.network === "mainnet" ? "" : config.network + "."}etherscan.io/tx/${txHash}`;
-    }
-
-    verifySuccess() {
-        const { approveTxStatus, subscribeTxStatus, distributeTxStatus } = this.state;
-        return approveTxStatus === TX_CONFIRMED && subscribeTxStatus === TX_CONFIRMED && distributeTxStatus === TX_CONFIRMED;
-    }
-
-    render() {
-        const { countdown, approveTxStatus, subscribeTxStatus, distributeTxStatus } = this.state;
-        const { approveTxHash, subscribeTxHash, distributeTxHash } = this.props;
-
-        return (
-            <div>
-                { this.state.countdownInterval &&
-                    <Typography paragraph>Waiting for transaction confirmation for {countdown} seconds...</Typography>
-                }
-
-                <Typography paragraph>ERC20 approval <a href={this.getEtherscanURL(approveTxHash!)} target="_blank" className="App-monospace">{approveTxHash}</a> {approveTxStatus}
-                </Typography>
-                <Typography paragraph>Subscription <a href={this.getEtherscanURL(subscribeTxHash!)} target="_blank" className="App-monospace">{subscribeTxHash}</a> {subscribeTxStatus}
-                </Typography>
-                <Typography paragraph>Fee distribution <a href={this.getEtherscanURL(distributeTxHash!)} target="_blank" className="App-monospace">{distributeTxHash}</a> {distributeTxStatus}
-                </Typography>
-            </div>
-        );
-    }
-
+        <Typography paragraph>
+          ERC20 approval{" "}
+          <a
+            href={this.getEtherscanURL(approveTxHash!)}
+            target="_blank"
+            className="App-monospace"
+          >
+            {approveTxHash}
+          </a>{" "}
+          {approveTxStatus}
+        </Typography>
+        <Typography paragraph>
+          Subscription{" "}
+          <a
+            href={this.getEtherscanURL(subscribeTxHash!)}
+            target="_blank"
+            className="App-monospace"
+          >
+            {subscribeTxHash}
+          </a>{" "}
+          {subscribeTxStatus}
+        </Typography>
+        <Typography paragraph>
+          Fee distribution{" "}
+          <a
+            href={this.getEtherscanURL(distributeTxHash!)}
+            target="_blank"
+            className="App-monospace"
+          >
+            {distributeTxHash}
+          </a>{" "}
+          {distributeTxStatus}
+        </Typography>
+      </div>
+    );
+  }
 }
 
 export default Confirmation;

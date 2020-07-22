@@ -4,7 +4,7 @@
   "private": true,
   "homepage": "https://orbs-network.github.io/subscription-ui/",
   "dependencies": {
-    "@material-ui/core": "^4.9.11",
+    "@material-ui/core": "^4.11.0",
     "@orbs-network/orbs-ethereum-contracts-v2": "0.0.20",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
