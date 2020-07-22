@@ -10,6 +10,7 @@
 
 # Genereated
 src/contracts/
+src/local/
 
 # production
 /build

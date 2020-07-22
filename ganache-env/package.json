@@ -6,7 +6,6 @@
   "type": "module",
   "scripts": {
     "clean": "rimraf build",
-    "compile-and-deploy": "truffle compile && truffle migrate --reset",
     "start-ganache": "ganache-cli -p 7545 -i 5777 -a 100 --gasLimit 0x7FFFFFFF --gasPrice 1 -m  \"vanish junk genuine web seminar cook absurd royal ability series taste method identify elevator liquid\"",
     "deploy-driver": "ts-node delpoyDriverScripts.ts"
   },

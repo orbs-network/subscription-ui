@@ -1,13 +1,13 @@
 import React from "react";
 import Web3 from "web3";
 import { InputLabel, TextField, Button } from '@material-ui/core';
-import { Config } from "./Config";
+import { IConfig } from "./configs";
 import VirtualChainMetadata from "./VirtualChainMetadata";
 import VirtualChainSubscription from "./VirtualChainSubscription";
 
 interface ExistingVirtualChainProps {
     web3: Web3;
-    config: Config;    
+    config: IConfig;
 }
 
 interface ExistingVirtualChainState {
