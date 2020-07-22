@@ -5,27 +5,45 @@
   "homepage": "https://orbs-network.github.io/subscription-ui/",
   "dependencies": {
     "@material-ui/core": "^4.9.11",
+    "@orbs-network/orbs-ethereum-contracts-v2": "0.0.20",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
+    "gh-pages": "^2.2.0",
+    "mobx": "^5.15.4",
+    "mobx-react": "^6.2.2",
+    "notistack": "^0.9.17",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-hook-form": "^6.0.8",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.1",
+    "react-spring": "^8.0.27",
+    "typechain": "^2.0.0",
+    "typescript": "~3.7.2",
+    "web3": "^1.2.11",
+    "web3-utils": "^1.2.11"
+  },
+  "devDependencies": {
     "@types/jest": "^24.0.0",
     "@types/node": "^12.0.0",
     "@types/react": "^16.9.0",
     "@types/react-dom": "^16.9.0",
-    "gh-pages": "^2.2.0",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "3.4.1",
-    "typescript": "~3.7.2",
-    "web3": "^1.2.7"
+    "@types/react-router-dom": "^5.1.5",
+    "@typechain/web3-v1": "^1.0.0",
+    "eslint-plugin-react-hooks": "^4.0.8",
+    "prettier": "^2.0.5"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "mkd": "mkdir -p ./src/local && mkdir -p ./ganache-env/_out",
+    "postinstall": "npm run generate_types && npm run mkd",
     "predeploy": "yarn run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "gh-pages -d build",
+    "generate_types": "typechain --target web3-v1 --outDir ./src/contracts './node_modules/@orbs-network/orbs-ethereum-contracts-v2/build/contracts/*.json'"
   },
   "eslintConfig": {
     "extends": "react-app"
