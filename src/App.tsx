@@ -17,6 +17,7 @@ import ExistingVirtualChain from "./ExistingVirtualChain";
 import configs from "./configs";
 import { config } from "react-spring";
 import { Header } from "./components/structure/header/Header";
+import { HEADER_HEIGHT_REM } from "./theme/Theme";
 
 interface AppState {
   connected: boolean;
@@ -29,12 +30,22 @@ interface AppState {
 const drawerWidth = 240;
 
 const useStyles = withStyles((theme) => ({
-  root: {
-    // display: "flex",
+  appMain: {
+    backgroundColor: "#06142e",
+    backgroundRepeat: "repeat-y",
+    backgroundImage:
+      "url(https://www.orbs.com/wp-content/uploads/2019/02/technology-background1.png)",
+    backgroundAttachment: "scroll",
+    backgroundPosition: "top center",
+    // minHeight: `calc(100% - ${HEADER_HEIGHT_REM}rem)`,
+    minHeight: `calc(100% - ${HEADER_HEIGHT_REM}rem)`,
+
+    // Center the content
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-  },
+
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
@@ -44,10 +55,6 @@ const useStyles = withStyles((theme) => ({
   },
   drawerContainer: {
     overflow: "auto",
-  },
-  content: {
-    flexGrow: 1,
-    padding: theme.spacing(3),
   },
 }));
 
@@ -126,7 +133,7 @@ class App extends React.Component<{}, AppState> {
         {/*    </List>*/}
         {/*  </div>*/}
         {/*</Drawer>*/}
-        <main className={classes.content}>
+        <main className={classes.appMain}>
           {/*<Toolbar />*/}
           {!this.state.connected && (
             <Connect
