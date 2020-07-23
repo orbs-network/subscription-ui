@@ -8,15 +8,17 @@ import { ICryptoWalletConnectionService } from "./cryptoWalletConnectionService/
 //   OrbsClientService,
 // } from "orbs-pos-data";
 import Web3 from "web3";
-import configs from '../configs';
+import configs from "../configs";
 
 // import { BuildOrbsClient } from "./OrbsClientFactory";
-import {ISubscriptionService} from "./subscriptionService/ISubscriptionService";
-import {SubscriptionService} from "./subscriptionService/SubscriptionService";
+import { ISubscriptionService } from "./subscriptionService/ISubscriptionService";
+import { SubscriptionService } from "./subscriptionService/SubscriptionService";
+import { IOrbsTokenService, OrbsTokenService } from "orbs-pos-data";
 
 export interface IServices {
   cryptoWalletIntegrationService: ICryptoWalletConnectionService;
   subscriptionService: ISubscriptionService;
+  orbsTokenService: IOrbsTokenService;
 }
 
 // DEV_NOTE : For simplicity of early stage dev, we assume that we have ethereum provider, if not, we will not initialize the services.
@@ -38,6 +40,10 @@ export function buildServices(ethereumProvider: IEthereumProvider): IServices {
     subscriptionService: new SubscriptionService(
       web3,
       configs.v2contractsAddressesOverride.subscriptionContract
+    ),
+    orbsTokenService: new OrbsTokenService(
+      web3,
+      configs.v2contractsAddressesOverride.erc20Contract
     ),
   };
 }
