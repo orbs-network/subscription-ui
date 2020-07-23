@@ -10,6 +10,8 @@ const COLOR3 = "#03FCF5"; // bright bluish- Tetra
 const PRIMARY_TEXT = "#dbdbdb";
 const SECONDARY_TEXT = "#7B7B7B";
 
+export const HEADER_HEIGHT_REM = 6;
+
 export const baseTheme = responsiveFontSizes(
   createMuiTheme({
     palette: {

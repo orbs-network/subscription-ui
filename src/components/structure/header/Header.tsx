@@ -19,14 +19,15 @@ import {
   Typography,
   useMediaQuery,
 } from "@material-ui/core";
-// import { HEADER_HEIGHT_REM } from "../../theme/hemeProvider";
 import { MenuPopup } from "./MenuPopup";
 import { useLinkDescriptors } from "./links";
+import { HEADER_HEIGHT_REM } from "../../../theme/Theme";
 
 export const HOVER_COLOR = "#16faff";
 
 const useStyles = makeStyles((theme) => ({
   appBar: {
+    height: `${HEADER_HEIGHT_REM}rem`,
     paddingTop: "0.5rem",
     paddingBottom: "0.5rem",
     boxSizing: "border-box",
