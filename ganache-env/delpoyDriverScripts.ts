@@ -17,11 +17,12 @@ const deployDriverScripts = async () => {
     console.log("After deploying Orbs PoS V2 contracts");
 
     const orbsV2Account = driver.accounts[0];
-    console.log("Assigning ORBS");
+    console.log(`Assigning ORBS to ${orbsV2Account}`);
     driver.erc20.assign(orbsV2Account, new BN("1000000000000000000000000000"));
 
     const addresses = {
       subscriptions: driver.subscriptions.address,
+      erc20: driver.erc20.address,
     };
 
     console.log("Saving addresses to file");

@@ -57,6 +57,7 @@ if (process.env.NODE_ENV !== "production") {
     // Override addresses
     configs.v2contractsAddressesOverride.subscriptionContract =
       addresses.guardiansRegistration;
+    configs.v2contractsAddressesOverride.erc20Contract = addresses.erc20;
   }
 }
 

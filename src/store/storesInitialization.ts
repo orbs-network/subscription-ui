@@ -7,7 +7,8 @@ import { OrbsAccountStore } from "./OrbsAccountStore";
 
 // This import ensures mobx batching
 import "mobx-react-lite/batchingForReactDom";
-import {ISubscriptionService} from "../services/subscriptionService/ISubscriptionService";
+import { ISubscriptionService } from "../services/subscriptionService/ISubscriptionService";
+import { IOrbsTokenService } from "orbs-pos-data";
 
 /**
  * Configures the mobx library. Should get called at App's initialization.
@@ -23,14 +24,16 @@ export function configureMobx() {
  */
 export function getStores(
   cryptoWalletConnectionService: ICryptoWalletConnectionService,
-  subscriptionService: ISubscriptionService
+  subscriptionService: ISubscriptionService,
+  orbsTokenService: IOrbsTokenService
 ): IStores {
   // Create stores instances + Hydrate the stores
   const cryptoWalletIntegrationStore = new CryptoWalletConnectionStore(
     cryptoWalletConnectionService
   );
   const orbsAccountStore = new OrbsAccountStore(
-    cryptoWalletIntegrationStore
+    cryptoWalletIntegrationStore,
+    orbsTokenService
   );
 
   const stores: IStores = {
