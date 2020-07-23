@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 
 const links = [
-  { translationKey: "New Virtual Chain", url: "/create_vc" },
+  { translationKey: "New Virtual Chain", url: "/new_vc" },
   { translationKey: "Existing Virtual Chain", url: "/existing_vc" },
   { translationKey: "Recover Virtual Chain", url: "/recover_vc" },
 ];
