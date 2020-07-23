@@ -18,6 +18,11 @@ import configs from "./configs";
 import { config } from "react-spring";
 import { Header } from "./components/structure/header/Header";
 import { HEADER_HEIGHT_REM } from "./theme/Theme";
+import { Route, RouteProps, Switch } from "react-router-dom";
+import { HomePage } from "./pages/HomePage";
+import { NewVCPage } from "./pages/NewVCPage";
+import { ExistingVCPage } from "./pages/ExistingVCPage";
+import { RecoverVCPage } from "./pages/RecoverVcPage";
 
 interface AppState {
   connected: boolean;
@@ -31,6 +36,13 @@ const drawerWidth = 240;
 
 const useStyles = withStyles((theme) => ({
   appMain: {
+    height: "100%",
+    maxWidth: "90%",
+    boxSizing: "border-box",
+    padding: theme.spacing(2),
+  },
+
+  mainWrapper: {
     backgroundColor: "#06142e",
     backgroundRepeat: "repeat-y",
     backgroundImage:
@@ -133,28 +145,36 @@ class App extends React.Component<{}, AppState> {
         {/*    </List>*/}
         {/*  </div>*/}
         {/*</Drawer>*/}
-        <main className={classes.appMain}>
-          {/*<Toolbar />*/}
-          {!this.state.connected && (
-            <Connect
-              onEthereumEnabled={(value: boolean) =>
-                this.onEthereumEnabled(value)
-              }
-            />
-          )}
-          {this.state.connected && this.state.newVirtualChain && (
-            <VirtualChainSubscription
-              web3={this.state.web3!}
-              config={configs}
-              virtualChainId="0x0000000000000000000000000000000000000000000000000000000000000001"
-              buttonLabel="Create"
-              subscriptionLabel="Initial subscription"
-            />
-          )}
-          {this.state.connected && this.state.existingVirtualChain && (
-            <ExistingVirtualChain web3={this.state.web3!} config={configs} />
-          )}
-        </main>
+        <div className={classes.mainWrapper}>
+          <main className={classes.appMain}>
+            <Switch>
+              <Route exact path="/" component={HomePage} />
+              <Route exact path="/new_vc" component={NewVCPage} />
+              <Route exact path="/existing_vc" component={ExistingVCPage} />
+              <Route exact path="/recover_vc" component={RecoverVCPage} />
+            </Switch>
+            {/*<Toolbar />*/}
+            {/*{!this.state.connected && (*/}
+            {/*  <Connect*/}
+            {/*    onEthereumEnabled={(value: boolean) =>*/}
+            {/*      this.onEthereumEnabled(value)*/}
+            {/*    }*/}
+            {/*  />*/}
+            {/*)}*/}
+            {/*{this.state.connected && this.state.newVirtualChain && (*/}
+            {/*  <VirtualChainSubscription*/}
+            {/*    web3={this.state.web3!}*/}
+            {/*    config={configs}*/}
+            {/*    virtualChainId="0x0000000000000000000000000000000000000000000000000000000000000001"*/}
+            {/*    buttonLabel="Create"*/}
+            {/*    subscriptionLabel="Initial subscription"*/}
+            {/*  />*/}
+            {/*)}*/}
+            {/*{this.state.connected && this.state.existingVirtualChain && (*/}
+            {/*  <ExistingVirtualChain web3={this.state.web3!} config={configs} />*/}
+            {/*)}*/}
+          </main>
+        </div>
       </>
     );
   }

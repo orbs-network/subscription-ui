@@ -24,6 +24,7 @@ export const baseTheme = responsiveFontSizes(
         main: "#7ccbf4",
       },
       text: {
+        // primary: "#f5f5f5",
         // primary: PRIMARY_TEXT,
         // secondary: SECONDARY_TEXT,
       },
