@@ -77,7 +77,7 @@ class App extends React.Component<{}, AppState> {
     const { classes } = this.props as any;
 
     return (
-      <div className={classes.root}>
+      <>
         {/*<AppBar position="fixed" className={classes.appBar}>*/}
         {/*  <Toolbar>*/}
         {/*    <Typography variant="h6" noWrap>*/}
@@ -127,7 +127,7 @@ class App extends React.Component<{}, AppState> {
         {/*  </div>*/}
         {/*</Drawer>*/}
         <main className={classes.content}>
-          <Toolbar />
+          {/*<Toolbar />*/}
           {!this.state.connected && (
             <Connect
               onEthereumEnabled={(value: boolean) =>
@@ -148,7 +148,7 @@ class App extends React.Component<{}, AppState> {
             <ExistingVirtualChain web3={this.state.web3!} config={configs} />
           )}
         </main>
-      </div>
+      </>
     );
   }
 }
