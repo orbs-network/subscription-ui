@@ -9,7 +9,9 @@ import { SnackbarProvider } from "notistack";
 import { CssBaseline } from "@material-ui/core";
 import { BrowserRouter as Router } from "react-router-dom";
 
-interface IProps {}
+interface IProps {
+  appComponent: React.ReactNode;
+}
 
 configureMobx();
 
@@ -21,7 +23,7 @@ const stores = getStores(
 );
 
 export const AppWrapper = React.memo<IProps>((props) => {
-  const { children } = props;
+  const { children, appComponent } = props;
   return (
     <>
       <Router>
@@ -29,7 +31,7 @@ export const AppWrapper = React.memo<IProps>((props) => {
           <StylesProvider injectFirst>
             <ThemeProvider theme={baseTheme}>
               <SnackbarProvider maxSnack={3}>
-                <App />
+                {appComponent}
                 <CssBaseline />
               </SnackbarProvider>
             </ThemeProvider>
