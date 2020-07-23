@@ -16,6 +16,7 @@ import VirtualChainSubscription from "./VirtualChainSubscription";
 import ExistingVirtualChain from "./ExistingVirtualChain";
 import configs from "./configs";
 import { config } from "react-spring";
+import { Header } from "./components/structure/header/Header";
 
 interface AppState {
   connected: boolean;
@@ -29,7 +30,7 @@ const drawerWidth = 240;
 
 const useStyles = withStyles((theme) => ({
   root: {
-    display: "flex",
+    // display: "flex",
   },
   appBar: {
     zIndex: theme.zIndex.drawer + 1,
@@ -49,6 +50,8 @@ const useStyles = withStyles((theme) => ({
     padding: theme.spacing(3),
   },
 }));
+
+// TODO : O.L : Make this a function.
 
 class App extends React.Component<{}, AppState> {
   constructor(props: any) {
@@ -75,54 +78,54 @@ class App extends React.Component<{}, AppState> {
 
     return (
       <div className={classes.root}>
-        <CssBaseline />
-        <AppBar position="fixed" className={classes.appBar}>
-          <Toolbar>
-            <Typography variant="h6" noWrap>
-              Orbs Virtual Chain Console
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <Drawer
-          className={classes.drawer}
-          variant="permanent"
-          classes={{
-            paper: classes.drawerPaper,
-          }}
-        >
-          <Toolbar />
-          <div className={classes.drawerContainer}>
-            <List>
-              <ListItem
-                button
-                selected={this.state.newVirtualChain}
-                onClick={() =>
-                  this.setState({
-                    newVirtualChain: true,
-                    existingVirtualChain: false,
-                  })
-                }
-              >
-                <ListItemText primary="New Virtual Chain" />
-              </ListItem>
-              <ListItem
-                button
-                selected={this.state.existingVirtualChain}
-                onClick={() =>
-                  this.setState({
-                    newVirtualChain: false,
-                    existingVirtualChain: true,
-                  })
-                }
-              >
-                <ListItemText primary="Existing Virtual Chain" />
-              </ListItem>
-              <ListItem button>
-                <ListItemText primary="Recover Virtual Chain" />
-              </ListItem>
-            </List>
-          </div>
-        </Drawer>
+        {/*<AppBar position="fixed" className={classes.appBar}>*/}
+        {/*  <Toolbar>*/}
+        {/*    <Typography variant="h6" noWrap>*/}
+        {/*      Orbs Virtual Chain Console*/}
+        {/*    </Typography>*/}
+        {/*  </Toolbar>*/}
+        {/*</AppBar>*/}
+        <Header />
+        {/*<Drawer*/}
+        {/*  className={classes.drawer}*/}
+        {/*  variant="permanent"*/}
+        {/*  classes={{*/}
+        {/*    paper: classes.drawerPaper,*/}
+        {/*  }}*/}
+        {/*>*/}
+        {/*  <Toolbar />*/}
+        {/*  <div className={classes.drawerContainer}>*/}
+        {/*    <List>*/}
+        {/*      <ListItem*/}
+        {/*        button*/}
+        {/*        selected={this.state.newVirtualChain}*/}
+        {/*        onClick={() =>*/}
+        {/*          this.setState({*/}
+        {/*            newVirtualChain: true,*/}
+        {/*            existingVirtualChain: false,*/}
+        {/*          })*/}
+        {/*        }*/}
+        {/*      >*/}
+        {/*        <ListItemText primary="New Virtual Chain" />*/}
+        {/*      </ListItem>*/}
+        {/*      <ListItem*/}
+        {/*        button*/}
+        {/*        selected={this.state.existingVirtualChain}*/}
+        {/*        onClick={() =>*/}
+        {/*          this.setState({*/}
+        {/*            newVirtualChain: false,*/}
+        {/*            existingVirtualChain: true,*/}
+        {/*          })*/}
+        {/*        }*/}
+        {/*      >*/}
+        {/*        <ListItemText primary="Existing Virtual Chain" />*/}
+        {/*      </ListItem>*/}
+        {/*      <ListItem button>*/}
+        {/*        <ListItemText primary="Recover Virtual Chain" />*/}
+        {/*      </ListItem>*/}
+        {/*    </List>*/}
+        {/*  </div>*/}
+        {/*</Drawer>*/}
         <main className={classes.content}>
           <Toolbar />
           {!this.state.connected && (
