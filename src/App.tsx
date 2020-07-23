@@ -42,6 +42,10 @@ const useStyles = withStyles((theme) => ({
     padding: theme.spacing(2),
   },
 
+  headerSeparator: {
+    height: `${HEADER_HEIGHT_REM}rem`,
+  },
+
   mainWrapper: {
     backgroundColor: "#06142e",
     backgroundRepeat: "repeat-y",
@@ -105,6 +109,7 @@ class App extends React.Component<{}, AppState> {
         {/*  </Toolbar>*/}
         {/*</AppBar>*/}
         <Header />
+        <div className={classes.headerSeparator} />
         {/*<Drawer*/}
         {/*  className={classes.drawer}*/}
         {/*  variant="permanent"*/}

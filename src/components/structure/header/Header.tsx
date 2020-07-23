@@ -116,12 +116,12 @@ export const Header = React.memo((props) => {
 
   // TODO : Fix display with title
   return (
-    <AppBar position="sticky" data-testid="header" className={classes.appBar}>
+    <AppBar position="fixed" data-testid="header" className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
         <NavLink to="/">
           <img className={classes.logo} src={logo} alt="Orbs" />
         </NavLink>
-        <Typography variant={"h4"}>VC Console</Typography>
+        {/*<Typography variant={"h4"}>VC Console</Typography>*/}
         {menu}
       </Toolbar>
     </AppBar>

@@ -17,21 +17,11 @@ export const baseTheme = responsiveFontSizes(
     palette: {
       // TODO : Adjust all styles after structure is done
       type: "dark",
-      primary: {
-        main: "rgba(16, 34, 91, 0.7)",
-      },
-      secondary: {
-        main: "#7ccbf4",
-      },
-      text: {
-        // primary: "#f5f5f5",
-        // primary: PRIMARY_TEXT,
-        // secondary: SECONDARY_TEXT,
-      },
+      primary: { main: "#09142c" },
+      secondary: { main: "#74f6fd" },
       background: {
-        // DEV_NOTE : This sets the app background color
-        default: "#16317d",
-        // paper: "rgba(0, 31, 107, 0.6)",
+        default: "#0a0f25",
+        paper: "#192a45",
       },
     },
     typography: {
