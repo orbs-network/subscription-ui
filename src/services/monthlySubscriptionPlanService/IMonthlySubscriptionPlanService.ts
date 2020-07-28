@@ -1,9 +1,14 @@
+import { PromiEvent, TransactionReceipt } from "web3-core";
+
 export interface IMonthlySubscriptionPlanService {
   createANewVC(
     amount: number,
     isCertified: boolean,
     deploymentSubset: string
-  ): Promise<boolean>;
+  ): PromiEvent<TransactionReceipt>;
 
-  extendSubscription(vcid: number, amount: number): Promise<boolean>;
+  extendSubscription(
+    vcid: number,
+    amount: number
+  ): PromiEvent<TransactionReceipt>;
 }
