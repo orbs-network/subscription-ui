@@ -20,9 +20,16 @@ const deployDriverScripts = async () => {
     console.log(`Assigning ORBS to ${orbsV2Account}`);
     driver.erc20.assign(orbsV2Account, new BN("1000000000000000000000000000"));
 
+    const monthlySubscriptionPlanDeployedInstance = await driver.newSubscriber(
+      "my_tier",
+      4000
+    );
+    monthlySubscriptionPlanDeployedInstance.address;
     const addresses = {
       subscriptions: driver.subscriptions.address,
       erc20: driver.erc20.address,
+      monthlySubscriptionPlanDeployedInstance:
+        monthlySubscriptionPlanDeployedInstance.address,
     };
 
     console.log("Saving addresses to file");

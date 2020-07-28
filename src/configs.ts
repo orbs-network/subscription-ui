@@ -11,6 +11,9 @@ export interface IConfig {
   v2contractsAddressesOverride: Partial<{
     subscriptionContract: string;
     erc20Contract: string;
+    // DEV_NOTE: O.L : For now, we have only one deployed 'Monthly Subscription Plan' instance.
+    // When we will start supporting more, we will need to read their addresses, tier name and price from a registery contract.
+    monthlySubscriptionPlanDeployedInstance: string;
   }>;
   ETHEREUM_PROVIDER_WS: string;
   termsOfUseUrl: string;
@@ -58,6 +61,8 @@ if (process.env.NODE_ENV !== "production") {
     configs.v2contractsAddressesOverride.subscriptionContract =
       addresses.guardiansRegistration;
     configs.v2contractsAddressesOverride.erc20Contract = addresses.erc20;
+    configs.v2contractsAddressesOverride.monthlySubscriptionPlanDeployedInstance =
+      addresses.monthlySubscriptionPlanDeployedInstance;
   }
 }
 
