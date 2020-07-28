@@ -14,11 +14,14 @@ import configs from "../configs";
 import { ISubscriptionService } from "./subscriptionService/ISubscriptionService";
 import { SubscriptionService } from "./subscriptionService/SubscriptionService";
 import { IOrbsTokenService, OrbsTokenService } from "orbs-pos-data";
+import { IMonthlySubscriptionPlanService } from "./monthlySubscriptionPlanService/IMonthlySubscriptionPlanService";
+import { MonthlySubscriptionPlanService } from "./monthlySubscriptionPlanService/MonthlySubscriptionPlanService";
 
 export interface IServices {
   cryptoWalletIntegrationService: ICryptoWalletConnectionService;
   subscriptionService: ISubscriptionService;
   orbsTokenService: IOrbsTokenService;
+  monthlySubscriptionPlanService: IMonthlySubscriptionPlanService;
 }
 
 // DEV_NOTE : For simplicity of early stage dev, we assume that we have ethereum provider, if not, we will not initialize the services.
@@ -44,6 +47,10 @@ export function buildServices(ethereumProvider: IEthereumProvider): IServices {
     orbsTokenService: new OrbsTokenService(
       web3,
       configs.v2contractsAddressesOverride.erc20Contract
+    ),
+    monthlySubscriptionPlanService: new MonthlySubscriptionPlanService(
+      web3,
+      configs.v2contractsAddressesOverride.monthlySubscriptionPlanDeployedInstance
     ),
   };
 }
