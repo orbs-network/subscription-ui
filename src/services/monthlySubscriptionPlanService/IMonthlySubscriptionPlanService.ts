@@ -14,6 +14,7 @@ export interface IMonthlySubscriptionPlanService {
 }
 
 export type TVirtualChainSubscriptionPayload = {
+  name: string;
   amount: number;
   isCertified: boolean;
   deploymentSubset: string;
