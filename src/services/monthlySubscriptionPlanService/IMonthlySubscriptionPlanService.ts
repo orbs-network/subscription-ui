@@ -4,9 +4,7 @@ export interface IMonthlySubscriptionPlanService {
   contractAddress: string;
 
   createANewVC(
-    amount: number,
-    isCertified: boolean,
-    deploymentSubset: string
+    vcSubscriptionPayload: TVirtualChainSubscriptionPayload
   ): PromiEvent<TransactionReceipt>;
 
   extendSubscription(
@@ -14,3 +12,9 @@ export interface IMonthlySubscriptionPlanService {
     amount: number
   ): PromiEvent<TransactionReceipt>;
 }
+
+export type TVirtualChainSubscriptionPayload = {
+  amount: number;
+  isCertified: boolean;
+  deploymentSubset: string;
+};

@@ -1,4 +1,7 @@
-import { IMonthlySubscriptionPlanService } from "./IMonthlySubscriptionPlanService";
+import {
+  IMonthlySubscriptionPlanService,
+  TVirtualChainSubscriptionPayload,
+} from "./IMonthlySubscriptionPlanService";
 import Web3 from "web3";
 import { MonthlySubscriptionPlan } from "../../contracts/MonthlySubscriptionPlan";
 import MonthlySubscriptionPlanContractJson from "@orbs-network/orbs-ethereum-contracts-v2/build/contracts/MonthlySubscriptionPlan.json";
@@ -27,10 +30,9 @@ export class MonthlySubscriptionPlanService
   }
 
   createANewVC(
-    amount: number,
-    isCertified: boolean,
-    deploymentSubset: string
+    vcSubscriptionPayload: TVirtualChainSubscriptionPayload
   ): PromiEvent<TransactionReceipt> {
+    const { amount, isCertified, deploymentSubset } = vcSubscriptionPayload;
     return this.monthlySubscriptionContract.methods
       .createVC(amount, isCertified, deploymentSubset)
       .send();
