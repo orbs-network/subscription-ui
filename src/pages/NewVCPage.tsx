@@ -12,13 +12,13 @@ export const NewVCPage = React.memo<IProps>((props) => {
   return (
     <Page>
       <ContentFitting>
-        <VirtualChainSubscription
-          web3={{} as Web3}
-          config={configs}
-          virtualChainId="0x0000000000000000000000000000000000000000000000000000000000000001"
-          buttonLabel="Create"
-          subscriptionLabel="Initial subscription"
-        />
+        {/*<VirtualChainSubscription*/}
+        {/*  web3={{} as Web3}*/}
+        {/*  config={configs}*/}
+        {/*  virtualChainId="0x0000000000000000000000000000000000000000000000000000000000000001"*/}
+        {/*  buttonLabel="Create"*/}
+        {/*  subscriptionLabel="Initial subscription"*/}
+        {/*/>*/}
         <VirtualChainSubscriptionForm
           subscribeNewVC={(virtualChainSubscriptionPayload) =>
             console.log(virtualChainSubscriptionPayload)
