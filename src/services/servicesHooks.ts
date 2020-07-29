@@ -2,7 +2,7 @@ import React from "react";
 import { IServices } from "./Services";
 import { ICryptoWalletConnectionService } from "./cryptoWalletConnectionService/ICryptoWalletConnectionService";
 import { MobXProviderContext } from "mobx-react";
-import { ISubscriptionService } from "./subscriptionService/ISubscriptionService";
+import { ISubscriptionsService } from "./subscriptionService/ISubscriptionsService";
 
 export function useServices(): IServices {
   const services = React.useContext(MobXProviderContext) as IServices;
@@ -18,6 +18,6 @@ export function useCryptoWalletConnectionService(): ICryptoWalletConnectionServi
   return useServices().cryptoWalletIntegrationService;
 }
 
-export function useSubscriptionsService(): ISubscriptionService {
-  return useServices().subscriptionService;
+export function useSubscriptionsService(): ISubscriptionsService {
+  return useServices().subscriptionsService;
 }

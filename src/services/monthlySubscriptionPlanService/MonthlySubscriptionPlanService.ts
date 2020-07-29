@@ -14,12 +14,16 @@ export class MonthlySubscriptionPlanService
 
   constructor(
     private web3: Web3,
-    monthlySubscriptionPlanContractAddress: string = MAIN_NET_MONTHLY_SUBSCRIPTION_PLAN_CONTRACT_ADDRESS
+    private monthlySubscriptionPlanContractAddress: string = MAIN_NET_MONTHLY_SUBSCRIPTION_PLAN_CONTRACT_ADDRESS
   ) {
     this.monthlySubscriptionContract = (new this.web3.eth.Contract(
       MonthlySubscriptionPlanContractJson.abi as AbiItem[],
       monthlySubscriptionPlanContractAddress
     ) as any) as MonthlySubscriptionPlan;
+  }
+
+  public get contractAddress(): string {
+    return this.monthlySubscriptionPlanContractAddress;
   }
 
   createANewVC(

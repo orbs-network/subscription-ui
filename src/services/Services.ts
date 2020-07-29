@@ -11,15 +11,15 @@ import Web3 from "web3";
 import configs from "../configs";
 
 // import { BuildOrbsClient } from "./OrbsClientFactory";
-import { ISubscriptionService } from "./subscriptionService/ISubscriptionService";
-import { SubscriptionService } from "./subscriptionService/SubscriptionService";
+import { ISubscriptionsService } from "./subscriptionService/ISubscriptionsService";
+import { SubscriptionsService } from "./subscriptionService/SubscriptionsService";
 import { IOrbsTokenService, OrbsTokenService } from "orbs-pos-data";
 import { IMonthlySubscriptionPlanService } from "./monthlySubscriptionPlanService/IMonthlySubscriptionPlanService";
 import { MonthlySubscriptionPlanService } from "./monthlySubscriptionPlanService/MonthlySubscriptionPlanService";
 
 export interface IServices {
   cryptoWalletIntegrationService: ICryptoWalletConnectionService;
-  subscriptionService: ISubscriptionService;
+  subscriptionsService: ISubscriptionsService;
   orbsTokenService: IOrbsTokenService;
   monthlySubscriptionPlanService: IMonthlySubscriptionPlanService;
 }
@@ -40,7 +40,7 @@ export function buildServices(ethereumProvider: IEthereumProvider): IServices {
     cryptoWalletIntegrationService: new CryptoWalletConnectionService(
       ethereumProvider
     ),
-    subscriptionService: new SubscriptionService(
+    subscriptionsService: new SubscriptionsService(
       web3,
       configs.v2contractsAddressesOverride.subscriptionContract
     ),

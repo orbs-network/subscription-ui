@@ -10,6 +10,7 @@ import { PromiEvent, TransactionReceipt } from "web3-core";
 import { JSON_RPC_ERROR_CODES } from "../constants/ethereumErrorCodes";
 import { IOrbsTokenService, OrbsTokenService } from "orbs-pos-data";
 import { fullOrbsFromWeiOrbs } from "../cryptoUtils/unitConverter";
+import { IMonthlySubscriptionPlanService } from "../services/monthlySubscriptionPlanService/IMonthlySubscriptionPlanService";
 
 export class OrbsAccountStore {
   @observable public doneLoading = false;
@@ -19,13 +20,15 @@ export class OrbsAccountStore {
   @observable public txCanceled = false;
   @observable public isGuardian = false;
 
-  @observable public orbsBalance = 0;
+  // TODO : O.L : Move all MSP related data to its own store when starting to work with more than 1.
+  @observable public allowanceToMSPContract = 0;
 
   private addressChangeReaction: IReactionDisposer;
 
   constructor(
     private cryptoWalletIntegrationStore: CryptoWalletConnectionStore,
-    private orbsTokenService: IOrbsTokenService
+    private orbsTokenService: IOrbsTokenService,
+    private monthlySubscriptionPlanService: IMonthlySubscriptionPlanService
   ) {
     this.addressChangeReaction = reaction(
       () => this.cryptoWalletIntegrationStore.mainAddress,
@@ -116,17 +119,18 @@ export class OrbsAccountStore {
     // } catch (e) {
     //   console.error(`Error read-n-set isGuardian ${e}`);
     // }
-    await this.readAndSetOrbsBalance(accountAddress).catch((e) => {
-      console.error(`Error read-n-set orbs balance: ${e}`);
+    await this.readAndSetMSPContractAllowance(accountAddress).catch((e) => {
+      console.error(`Error read-n-set MSP contract allowance: ${e}`);
     });
   }
 
   // **** Read and Set ****
-  private async readAndSetOrbsBalance(accountAddress: string) {
-    const balanceInWeiOrbs = await this.orbsTokenService.readBalance(
-      accountAddress
+  private async readAndSetMSPContractAllowance(accountAddress: string) {
+    const balanceInWeiOrbs = await this.orbsTokenService.readAllowance(
+      accountAddress,
+      this.monthlySubscriptionPlanService.contractAddress
     );
-    this.setOrbsBalance(fullOrbsFromWeiOrbs(balanceInWeiOrbs));
+    this.setMSPContractAllowance(fullOrbsFromWeiOrbs(balanceInWeiOrbs));
   }
 
   // ****  Subscriptions ****
@@ -175,9 +179,8 @@ export class OrbsAccountStore {
     this.txHadError = txHadError;
   }
 
-  @action("setOrbsBalance")
-  private setOrbsBalance(orbsBalanceInFullOrbs: number) {
-    this.orbsBalance = orbsBalanceInFullOrbs;
-    console.log("orbsBalanceInFullOrbs", orbsBalanceInFullOrbs);
+  @action("setMSPContractAllowance")
+  private setMSPContractAllowance(contractAllowance: number) {
+    this.allowanceToMSPContract = contractAllowance;
   }
 }
