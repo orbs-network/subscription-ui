@@ -1,4 +1,7 @@
-import { ISubscriptionsService } from "./ISubscriptionsService";
+import {
+  ISubscriptionsService,
+  TReadVcDataResponse,
+} from "./ISubscriptionsService";
 import Web3 from "web3";
 import SubscriptionContractJson from "@orbs-network/orbs-ethereum-contracts-v2/build/contracts/Subscriptions.json";
 import { AbiItem } from "web3-utils";
@@ -12,20 +15,21 @@ export class SubscriptionsService implements ISubscriptionsService {
 
   constructor(
     private web3: Web3,
-    guardiansRegistrationAddress: string = MAIN_NET_SUBSCRIPTION_CONTRACT_ADDRESS
+    subscriptionsContractAddress: string = MAIN_NET_SUBSCRIPTION_CONTRACT_ADDRESS
   ) {
     this.subscriptionsContract = (new this.web3.eth.Contract(
       SubscriptionContractJson.abi as AbiItem[],
-      guardiansRegistrationAddress
+      subscriptionsContractAddress
     ) as any) as Subscriptions;
   }
 
-  public async subscribeNewVirtualChain() {
-    // TODO : ORL : Get the proper value for this.
-    // DEV_NOTE : For now we have only one tier.
-    const TIER = "ONLY_TIER";
-    const RATE = "rate";
+  public async readVcData(vcid: string): Promise<TReadVcDataResponse> {
+    const rawResponse = await this.subscriptionsContract.methods
+      .getVcData(vcid)
+      .call();
 
-    // this.subscriptionContract.methods.createVC(TIER, RATE);
+    const response: TReadVcDataResponse = rawResponse;
+
+    return response;
   }
 }

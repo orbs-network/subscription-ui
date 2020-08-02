@@ -32,9 +32,14 @@ export class MonthlySubscriptionPlanService
   createANewVC(
     vcSubscriptionPayload: TVirtualChainSubscriptionPayload
   ): PromiEvent<TransactionReceipt> {
-    const { amount, isCertified, deploymentSubset } = vcSubscriptionPayload;
+    const {
+      name,
+      amount,
+      isCertified,
+      deploymentSubset,
+    } = vcSubscriptionPayload;
     return this.monthlySubscriptionContract.methods
-      .createVC(amount, isCertified, deploymentSubset)
+      .createVC(name, amount, isCertified, deploymentSubset)
       .send();
   }
 
