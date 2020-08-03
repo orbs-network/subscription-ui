@@ -1,4 +1,6 @@
-export interface ISubscriptionsService {}
+export interface ISubscriptionsService {
+  readVcData(vcid: string): Promise<TReadVcDataResponse>;
+}
 
 export type TReadVcDataResponse = {
   name: string;
