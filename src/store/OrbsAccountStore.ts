@@ -73,6 +73,19 @@ export class OrbsAccountStore {
     }
   }
 
+  public async setAllowanceForStakingContract(
+    allowanceForStakingContractInWeiOrbs: bigint
+  ): Promise<void> {
+    const mspContractAddress = this.monthlySubscriptionPlanService
+      .contractAddress;
+    const promivent = this.orbsTokenService.approve(
+      mspContractAddress,
+      allowanceForStakingContractInWeiOrbs
+    );
+
+    this.handlePromievent(promivent, "setAllowanceForStakingContract");
+  }
+
   // **** Current address changed ****
 
   private async reactToConnectedAddressChanged(currentAddress: string) {

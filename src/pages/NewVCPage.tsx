@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { Page } from "../components/structure/Page";
 import configs from "../configs";
 import VirtualChainSubscription from "../VirtualChainSubscription";
@@ -9,11 +9,14 @@ import { TVirtualChainSubscriptionPayload } from "../services/monthlySubscriptio
 import { useMonthlySubscriptionPlanService } from "../services/servicesHooks";
 import { Typography } from "@material-ui/core";
 import { useOrbsAccountStore } from "../store/storeHooks";
+import { weiOrbsFromFullOrbs } from "../cryptoUtils/unitConverter";
 
 interface IProps {}
 
 export const NewVCPage = React.memo<IProps>((props) => {
   const orbsAccountStore = useOrbsAccountStore();
+  const [runningTx, setRunningTx] = useState(false);
+
   const monthlySubscriptionPlanService = useMonthlySubscriptionPlanService();
   const createVC = useCallback(
     async (
@@ -32,6 +35,12 @@ export const NewVCPage = React.memo<IProps>((props) => {
     []
   );
 
+  const setMSPContractAllowance = useCallback((allowanceInFullOrbs: number) => {
+    orbsAccountStore.setAllowanceForStakingContract(
+      weiOrbsFromFullOrbs(allowanceInFullOrbs)
+    );
+  }, []);
+
   return (
     <Page>
       <ContentFitting>
@@ -48,6 +57,7 @@ export const NewVCPage = React.memo<IProps>((props) => {
             createVC(virtualChainSubscriptionPayload);
           }}
           allowanceToMSPContract={orbsAccountStore.allowanceToMSPContract}
+          setMSPContractAllowance={setMSPContractAllowance}
         />
       </ContentFitting>
     </Page>

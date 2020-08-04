@@ -18,6 +18,7 @@ interface IProps {
   subscribeNewVC: (
     virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload
   ) => Promise<void>;
+  setMSPContractAllowance: (allowanceInFullOrbs: number) => void;
 
   // Orbs account
   allowanceToMSPContract: number;
@@ -45,6 +46,15 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: "0.1rem",
     // textDecoration: "underline",
     // borderBottom: "1px solid",
+  },
+
+  // DEV_NOTE : O.L : For now, we give 100% to enusre united width labels with texts and icons,
+  //                  If this breaks, fix this.
+  forControlLabel: {
+    width: "100%",
+    "& .MuiFormControlLabel-label": {
+      width: "100%",
+    },
   },
 
   checkBoxes: {},
@@ -154,6 +164,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
       <br />
 
       <FormControlLabel
+        className={classes.forControlLabel}
         control={
           <>
             <Checkbox
@@ -176,7 +187,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
       <br />
 
       <FormControlLabel
-        style={{ width: "100%" }}
+        className={classes.forControlLabel}
         control={
           <Checkbox
             className={classes.checkBoxes}
