@@ -38,6 +38,7 @@ export class MonthlySubscriptionPlanService
       isCertified,
       deploymentSubset,
     } = vcSubscriptionPayload;
+
     return this.monthlySubscriptionContract.methods
       .createVC(name, amount, isCertified, deploymentSubset)
       .send();
@@ -50,5 +51,9 @@ export class MonthlySubscriptionPlanService
     return this.monthlySubscriptionContract.methods
       .extendSubscription(vcid, amount)
       .send();
+  }
+
+  setFromAccount(defaultAccountAddress: string): void {
+    this.monthlySubscriptionContract.options.from = defaultAccountAddress;
   }
 }

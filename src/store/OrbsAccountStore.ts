@@ -95,7 +95,9 @@ export class OrbsAccountStore {
     }
   }
 
-  private setDefaultAccountAddress(accountAddress: string) {}
+  private setDefaultAccountAddress(accountAddress: string) {
+    this.monthlySubscriptionPlanService.setFromAccount(accountAddress);
+  }
 
   // **** Data reading and setting ****
 
