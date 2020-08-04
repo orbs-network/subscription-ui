@@ -11,6 +11,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import AddIcon from "@material-ui/icons/Add";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import Typography from "@material-ui/core/Typography";
+import { useSnackbar } from "notistack";
 
 interface IProps {
   // Form action
@@ -18,9 +19,11 @@ interface IProps {
     virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload
   ) => Promise<void>;
 
-  disableActionButtons?: boolean;
-
   // Orbs account
+  allowanceToMSPContract: number;
+
+  // Activation flags
+  disableActionButtons?: boolean;
 }
 
 type TFormData = {
@@ -49,7 +52,13 @@ const useStyles = makeStyles((theme) => ({
 
 export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
   const classes = useStyles();
-  const { subscribeNewVC, disableActionButtons } = props;
+  const {
+    subscribeNewVC,
+    disableActionButtons,
+    allowanceToMSPContract,
+  } = props;
+  // TODO : O.L : Move this and provide as prop.
+  const { enqueueSnackbar } = useSnackbar();
   const [name, setName] = useState<string>("");
   const [monthsToPayForInAdvance, setMonthsToPayForInAdvance] = useState<
     number
@@ -59,7 +68,20 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
 
   const { register, handleSubmit, errors } = useForm<TFormData>();
 
+  const currentCostOfPlan =
+    monthsToPayForInAdvance * configs.minimalSubscriptionAmount;
+  const hasEnoughAllowance = allowanceToMSPContract >= currentCostOfPlan;
+
+  console.log({ currentCostOfPlan });
+  console.log({ hasEnoughAllowance });
+
   const submit = useCallback((formData: TFormData) => {
+    if (!hasEnoughAllowance) {
+      enqueueSnackbar(
+        "Before creating a new vc, please approve usage of your ORBS (to ensure payment for the subscription)"
+      );
+    }
+
     const virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload = {
       name: formData.name,
       amount: 0,
@@ -154,6 +176,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
       <br />
 
       <FormControlLabel
+        style={{ width: "100%" }}
         control={
           <Checkbox
             className={classes.checkBoxes}
@@ -199,7 +222,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
         type={"submit"}
         disabled={disableActionButtons}
       >
-        Create
+        Create new VC
       </Button>
     </form>
   );
@@ -211,6 +234,7 @@ const LabelWithIconTooltip = React.memo(
     return (
       <div
         style={{
+          width: "100%",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
