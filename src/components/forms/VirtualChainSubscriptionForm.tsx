@@ -10,12 +10,17 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import AddIcon from "@material-ui/icons/Add";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import Typography from "@material-ui/core/Typography";
 
 interface IProps {
+  // Form action
   subscribeNewVC: (
     virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload
-  ) => void;
-  disableSubmit?: boolean;
+  ) => Promise<void>;
+
+  disableActionButtons?: boolean;
+
+  // Orbs account
 }
 
 type TFormData = {
@@ -31,14 +36,24 @@ const useStyles = makeStyles((theme) => ({
     },
   },
 
+  phaseInstructionLabel: {
+    width: "max-content",
+    marginBottom: "0.5rem",
+    paddingBottom: "0.1rem",
+    // textDecoration: "underline",
+    // borderBottom: "1px solid",
+  },
+
   checkBoxes: {},
 }));
 
 export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
   const classes = useStyles();
-  const { subscribeNewVC, disableSubmit } = props;
+  const { subscribeNewVC, disableActionButtons } = props;
   const [name, setName] = useState<string>("");
-  const [plan, setPlan] = useState<string>("3Months");
+  const [monthsToPayForInAdvance, setMonthsToPayForInAdvance] = useState<
+    number
+  >(1);
   const [runOnCertifiedOnly, setRunOnCertifiedOnly] = useState<boolean>(false);
   const [runOnCanary, setRunOnCanary] = useState<boolean>(false);
 
@@ -64,11 +79,20 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
         width: "100%",
       }}
     >
+      <Typography
+        className={classes.phaseInstructionLabel}
+        variant={"body1"}
+        color={"secondary"}
+      >
+        1) Fill in your VC details
+      </Typography>
       <TextField
+        autoComplete={"off"}
         InputLabelProps={{ style: { pointerEvents: "auto" } }}
         name={"name"}
         label={"VC name"}
         title={""}
+        variant={"outlined"}
         value={name}
         onChange={(e) => setName(e.target.value)}
         required
@@ -77,7 +101,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
         className={classes.textField}
       />
       <br />
-
+      <br />
       <TextField
         select
         SelectProps={{ native: true }}
@@ -85,24 +109,26 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
         name={"name"}
         label={"Initial Subscription"}
         title={""}
-        value={plan}
-        onChange={(e) => setPlan(e.target.value)}
+        variant={"outlined"}
+        value={monthsToPayForInAdvance}
+        onChange={(e) => setMonthsToPayForInAdvance(parseInt(e.target.value))}
         required
         inputRef={register}
         fullWidth
         className={classes.textField}
       >
         {/* TODO : Add proper dynamic values when dealing with the real contract */}
-        <option value={"1Months"}>
+        <option value={1}>
           1 month - {configs.minimalSubscriptionAmount * 1} ORBS
         </option>
-        <option value={"3Months"}>
+        <option value={3}>
           3 months - {configs.minimalSubscriptionAmount * 3} ORBS
         </option>
-        <option value={"6Months"}>
+        <option value={6}>
           6 months - {configs.minimalSubscriptionAmount * 6} ORBS
         </option>
       </TextField>
+      <br />
       <br />
 
       <FormControlLabel
@@ -146,11 +172,32 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
         }
       />
       <br />
+      <br />
+
+      <Typography
+        className={classes.phaseInstructionLabel}
+        variant={"body1"}
+        color={"secondary"}
+      >
+        2) Allow usage of your ORBS
+      </Typography>
+      <Button variant={"outlined"} fullWidth disabled={disableActionButtons}>
+        Approve usage of your ORBS
+      </Button>
+      <br />
+      <br />
+      <Typography
+        className={classes.phaseInstructionLabel}
+        variant={"body1"}
+        color={"secondary"}
+      >
+        3) Create your new Virtual chain
+      </Typography>
       <Button
         variant={"outlined"}
         fullWidth
         type={"submit"}
-        disabled={disableSubmit}
+        disabled={disableActionButtons}
       >
         Create
       </Button>
