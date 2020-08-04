@@ -47,6 +47,7 @@ export const NewVCPage = React.memo<IProps>((props) => {
             console.log(virtualChainSubscriptionPayload);
             createVC(virtualChainSubscriptionPayload);
           }}
+          allowanceToMSPContract={orbsAccountStore.allowanceToMSPContract}
         />
       </ContentFitting>
     </Page>
