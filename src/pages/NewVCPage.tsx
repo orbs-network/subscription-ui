@@ -35,23 +35,6 @@ export const NewVCPage = observer<React.FunctionComponent<IProps>>((props) => {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const createVC = useCallback(
-    async (
-      virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload
-    ) => {
-      try {
-        console.log(virtualChainSubscriptionPayload);
-        // const res = await monthlySubscriptionPlanService.createANewVC(
-        //   virtualChainSubscriptionPayload
-        // );
-        // console.log(res);
-      } catch (e) {
-        debugger;
-      }
-    },
-    []
-  );
-
   const setMSPContractAllowance = useCallback(
     (allowanceInFullOrbs: number) => {
       orbsAccountStore.setAllowanceForStakingContract(
@@ -60,6 +43,42 @@ export const NewVCPage = observer<React.FunctionComponent<IProps>>((props) => {
     },
     [orbsAccountStore]
   );
+
+  const createNewVc = useCallback(
+    (virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload) => {
+      orbsAccountStore.createNewVc(virtualChainSubscriptionPayload);
+    },
+    [orbsAccountStore]
+  );
+
+  const showCreateVcDialog = useCallback(
+    async (
+      virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload
+    ) => {
+      console.log(virtualChainSubscriptionPayload);
+      setDialogTexts({
+        title: `Create new virtual chain ${virtualChainSubscriptionPayload.name}`,
+        content: 'Please click "Create" and accept the transaction.',
+        acceptText: "Create",
+        onCancelMessage: "VC creation canceled",
+      });
+      setShowModal(true);
+      setOnDialogAccept(() => () =>
+        createNewVc(virtualChainSubscriptionPayload)
+      );
+
+      try {
+        // const res = await monthlySubscriptionPlanService.createANewVC(
+        //   virtualChainSubscriptionPayload
+        // );
+        // console.log(res);
+      } catch (e) {
+        debugger;
+      }
+    },
+    [createNewVc]
+  );
+
   const showSetMSPContractAllowanceDialog = useCallback(
     (allowanceInFullOrbs: number) => {
       setDialogTexts({
@@ -76,8 +95,6 @@ export const NewVCPage = observer<React.FunctionComponent<IProps>>((props) => {
     [setMSPContractAllowance]
   );
 
-  console.log("contract allowance", orbsAccountStore.allowanceToMSPContract);
-
   return (
     <Page>
       <ContentFitting>
@@ -89,16 +106,12 @@ export const NewVCPage = observer<React.FunctionComponent<IProps>>((props) => {
         {/*  subscriptionLabel="Initial subscription"*/}
         {/*/>*/}
         <VirtualChainSubscriptionForm
-          subscribeNewVC={async (virtualChainSubscriptionPayload) => {
-            console.log(virtualChainSubscriptionPayload);
-            createVC(virtualChainSubscriptionPayload);
-          }}
+          subscribeNewVC={showCreateVcDialog}
           allowanceToMSPContract={orbsAccountStore.allowanceToMSPContract}
           setMSPContractAllowance={showSetMSPContractAllowanceDialog}
         />
         <ActionConfirmationModal
           open={showModal}
-          // handleClose={() => setShowModal(false)}
           onAccept={() => {
             setShowModal(false);
             onDialogAccept();
