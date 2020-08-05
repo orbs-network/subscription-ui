@@ -10,7 +10,10 @@ import { PromiEvent, TransactionReceipt } from "web3-core";
 import { JSON_RPC_ERROR_CODES } from "../constants/ethereumErrorCodes";
 import { IOrbsTokenService, OrbsTokenService } from "orbs-pos-data";
 import { fullOrbsFromWeiOrbs } from "../cryptoUtils/unitConverter";
-import { IMonthlySubscriptionPlanService } from "../services/monthlySubscriptionPlanService/IMonthlySubscriptionPlanService";
+import {
+  IMonthlySubscriptionPlanService,
+  TVirtualChainSubscriptionPayload,
+} from "../services/monthlySubscriptionPlanService/IMonthlySubscriptionPlanService";
 
 export class OrbsAccountStore {
   @observable public doneLoading = false;
@@ -90,6 +93,21 @@ export class OrbsAccountStore {
       this.readAndSetMSPContractAllowance(
         this.cryptoWalletIntegrationStore.mainAddress
       )
+    );
+  }
+
+  // TODO : O.L : Move to proper store
+  public async createNewVc(
+    virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload
+  ): Promise<void> {
+    const mspContractAddress = this.monthlySubscriptionPlanService
+      .contractAddress;
+    const promivent = this.monthlySubscriptionPlanService.createANewVC(
+      virtualChainSubscriptionPayload
+    );
+
+    this.handlePromievent(promivent, "createNewVc").then(() =>
+      console.log("Add handling of created vc")
     );
   }
 

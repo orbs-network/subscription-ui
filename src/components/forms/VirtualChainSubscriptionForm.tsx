@@ -110,13 +110,15 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
     (formData: TFormData) => {
       if (!hasEnoughAllowance) {
         enqueueSnackbar(
-          "Before creating a new vc, please approve usage of your ORBS (to ensure payment for the subscription)"
+          "Before creating a new VC, please approve usage of your ORBS",
+          { variant: "info", preventDuplicate: true }
         );
+        return;
       }
 
       const virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload = {
         name: formData.name,
-        amount: 0,
+        amount: currentCostOfPlan,
         // TODO : O.L : Change these texts to proper values once decided.
         deploymentSubset: formData.runOnCanary ? "Canary" : "All",
         isCertified: formData.runOnlyOnCertifiedValidators,
@@ -124,7 +126,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
 
       subscribeNewVC(virtualChainSubscriptionPayload);
     },
-    [enqueueSnackbar, hasEnoughAllowance, subscribeNewVC]
+    [currentCostOfPlan, enqueueSnackbar, hasEnoughAllowance, subscribeNewVC]
   );
 
   const setAllowance = useCallback(() => {
@@ -169,7 +171,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
         select
         SelectProps={{ native: true }}
         // InputLabelProps={{ style: { pointerEvents: "auto" } }}
-        name={"name"}
+        name={"subscriptionOption"}
         label={"Initial Subscription"}
         title={""}
         variant={"outlined"}
