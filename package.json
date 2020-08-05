@@ -29,12 +29,12 @@
     "web3-utils": "^1.2.11"
   },
   "devDependencies": {
+    "@typechain/web3-v1": "^1.0.0",
     "@types/jest": "^26.0.8",
     "@types/node": "^14.0.27",
     "@types/react": "^16.9.44",
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.5",
-    "@typechain/web3-v1": "^1.0.0",
     "eslint-plugin-react-hooks": "^4.0.8",
     "prettier": "^2.0.5"
   },
@@ -50,7 +50,14 @@
     "generate_types": "typechain --target web3-v1 --outDir ./src/contracts './node_modules/@orbs-network/orbs-ethereum-contracts-v2/build/contracts/*.json'"
   },
   "eslintConfig": {
-    "extends": "react-app"
+    "extends": [
+      "react-app",
+      "plugin:react-hooks/recommended"
+    ],
+    "rules": {
+      "react-hooks/rules-of-hooks": "error",
+      "react-hooks/exhaustive-deps": "error"
+    }
   },
   "browserslist": {
     "production": [

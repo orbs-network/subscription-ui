@@ -10,14 +10,31 @@ import { useMonthlySubscriptionPlanService } from "../services/servicesHooks";
 import { Typography } from "@material-ui/core";
 import { useOrbsAccountStore } from "../store/storeHooks";
 import { weiOrbsFromFullOrbs } from "../cryptoUtils/unitConverter";
+import { ActionConfirmationModal } from "../components/modals/ActionConfirmationModal";
+import { useSnackbar } from "notistack";
+import { observer } from "mobx-react";
 
 interface IProps {}
 
-export const NewVCPage = React.memo<IProps>((props) => {
+export const NewVCPage = observer<React.FunctionComponent<IProps>>((props) => {
   const orbsAccountStore = useOrbsAccountStore();
   const [runningTx, setRunningTx] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [dialogTexts, setDialogTexts] = useState<{
+    title: string;
+    content: string;
+    acceptText?: string;
+    cancelText?: string;
+    onCancelMessage?: string;
+  }>({ title: "", content: "" });
+  const [onDialogAccept, setOnDialogAccept] = useState(() => () =>
+    console.log("Accepted")
+  );
 
   const monthlySubscriptionPlanService = useMonthlySubscriptionPlanService();
+
+  const { enqueueSnackbar } = useSnackbar();
+
   const createVC = useCallback(
     async (
       virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload
@@ -35,11 +52,31 @@ export const NewVCPage = React.memo<IProps>((props) => {
     []
   );
 
-  const setMSPContractAllowance = useCallback((allowanceInFullOrbs: number) => {
-    orbsAccountStore.setAllowanceForStakingContract(
-      weiOrbsFromFullOrbs(allowanceInFullOrbs)
-    );
-  }, []);
+  const setMSPContractAllowance = useCallback(
+    (allowanceInFullOrbs: number) => {
+      orbsAccountStore.setAllowanceForStakingContract(
+        weiOrbsFromFullOrbs(allowanceInFullOrbs)
+      );
+    },
+    [orbsAccountStore]
+  );
+  const showSetMSPContractAllowanceDialog = useCallback(
+    (allowanceInFullOrbs: number) => {
+      setDialogTexts({
+        title: `Set allowance of ${allowanceInFullOrbs} ORBS`,
+        content: 'Please click "Allow" and accept the transaction.',
+        acceptText: "Allow",
+        onCancelMessage: "Action canceled",
+      });
+      setShowModal(true);
+      setOnDialogAccept(() => () =>
+        setMSPContractAllowance(allowanceInFullOrbs)
+      );
+    },
+    [setMSPContractAllowance]
+  );
+
+  console.log("contract allowance", orbsAccountStore.allowanceToMSPContract);
 
   return (
     <Page>
@@ -57,7 +94,26 @@ export const NewVCPage = React.memo<IProps>((props) => {
             createVC(virtualChainSubscriptionPayload);
           }}
           allowanceToMSPContract={orbsAccountStore.allowanceToMSPContract}
-          setMSPContractAllowance={setMSPContractAllowance}
+          setMSPContractAllowance={showSetMSPContractAllowanceDialog}
+        />
+        <ActionConfirmationModal
+          open={showModal}
+          // handleClose={() => setShowModal(false)}
+          onAccept={() => {
+            setShowModal(false);
+            onDialogAccept();
+          }}
+          onCancel={() => {
+            setShowModal(false);
+            if (dialogTexts.onCancelMessage) {
+              enqueueSnackbar(dialogTexts.onCancelMessage, {
+                variant: "info",
+                preventDuplicate: true,
+              });
+            }
+          }}
+          title={dialogTexts.title}
+          contentText={dialogTexts.content}
         />
       </ContentFitting>
     </Page>
