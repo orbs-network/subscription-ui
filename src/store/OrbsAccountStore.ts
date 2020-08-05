@@ -83,7 +83,14 @@ export class OrbsAccountStore {
       allowanceForStakingContractInWeiOrbs
     );
 
-    this.handlePromievent(promivent, "setAllowanceForStakingContract");
+    this.handlePromievent(
+      promivent,
+      "setAllowanceForStakingContract"
+    ).then(() =>
+      this.readAndSetMSPContractAllowance(
+        this.cryptoWalletIntegrationStore.mainAddress
+      )
+    );
   }
 
   // **** Current address changed ****
@@ -110,6 +117,7 @@ export class OrbsAccountStore {
 
   private setDefaultAccountAddress(accountAddress: string) {
     this.monthlySubscriptionPlanService.setFromAccount(accountAddress);
+    this.orbsTokenService.setFromAccount(accountAddress);
   }
 
   // **** Data reading and setting ****

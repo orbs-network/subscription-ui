@@ -21,7 +21,8 @@ export const baseTheme = responsiveFontSizes(
       secondary: { main: "#74f6fd" },
       background: {
         default: "#0a0f25",
-        paper: "#192a45",
+        // paper: "#192a45",
+        paper: "#09142c",
       },
     },
     typography: {

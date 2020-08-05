@@ -86,6 +86,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
     subscribeNewVC,
     disableActionButtons,
     allowanceToMSPContract,
+    setMSPContractAllowance,
   } = props;
   // TODO : O.L : Move this and provide as prop.
   const { enqueueSnackbar } = useSnackbar();
@@ -104,23 +105,30 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
     monthsToPayForInAdvance * configs.minimalSubscriptionAmount;
   const hasEnoughAllowance = allowanceToMSPContract >= currentCostOfPlan;
 
-  const submit = useCallback((formData: TFormData) => {
-    if (!hasEnoughAllowance) {
-      enqueueSnackbar(
-        "Before creating a new vc, please approve usage of your ORBS (to ensure payment for the subscription)"
-      );
-    }
+  const submit = useCallback(
+    (formData: TFormData) => {
+      if (!hasEnoughAllowance) {
+        enqueueSnackbar(
+          "Before creating a new vc, please approve usage of your ORBS (to ensure payment for the subscription)"
+        );
+      }
 
-    const virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload = {
-      name: formData.name,
-      amount: 0,
-      // TODO : O.L : Change these texts to proper values once decided.
-      deploymentSubset: formData.runOnCanary ? "Canary" : "All",
-      isCertified: formData.runOnlyOnCertifiedValidators,
-    };
+      const virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload = {
+        name: formData.name,
+        amount: 0,
+        // TODO : O.L : Change these texts to proper values once decided.
+        deploymentSubset: formData.runOnCanary ? "Canary" : "All",
+        isCertified: formData.runOnlyOnCertifiedValidators,
+      };
 
-    subscribeNewVC(virtualChainSubscriptionPayload);
-  }, []);
+      subscribeNewVC(virtualChainSubscriptionPayload);
+    },
+    [enqueueSnackbar, hasEnoughAllowance, subscribeNewVC]
+  );
+
+  const setAllowance = useCallback(() => {
+    setMSPContractAllowance(currentCostOfPlan);
+  }, [currentCostOfPlan, setMSPContractAllowance]);
 
   return (
     <form
@@ -246,12 +254,14 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
         className={classes.actionButton}
         variant={"outlined"}
         fullWidth
+        onClick={setAllowance}
         disabled={disableActionButtons}
       >
         Approve usage of your ORBS
       </Button>
       <br />
       <br />
+
       <Typography
         className={classes.phaseInstructionLabel}
         variant={"body1"}

@@ -3,7 +3,11 @@ import App from "./App";
 import { configureMobx, getStores } from "./store/storesInitialization";
 import { buildServices } from "./services/Services";
 import { Provider } from "mobx-react";
-import { StylesProvider, ThemeProvider } from "@material-ui/core/styles";
+import {
+  makeStyles,
+  StylesProvider,
+  ThemeProvider,
+} from "@material-ui/core/styles";
 import { baseTheme } from "./theme/Theme";
 import { SnackbarProvider } from "notistack";
 import { CssBaseline } from "@material-ui/core";
@@ -15,6 +19,13 @@ interface IProps {
 
 configureMobx();
 
+const useStyles = makeStyles((theme) => ({
+  snackbarInfo: {
+    backgroundColor: baseTheme.palette.primary.dark,
+    color: theme.palette.getContrastText(baseTheme.palette.primary.dark),
+  },
+}));
+
 const ethereumProvider = (window as any).ethereum;
 const services = buildServices(ethereumProvider);
 const stores = getStores(
@@ -25,6 +36,7 @@ const stores = getStores(
 );
 
 export const AppWrapper = React.memo<IProps>((props) => {
+  const classes = useStyles();
   const { children, appComponent } = props;
   return (
     <>
@@ -32,7 +44,10 @@ export const AppWrapper = React.memo<IProps>((props) => {
         <Provider {...stores} {...services}>
           <StylesProvider injectFirst>
             <ThemeProvider theme={baseTheme}>
-              <SnackbarProvider maxSnack={3}>
+              <SnackbarProvider
+                maxSnack={3}
+                classes={{ variantInfo: classes.snackbarInfo }}
+              >
                 {appComponent}
                 <CssBaseline />
               </SnackbarProvider>
