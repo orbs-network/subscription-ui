@@ -58,6 +58,26 @@ const useStyles = makeStyles((theme) => ({
   },
 
   checkBoxes: {},
+
+  typographyAnimated: {
+    transition: "height 5s, visibility 5s linear, background-color 2s",
+    height: 0,
+    visibility: "hidden",
+  },
+
+  typographyAnimatedShow: {
+    transition: "height 5s, visibility 5s linear, background-color 2s",
+    height: "100%",
+    visibility: "visible",
+  },
+
+  actionButton: {
+    transition: "background-color 0.4s linear, color 0.2s linear",
+    "&:hover": {
+      backgroundColor: theme.palette.secondary.light,
+      color: theme.palette.getContrastText(theme.palette.secondary.light),
+    },
+  },
 }));
 
 export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
@@ -69,6 +89,8 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
   } = props;
   // TODO : O.L : Move this and provide as prop.
   const { enqueueSnackbar } = useSnackbar();
+  // DEV_NOTE : This flag is used to display a message about sufficient/insufficient allowance.
+  const [planOptionChanged, setPlanOptionChanged] = useState(false);
   const [name, setName] = useState<string>("");
   const [monthsToPayForInAdvance, setMonthsToPayForInAdvance] = useState<
     number
@@ -81,9 +103,6 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
   const currentCostOfPlan =
     monthsToPayForInAdvance * configs.minimalSubscriptionAmount;
   const hasEnoughAllowance = allowanceToMSPContract >= currentCostOfPlan;
-
-  console.log({ currentCostOfPlan });
-  console.log({ hasEnoughAllowance });
 
   const submit = useCallback((formData: TFormData) => {
     if (!hasEnoughAllowance) {
@@ -118,6 +137,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
       >
         1) Fill in your VC details
       </Typography>
+      {/* Name */}
       <TextField
         autoComplete={"off"}
         InputLabelProps={{ style: { pointerEvents: "auto" } }}
@@ -134,6 +154,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
       />
       <br />
       <br />
+      {/* Subscription length */}
       <TextField
         select
         SelectProps={{ native: true }}
@@ -143,7 +164,10 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
         title={""}
         variant={"outlined"}
         value={monthsToPayForInAdvance}
-        onChange={(e) => setMonthsToPayForInAdvance(parseInt(e.target.value))}
+        onChange={(e) => {
+          setPlanOptionChanged(true);
+          setMonthsToPayForInAdvance(parseInt(e.target.value));
+        }}
         required
         inputRef={register}
         fullWidth
@@ -215,7 +239,15 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
       >
         2) Allow usage of your ORBS
       </Typography>
-      <Button variant={"outlined"} fullWidth disabled={disableActionButtons}>
+      <Typography variant={"caption"}>
+        Current allowance : {allowanceToMSPContract}/{currentCostOfPlan}
+      </Typography>
+      <Button
+        className={classes.actionButton}
+        variant={"outlined"}
+        fullWidth
+        disabled={disableActionButtons}
+      >
         Approve usage of your ORBS
       </Button>
       <br />
@@ -228,6 +260,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
         3) Create your new Virtual chain
       </Typography>
       <Button
+        className={classes.actionButton}
         variant={"outlined"}
         fullWidth
         type={"submit"}
