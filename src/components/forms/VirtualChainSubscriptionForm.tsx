@@ -12,6 +12,7 @@ import AddIcon from "@material-ui/icons/Add";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import Typography from "@material-ui/core/Typography";
 import { useSnackbar } from "notistack";
+import CheckIcon from "@material-ui/icons/Check";
 
 interface IProps {
   // Form action
@@ -135,7 +136,8 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
       onSubmit={handleSubmit((formData) => submit(formData))}
       style={{
         maxWidth: "100%",
-        width: "100%",
+        // width: "100%",
+        width: "60ch",
       }}
     >
       <Typography
@@ -255,9 +257,12 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
         variant={"outlined"}
         fullWidth
         onClick={setAllowance}
-        disabled={disableActionButtons}
+        disabled={disableActionButtons || hasEnoughAllowance}
+        startIcon={hasEnoughAllowance ? <CheckIcon /> : null}
       >
-        Approve usage of your ORBS
+        {hasEnoughAllowance
+          ? "Sufficient allowance"
+          : "Approve usage of your ORBS"}
       </Button>
       <br />
       <br />
