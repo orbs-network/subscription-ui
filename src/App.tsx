@@ -23,6 +23,8 @@ import { HomePage } from "./pages/HomePage";
 import { NewVCPage } from "./pages/NewVCPage";
 import { ExistingVCPage } from "./pages/ExistingVCPage";
 import { RecoverVCPage } from "./pages/RecoverVcPage";
+import { ROUTES } from "./constants/routes";
+import { VcCreationSuccessPage } from "./pages/VcCreationSuccessPage";
 
 interface AppState {
   connected: boolean;
@@ -101,82 +103,25 @@ class App extends React.Component<{}, AppState> {
 
     return (
       <>
-        {/*<AppBar position="fixed" className={classes.appBar}>*/}
-        {/*  <Toolbar>*/}
-        {/*    <Typography variant="h6" noWrap>*/}
-        {/*      Orbs Virtual Chain Console*/}
-        {/*    </Typography>*/}
-        {/*  </Toolbar>*/}
-        {/*</AppBar>*/}
         <Header />
         <div className={classes.headerSeparator} />
-        {/*<Drawer*/}
-        {/*  className={classes.drawer}*/}
-        {/*  variant="permanent"*/}
-        {/*  classes={{*/}
-        {/*    paper: classes.drawerPaper,*/}
-        {/*  }}*/}
-        {/*>*/}
-        {/*  <Toolbar />*/}
-        {/*  <div className={classes.drawerContainer}>*/}
-        {/*    <List>*/}
-        {/*      <ListItem*/}
-        {/*        button*/}
-        {/*        selected={this.state.newVirtualChain}*/}
-        {/*        onClick={() =>*/}
-        {/*          this.setState({*/}
-        {/*            newVirtualChain: true,*/}
-        {/*            existingVirtualChain: false,*/}
-        {/*          })*/}
-        {/*        }*/}
-        {/*      >*/}
-        {/*        <ListItemText primary="New Virtual Chain" />*/}
-        {/*      </ListItem>*/}
-        {/*      <ListItem*/}
-        {/*        button*/}
-        {/*        selected={this.state.existingVirtualChain}*/}
-        {/*        onClick={() =>*/}
-        {/*          this.setState({*/}
-        {/*            newVirtualChain: false,*/}
-        {/*            existingVirtualChain: true,*/}
-        {/*          })*/}
-        {/*        }*/}
-        {/*      >*/}
-        {/*        <ListItemText primary="Existing Virtual Chain" />*/}
-        {/*      </ListItem>*/}
-        {/*      <ListItem button>*/}
-        {/*        <ListItemText primary="Recover Virtual Chain" />*/}
-        {/*      </ListItem>*/}
-        {/*    </List>*/}
-        {/*  </div>*/}
-        {/*</Drawer>*/}
         <div className={classes.mainWrapper}>
           <main className={classes.appMain}>
             <Switch>
-              <Route exact path="/" component={HomePage} />
-              <Route exact path="/new_vc" component={NewVCPage} />
-              <Route exact path="/existing_vc" component={ExistingVCPage} />
-              <Route exact path="/recover_vc" component={RecoverVCPage} />
+              <Route exact path="/" component={NewVCPage} />
+              <Route exact path={ROUTES.newVc} component={NewVCPage} />
+              <Route
+                exact
+                path={ROUTES.existingVc}
+                component={ExistingVCPage}
+              />
+              <Route exact path={ROUTES.recoverVc} component={RecoverVCPage} />
+              <Route
+                exact
+                path={ROUTES.vcCreated}
+                component={VcCreationSuccessPage}
+              />
             </Switch>
-            {/*<Toolbar />*/}
-            {/*{!this.state.connected && (*/}
-            {/*  <Connect*/}
-            {/*    onEthereumEnabled={(value: boolean) =>*/}
-            {/*      this.onEthereumEnabled(value)*/}
-            {/*    }*/}
-            {/*  />*/}
-            {/*)}*/}
-            {/*{this.state.connected && this.state.newVirtualChain && (*/}
-            {/*  <VirtualChainSubscription*/}
-            {/*    web3={this.state.web3!}*/}
-            {/*    config={configs}*/}
-            {/*    virtualChainId="0x0000000000000000000000000000000000000000000000000000000000000001"*/}
-            {/*    buttonLabel="Create"*/}
-            {/*    subscriptionLabel="Initial subscription"*/}
-            {/*  />*/}
-            {/*)}*/}
-            {/*{this.state.connected && this.state.existingVirtualChain && (*/}
-            {/*  <ExistingVirtualChain web3={this.state.web3!} config={configs} />*/}
             {/*)}*/}
           </main>
         </div>

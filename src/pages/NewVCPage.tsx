@@ -13,11 +13,14 @@ import { weiOrbsFromFullOrbs } from "../cryptoUtils/unitConverter";
 import { ActionConfirmationModal } from "../components/modals/ActionConfirmationModal";
 import { useSnackbar } from "notistack";
 import { observer } from "mobx-react";
+import { useHistory } from "react-router-dom";
+import { ROUTES } from "../constants/routes";
 
 interface IProps {}
 
 export const NewVCPage = observer<React.FunctionComponent<IProps>>((props) => {
   const orbsAccountStore = useOrbsAccountStore();
+  const history = useHistory();
   const [runningTx, setRunningTx] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [dialogTexts, setDialogTexts] = useState<{
@@ -51,13 +54,16 @@ export const NewVCPage = observer<React.FunctionComponent<IProps>>((props) => {
       try {
         await orbsAccountStore.createNewVc(virtualChainSubscriptionPayload);
         enqueueSnackbar("VC Created !", { variant: "success" });
+        // TODO : ORL : Get the vc id after fixing the contract returrn values.
+        const tempVcId = "1ad23";
+        history.push(`${ROUTES.vcCreated}?vcId=${tempVcId}`);
       } catch (e) {
         console.log(e);
         debugger;
         enqueueSnackbar(`TX Error !`, { variant: "error" });
       }
     },
-    [enqueueSnackbar, orbsAccountStore]
+    [enqueueSnackbar, history, orbsAccountStore]
   );
 
   const showCreateVcDialog = useCallback(
