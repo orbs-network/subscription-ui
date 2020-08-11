@@ -12,7 +12,7 @@ export const VcCreationSuccessPage = React.memo<IProps>((props) => {
         <VirtualChainSubscriptionForm
           vcId={"143524"}
           vcName={"my dev VC"}
-          paidUntil={121212}
+          paidUntil={1597159653}
         />
       </ContentFitting>{" "}
     </Page>
