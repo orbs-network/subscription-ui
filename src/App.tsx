@@ -117,8 +117,7 @@ class App extends React.Component<{}, AppState> {
               />
               <Route exact path={ROUTES.recoverVc} component={RecoverVCPage} />
               <Route
-                exact
-                path={ROUTES.vcCreated}
+                path={`${ROUTES.vcCreated}/:vcId`}
                 component={VcCreationSuccessPage}
               />
             </Switch>
