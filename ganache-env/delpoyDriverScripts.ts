@@ -24,7 +24,7 @@ const deployDriverScripts = async () => {
       "my_tier",
       4000
     );
-    monthlySubscriptionPlanDeployedInstance.address;
+
     const addresses = {
       subscriptions: driver.subscriptions.address,
       erc20: driver.erc20.address,

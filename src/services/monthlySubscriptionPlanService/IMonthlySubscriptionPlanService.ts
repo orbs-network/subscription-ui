@@ -13,6 +13,10 @@ export interface IMonthlySubscriptionPlanService {
     vcid: number,
     amount: number
   ): PromiEvent<TransactionReceipt>;
+
+  // Contract instance specific data
+  readTier(): Promise<string>;
+  readMonthlyRate(): Promise<number>;
 }
 
 export type TVirtualChainSubscriptionPayload = {

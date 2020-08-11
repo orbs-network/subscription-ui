@@ -45,10 +45,19 @@ export const NewVCPage = observer<React.FunctionComponent<IProps>>((props) => {
   );
 
   const createNewVc = useCallback(
-    (virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload) => {
-      orbsAccountStore.createNewVc(virtualChainSubscriptionPayload);
+    async (
+      virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload
+    ) => {
+      try {
+        await orbsAccountStore.createNewVc(virtualChainSubscriptionPayload);
+        enqueueSnackbar("VC Created !", { variant: "success" });
+      } catch (e) {
+        console.log(e);
+        debugger;
+        enqueueSnackbar(`TX Error !`, { variant: "error" });
+      }
     },
-    [orbsAccountStore]
+    [enqueueSnackbar, orbsAccountStore]
   );
 
   const showCreateVcDialog = useCallback(
@@ -109,6 +118,9 @@ export const NewVCPage = observer<React.FunctionComponent<IProps>>((props) => {
           subscribeNewVC={showCreateVcDialog}
           allowanceToMSPContract={orbsAccountStore.allowanceToMSPContract}
           setMSPContractAllowance={showSetMSPContractAllowanceDialog}
+          monthlyRateInFullOrbs={
+            orbsAccountStore.mspContractParameters.monthlyRateInFullOrbs
+          }
         />
         <ActionConfirmationModal
           open={showModal}
