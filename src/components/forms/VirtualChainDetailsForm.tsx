@@ -70,9 +70,13 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
   return (
     <form
       style={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
         maxWidth: "100%",
         // width: "100%",
         width: "60ch",
+        textAlign: "center",
       }}
     >
       <Typography
