@@ -74,7 +74,7 @@ export class OrbsAccountStore {
   private async handlePromievent(
     promievent: PromiEvent<TransactionReceipt>,
     name = "A promivent"
-  ): Promise<void> {
+  ): Promise<any> {
     this.resetTxIndicators();
 
     // Indicate tx is pending
@@ -84,7 +84,7 @@ export class OrbsAccountStore {
     try {
       const res = await promievent;
       console.log(`Got Results for promievent of ${name}`);
-      return;
+      return res;
     } catch (e) {
       if (
         (e as any).code === JSON_RPC_ERROR_CODES.provider.userRejectedRequest
@@ -128,9 +128,11 @@ export class OrbsAccountStore {
       virtualChainSubscriptionPayload
     );
 
-    await this.handlePromievent(promivent, "createNewVc").then(() =>
-      console.log("Add handling of created vc")
-    );
+    return await this.handlePromievent(promivent, "createNewVc").then((val) => {
+      console.log("Add handling of created vc");
+      console.log({ val });
+      return val;
+    });
   }
 
   // **** Current address changed ****
