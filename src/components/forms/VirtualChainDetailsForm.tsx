@@ -1,15 +1,7 @@
 import React, { useCallback, useState } from "react";
-import { useForm } from "react-hook-form";
-import { TVirtualChainSubscriptionPayload } from "../../services/monthlySubscriptionPlanService/IMonthlySubscriptionPlanService";
-import { Button, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
-import Tooltip from "@material-ui/core/Tooltip";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import Typography from "@material-ui/core/Typography";
-import { useSnackbar } from "notistack";
-import CheckIcon from "@material-ui/icons/Check";
+import Moment from "moment";
 
 interface IProps {
   vcId: string;
@@ -74,6 +66,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
   const classes = useStyles();
   const { paidUntil, vcId, vcName } = props;
 
+  console.log({ paidUntil });
   return (
     <form
       style={{
@@ -84,47 +77,35 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
     >
       <Typography
         className={classes.phaseInstructionLabel}
-        variant={"body1"}
+        variant={"h5"}
         color={"secondary"}
       >
         Virtual chain ID
       </Typography>
-      {/* Name */}
-      <TextField
-        autoComplete={"off"}
-        InputLabelProps={{ style: { pointerEvents: "auto" } }}
-        name={"vcId"}
-        label={"Virtual chain ID"}
-        title={""}
-        variant={"outlined"}
-        value={vcId}
-        fullWidth
-        className={classes.textField}
-      />
-      <br />
-      <br />
+      <Typography className={classes.phaseInstructionLabel} variant={"body1"}>
+        {vcId}
+      </Typography>
 
       <Typography
         className={classes.phaseInstructionLabel}
-        variant={"body1"}
+        variant={"h5"}
         color={"secondary"}
       >
-        Virtual chain ID
+        Virtual chain Name
       </Typography>
-      {/* Name */}
-      <TextField
-        autoComplete={"off"}
-        InputLabelProps={{ style: { pointerEvents: "auto" } }}
-        name={"name"}
-        label={"Name"}
-        title={""}
-        variant={"outlined"}
-        value={vcName}
-        fullWidth
-        className={classes.textField}
-      />
-      <br />
-      <br />
+      <Typography className={classes.phaseInstructionLabel} variant={"body1"}>
+        {vcName}
+      </Typography>
+      <Typography
+        className={classes.phaseInstructionLabel}
+        variant={"h5"}
+        color={"secondary"}
+      >
+        Paid Until
+      </Typography>
+      <Typography className={classes.phaseInstructionLabel} variant={"body1"}>
+        {Moment.unix(paidUntil).format("MMM DD, YYYY")}
+      </Typography>
     </form>
   );
 });
