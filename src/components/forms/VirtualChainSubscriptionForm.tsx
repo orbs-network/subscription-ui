@@ -5,10 +5,7 @@ import { Button, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import configs from "../../configs";
-import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
-import AddIcon from "@material-ui/icons/Add";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import Typography from "@material-ui/core/Typography";
 import { useSnackbar } from "notistack";
@@ -20,6 +17,9 @@ interface IProps {
     virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload
   ) => Promise<void>;
   setMSPContractAllowance: (allowanceInFullOrbs: number) => void;
+
+  // Form parameters
+  monthlyRateInFullOrbs: number;
 
   // Orbs account
   allowanceToMSPContract: number;
@@ -89,6 +89,9 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
     allowanceToMSPContract,
     setMSPContractAllowance,
   } = props;
+
+  const { monthlyRateInFullOrbs } = props;
+
   // TODO : O.L : Move this and provide as prop.
   const { enqueueSnackbar } = useSnackbar();
   // DEV_NOTE : This flag is used to display a message about sufficient/insufficient allowance.
@@ -102,8 +105,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
 
   const { register, handleSubmit, errors } = useForm<TFormData>();
 
-  const currentCostOfPlan =
-    monthsToPayForInAdvance * configs.minimalSubscriptionAmount;
+  const currentCostOfPlan = monthsToPayForInAdvance * monthlyRateInFullOrbs;
   const hasEnoughAllowance = allowanceToMSPContract >= currentCostOfPlan;
 
   const submit = useCallback(
@@ -120,7 +122,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
         name: formData.name,
         amount: currentCostOfPlan,
         // TODO : O.L : Change these texts to proper values once decided.
-        deploymentSubset: formData.runOnCanary ? "Canary" : "All",
+        deploymentSubset: formData.runOnCanary ? "canary" : "main",
         isCertified: formData.runOnlyOnCertifiedValidators,
       };
 
@@ -186,15 +188,9 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
         className={classes.textField}
       >
         {/* TODO : Add proper dynamic values when dealing with the real contract */}
-        <option value={1}>
-          1 month - {configs.minimalSubscriptionAmount * 1} ORBS
-        </option>
-        <option value={3}>
-          3 months - {configs.minimalSubscriptionAmount * 3} ORBS
-        </option>
-        <option value={6}>
-          6 months - {configs.minimalSubscriptionAmount * 6} ORBS
-        </option>
+        <option value={1}>1 month - {monthlyRateInFullOrbs * 1} ORBS</option>
+        <option value={3}>3 months - {monthlyRateInFullOrbs * 3} ORBS</option>
+        <option value={6}>6 months - {monthlyRateInFullOrbs * 6} ORBS</option>
       </TextField>
       <br />
       <br />

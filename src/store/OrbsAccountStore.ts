@@ -15,13 +15,24 @@ import {
   TVirtualChainSubscriptionPayload,
 } from "../services/monthlySubscriptionPlanService/IMonthlySubscriptionPlanService";
 
+type TMSPContractParameters = {
+  tierName: string;
+  monthlyRateInFullOrbs: number;
+};
+
 export class OrbsAccountStore {
+  @observable public contractParametersDoneLoading = false;
+  @observable public contractParametersErrorLoading = false;
   @observable public doneLoading = false;
   @observable public errorLoading = false;
   @observable public txPending = false;
   @observable public txHadError = false;
   @observable public txCanceled = false;
   @observable public isGuardian = false;
+  @observable public mspContractParameters: TMSPContractParameters = {
+    monthlyRateInFullOrbs: 0,
+    tierName: "",
+  };
 
   // TODO : O.L : Move all MSP related data to its own store when starting to work with more than 1.
   @observable public allowanceToMSPContract = 0;
@@ -33,11 +44,22 @@ export class OrbsAccountStore {
     private orbsTokenService: IOrbsTokenService,
     private monthlySubscriptionPlanService: IMonthlySubscriptionPlanService
   ) {
+    this.readContractParameters().then(() =>
+      console.log("MSP contract parameters read success")
+    );
     this.addressChangeReaction = reaction(
       () => this.cryptoWalletIntegrationStore.mainAddress,
       async (address) => {
         this.setDoneLoading(false);
         await this.reactToConnectedAddressChanged(address);
+
+        this.monthlySubscriptionPlanService
+          .readMonthlyRate()
+          .then((monthlyRate) => console.log({ monthlyRate }));
+
+        this.monthlySubscriptionPlanService
+          .readTier()
+          .then((tier) => console.log({ tier }));
         this.setDoneLoading(true);
       },
       {
@@ -106,7 +128,7 @@ export class OrbsAccountStore {
       virtualChainSubscriptionPayload
     );
 
-    this.handlePromievent(promivent, "createNewVc").then(() =>
+    await this.handlePromievent(promivent, "createNewVc").then(() =>
       console.log("Add handling of created vc")
     );
   }
@@ -139,6 +161,19 @@ export class OrbsAccountStore {
   }
 
   // **** Data reading and setting ****
+
+  private async readContractParameters() {
+    try {
+      const tierName = await this.monthlySubscriptionPlanService.readTier();
+      const monthlyRateInFullOrbs = await this.monthlySubscriptionPlanService.readMonthlyRate();
+
+      this.setMspContractParameters({ tierName, monthlyRateInFullOrbs });
+    } catch (e) {
+      this.setContractParametersErrorLoading(true);
+      console.error("Error loading msp contract parameters");
+      console.error(e);
+    }
+  }
 
   public async manuallyReadAccountData() {
     try {
@@ -195,6 +230,20 @@ export class OrbsAccountStore {
   }
 
   // ****  Observables setter actions ****
+  @action("setContractParametersDoneLoading")
+  private setContractParametersDoneLoading(
+    contractParametersDoneLoading: boolean
+  ) {
+    this.contractParametersDoneLoading = contractParametersDoneLoading;
+  }
+
+  @action("setContractParametersErrorLoading")
+  private setContractParametersErrorLoading(
+    contractParametersErrorLoading: boolean
+  ) {
+    this.contractParametersErrorLoading = contractParametersErrorLoading;
+  }
+
   @action("setDoneLoading")
   private setDoneLoading(doneLoading: boolean) {
     this.doneLoading = doneLoading;
@@ -223,5 +272,12 @@ export class OrbsAccountStore {
   @action("setMSPContractAllowance")
   private setMSPContractAllowance(contractAllowance: number) {
     this.allowanceToMSPContract = contractAllowance;
+  }
+
+  @action("setMspContractParameters")
+  private setMspContractParameters(
+    mspContractParameters: TMSPContractParameters
+  ) {
+    this.mspContractParameters = mspContractParameters;
   }
 }

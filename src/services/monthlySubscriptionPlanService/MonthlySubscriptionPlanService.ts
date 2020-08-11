@@ -56,4 +56,15 @@ export class MonthlySubscriptionPlanService
   setFromAccount(defaultAccountAddress: string): void {
     this.monthlySubscriptionContract.options.from = defaultAccountAddress;
   }
+
+  async readMonthlyRate(): Promise<number> {
+    const rateAsString = await this.monthlySubscriptionContract.methods
+      .monthlyRate()
+      .call();
+    return parseInt(rateAsString);
+  }
+
+  async readTier(): Promise<string> {
+    return this.monthlySubscriptionContract.methods.tier().call();
+  }
 }
