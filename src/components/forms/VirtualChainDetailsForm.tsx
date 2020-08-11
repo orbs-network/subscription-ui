@@ -82,7 +82,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
       >
         Virtual chain ID
       </Typography>
-      <Typography className={classes.phaseInstructionLabel} variant={"body1"}>
+      <Typography className={classes.phaseInstructionLabel} variant={"h6"}>
         {vcId}
       </Typography>
 
@@ -93,7 +93,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
       >
         Virtual chain Name
       </Typography>
-      <Typography className={classes.phaseInstructionLabel} variant={"body1"}>
+      <Typography className={classes.phaseInstructionLabel} variant={"h6"}>
         {vcName}
       </Typography>
       <Typography
@@ -103,7 +103,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
       >
         Paid Until
       </Typography>
-      <Typography className={classes.phaseInstructionLabel} variant={"body1"}>
+      <Typography className={classes.phaseInstructionLabel} variant={"h6"}>
         {Moment.unix(paidUntil).format("MMM DD, YYYY")}
       </Typography>
     </form>
