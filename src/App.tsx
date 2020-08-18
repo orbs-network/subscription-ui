@@ -108,7 +108,6 @@ class App extends React.Component<{}, AppState> {
         <div className={classes.mainWrapper}>
           <main className={classes.appMain}>
             <Switch>
-              <Route exact path="/" component={NewVCPage} />
               <Route exact path={ROUTES.newVc} component={NewVCPage} />
               <Route
                 exact
@@ -120,6 +119,7 @@ class App extends React.Component<{}, AppState> {
                 path={`${ROUTES.vcCreated}/:vcId`}
                 component={VcCreationSuccessPage}
               />
+              <Route path="/" component={NewVCPage} />
             </Switch>
             {/*)}*/}
           </main>

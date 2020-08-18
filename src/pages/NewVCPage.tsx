@@ -54,7 +54,7 @@ export const NewVCPage = observer<React.FunctionComponent<IProps>>((props) => {
       try {
         await orbsAccountStore.createNewVc(virtualChainSubscriptionPayload);
         enqueueSnackbar("VC Created !", { variant: "success" });
-        // TODO : ORL : Get the vc id after fixing the contract returrn values.
+
         const tempVcId = "1ad23";
         history.push(`${ROUTES.vcCreated}/${tempVcId}`);
       } catch (e) {
