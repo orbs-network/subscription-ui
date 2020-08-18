@@ -60,14 +60,28 @@ export const VcCreationSuccessPage = React.memo<IProps>((props) => {
     );
   }
 
+  // TODO : O.L : Fix the centering of the elements to be more elegant
+
   return (
     <Page>
       <ContentFitting>
-        <VirtualChainSubscriptionForm
-          vcId={vcId}
-          vcName={vcData.name}
-          paidUntil={vcData.payedUntil}
-        />
+        <div
+          style={{
+            padding: "0.5rem",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            textAlign: "center",
+            marginRight: "auto",
+            marginLeft: "auto",
+          }}
+        >
+          <VirtualChainSubscriptionForm
+            vcId={vcId}
+            vcName={vcData.name}
+            paidUntil={vcData.payedUntil}
+          />{" "}
+        </div>
         <div
           style={{
             padding: "0.5rem",
