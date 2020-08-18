@@ -74,20 +74,16 @@ export const VcIdForm = React.memo<IProps>((props) => {
   const classes = useStyles();
   const { actionButtonText, onActionClick } = props;
 
-  // DEV_NOTE : This flag is used to display a message about sufficient/insufficient allowance.
-  const [planOptionChanged, setPlanOptionChanged] = useState(false);
-  const [name, setName] = useState<string>("");
-  const [monthsToPayForInAdvance, setMonthsToPayForInAdvance] = useState<
-    number
-  >(1);
-  const [runOnCertifiedOnly, setRunOnCertifiedOnly] = useState<boolean>(false);
-  const [runOnCanary, setRunOnCanary] = useState<boolean>(false);
+  const [vcId, setVcId] = useState<string>("");
 
   const { register, handleSubmit, errors } = useForm<TFormData>();
 
-  const submit = useCallback((formData: TFormData) => {
-    console.log(formData);
-  }, []);
+  const submit = useCallback(
+    (formData: TFormData) => {
+      onActionClick(formData.vcId);
+    },
+    [onActionClick]
+  );
 
   return (
     <form
@@ -113,8 +109,8 @@ export const VcIdForm = React.memo<IProps>((props) => {
         label={"Virtual chain ID"}
         title={""}
         variant={"outlined"}
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        value={vcId}
+        onChange={(e) => setVcId(e.target.value)}
         required
         inputRef={register}
         fullWidth

@@ -38,6 +38,8 @@ export function useVcDataHook(vcId: string): TUseVcDataHookResponse {
   );
 
   useEffect(() => {
+    setIsLoading(true);
+    setErrorFindingVc(false);
     readVcData(vcId)
       .then((vcData) => {
         setIsLoading(false);
