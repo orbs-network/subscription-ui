@@ -59,7 +59,7 @@ if (process.env.NODE_ENV !== "production") {
 
     // Override addresses
     configs.v2contractsAddressesOverride.subscriptionContract =
-      addresses.guardiansRegistration;
+      addresses.subscriptions;
     configs.v2contractsAddressesOverride.erc20Contract = addresses.erc20;
     configs.v2contractsAddressesOverride.monthlySubscriptionPlanDeployedInstance =
       addresses.monthlySubscriptionPlanDeployedInstance;

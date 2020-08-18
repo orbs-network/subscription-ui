@@ -17,9 +17,28 @@ export const VcCreationSuccessPage = React.memo<IProps>((props) => {
   const theme = useTheme();
 
   const { vcId } = useParams<TRouteParams>();
-  const vcData = useVcDataHook(vcId);
+  const { vcData, errorFindingVc, isLoading } = useVcDataHook(vcId);
 
-  if (!vcData) {
+  if (isLoading) {
+    return (
+      <Page>
+        <ContentFitting
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            variant={"h3"}
+            style={{ color: theme.palette.error.main }}
+          >
+            Loading...
+          </Typography>
+        </ContentFitting>
+      </Page>
+    );
+  } else if (errorFindingVc) {
     return (
       <Page>
         <ContentFitting

@@ -7,9 +7,16 @@ type TVcData = {
   payedUntil: number;
 };
 
-export function useVcDataHook(vcId: string): TVcData | null {
-  const [noSuchVc, setNoSuchVc] = useState(false);
-  const [vdData, setVcData] = useState<TVcData>({
+type TUseVcDataHookResponse = {
+  vcData: TVcData;
+  isLoading: boolean;
+  errorFindingVc: boolean;
+};
+
+export function useVcDataHook(vcId: string): TUseVcDataHookResponse {
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorFindingVc, setErrorFindingVc] = useState(false);
+  const [vcData, setVcData] = useState<TVcData>({
     id: "",
     name: "",
     payedUntil: 0,
@@ -32,13 +39,19 @@ export function useVcDataHook(vcId: string): TVcData | null {
 
   useEffect(() => {
     readVcData(vcId)
-      .then((vcData) => setVcData(vcData))
-      .catch(() => setNoSuchVc(true));
+      .then((vcData) => {
+        setIsLoading(false);
+        setVcData(vcData);
+      })
+      .catch(() => {
+        setIsLoading(false);
+        setErrorFindingVc(true);
+      });
   }, [readVcData, vcId]);
 
-  if (noSuchVc) {
-    return null;
-  } else {
-    return vdData;
-  }
+  return {
+    errorFindingVc,
+    isLoading,
+    vcData,
+  };
 }

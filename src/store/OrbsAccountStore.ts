@@ -14,6 +14,7 @@ import {
   IMonthlySubscriptionPlanService,
   TVirtualChainSubscriptionPayload,
 } from "../services/monthlySubscriptionPlanService/IMonthlySubscriptionPlanService";
+import { ISubscriptionsService } from "../services/subscriptionService/ISubscriptionsService";
 
 type TMSPContractParameters = {
   tierName: string;
@@ -42,7 +43,8 @@ export class OrbsAccountStore {
   constructor(
     private cryptoWalletIntegrationStore: CryptoWalletConnectionStore,
     private orbsTokenService: IOrbsTokenService,
-    private monthlySubscriptionPlanService: IMonthlySubscriptionPlanService
+    private monthlySubscriptionPlanService: IMonthlySubscriptionPlanService,
+    private subscriptionsService: ISubscriptionsService
   ) {
     this.readContractParameters().then(() =>
       console.log("MSP contract parameters read success")
@@ -74,7 +76,7 @@ export class OrbsAccountStore {
   private async handlePromievent(
     promievent: PromiEvent<TransactionReceipt>,
     name = "A promivent"
-  ): Promise<any> {
+  ): Promise<TransactionReceipt | undefined> {
     this.resetTxIndicators();
 
     // Indicate tx is pending
@@ -121,18 +123,27 @@ export class OrbsAccountStore {
   // TODO : O.L : Move to proper store
   public async createNewVc(
     virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload
-  ): Promise<void> {
+  ): Promise<string> {
     const mspContractAddress = this.monthlySubscriptionPlanService
       .contractAddress;
     const promivent = this.monthlySubscriptionPlanService.createANewVC(
       virtualChainSubscriptionPayload
     );
 
-    return await this.handlePromievent(promivent, "createNewVc").then((val) => {
-      console.log("Add handling of created vc");
-      console.log({ val });
-      return val;
-    });
+    const recipt = await this.handlePromievent(promivent, "createNewVc").then(
+      (val) => {
+        console.log("Add handling of created vc");
+        console.log({ val });
+        return val;
+      }
+    );
+
+    const { vcId } = await this.subscriptionsService.readVcIdFromHistory(
+      recipt!.blockNumber,
+      this.cryptoWalletIntegrationStore.mainAddress
+    );
+
+    return vcId;
   }
 
   // **** Current address changed ****
@@ -159,6 +170,7 @@ export class OrbsAccountStore {
 
   private setDefaultAccountAddress(accountAddress: string) {
     this.monthlySubscriptionPlanService.setFromAccount(accountAddress);
+    this.subscriptionsService.setFromAccount(accountAddress);
     this.orbsTokenService.setFromAccount(accountAddress);
   }
 
