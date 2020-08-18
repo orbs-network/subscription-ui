@@ -52,14 +52,14 @@ export const NewVCPage = observer<React.FunctionComponent<IProps>>((props) => {
       virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload
     ) => {
       try {
-        await orbsAccountStore.createNewVc(virtualChainSubscriptionPayload);
+        const vcId = await orbsAccountStore.createNewVc(
+          virtualChainSubscriptionPayload
+        );
         enqueueSnackbar("VC Created !", { variant: "success" });
 
-        const tempVcId = "1ad23";
-        history.push(`${ROUTES.vcCreated}/${tempVcId}`);
+        history.push(`${ROUTES.vcCreated}/${vcId}`);
       } catch (e) {
         console.log(e);
-        debugger;
         enqueueSnackbar(`TX Error !`, { variant: "error" });
       }
     },
@@ -88,7 +88,7 @@ export const NewVCPage = observer<React.FunctionComponent<IProps>>((props) => {
         // );
         // console.log(res);
       } catch (e) {
-        debugger;
+        console.error(e);
       }
     },
     [createNewVc]
