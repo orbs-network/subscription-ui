@@ -1,5 +1,6 @@
 import {
   IMonthlySubscriptionPlanService,
+  TVirtualChainSubscriptionExtensionPayload,
   TVirtualChainSubscriptionPayload,
 } from "./IMonthlySubscriptionPlanService";
 import Web3 from "web3";
@@ -45,11 +46,12 @@ export class MonthlySubscriptionPlanService
   }
 
   extendSubscription(
-    vcid: number,
-    amount: number
+    virtualChainSubscriptionExtensionPayload: TVirtualChainSubscriptionExtensionPayload
   ): PromiEvent<TransactionReceipt> {
+    const { amount, vcId } = virtualChainSubscriptionExtensionPayload;
+    console.log("Extending by amount", amount);
     return this.monthlySubscriptionContract.methods
-      .extendSubscription(vcid, amount)
+      .extendSubscription(vcId, amount)
       .send();
   }
 

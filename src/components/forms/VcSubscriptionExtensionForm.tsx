@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
-import { TVirtualChainSubscriptionPayload } from "../../services/monthlySubscriptionPlanService/IMonthlySubscriptionPlanService";
 import { Button, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -13,9 +12,7 @@ import CheckIcon from "@material-ui/icons/Check";
 
 interface IProps {
   // Form action
-  subscribeNewVC: (
-    virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload
-  ) => Promise<void>;
+  extendVcSubscription: (amount: number) => Promise<void>;
   setMSPContractAllowance: (allowanceInFullOrbs: number) => void;
 
   // Form parameters
@@ -81,10 +78,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
+export const VcSubscriptionExtensionForm = React.memo<IProps>((props) => {
   const classes = useStyles();
   const {
-    subscribeNewVC,
+    extendVcSubscription,
     disableActionButtons,
     allowanceToMSPContract,
     setMSPContractAllowance,
@@ -112,23 +109,20 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
     (formData: TFormData) => {
       if (!hasEnoughAllowance) {
         enqueueSnackbar(
-          "Before creating a new VC, please approve usage of your ORBS",
+          "Before extending your VC subscription, please approve usage of your ORBS",
           { variant: "info", preventDuplicate: true }
         );
         return;
       }
 
-      const virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload = {
-        name: formData.name,
-        amount: currentCostOfPlan,
-        // TODO : O.L : Change these texts to proper values once decided.
-        deploymentSubset: formData.runOnCanary ? "canary" : "main",
-        isCertified: formData.runOnlyOnCertifiedValidators,
-      };
-
-      subscribeNewVC(virtualChainSubscriptionPayload);
+      extendVcSubscription(currentCostOfPlan);
     },
-    [currentCostOfPlan, enqueueSnackbar, hasEnoughAllowance, subscribeNewVC]
+    [
+      hasEnoughAllowance,
+      currentCostOfPlan,
+      extendVcSubscription,
+      enqueueSnackbar,
+    ]
   );
 
   const setAllowance = useCallback(() => {
@@ -149,25 +143,8 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
         variant={"body1"}
         color={"secondary"}
       >
-        1) Fill in your VC details
+        1) Select how many months to extend by
       </Typography>
-      {/* Name */}
-      <TextField
-        autoComplete={"off"}
-        InputLabelProps={{ style: { pointerEvents: "auto" } }}
-        name={"name"}
-        label={"VC name"}
-        title={""}
-        variant={"outlined"}
-        value={name}
-        onChange={(e) => setName(e.target.value)}
-        required
-        inputRef={register}
-        fullWidth
-        className={classes.textField}
-      />
-      <br />
-      <br />
       {/* Subscription length */}
       <TextField
         select
@@ -188,58 +165,16 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
         className={classes.textField}
       >
         {/* TODO : Add proper dynamic values when dealing with the real contract */}
-        <option value={1}>1 month - {monthlyRateInFullOrbs * 1} ORBS</option>
-        <option value={3}>3 months - {monthlyRateInFullOrbs * 3} ORBS</option>
-        <option value={6}>6 months - {monthlyRateInFullOrbs * 6} ORBS</option>
+        <option value={1}>
+          1 month extension - {monthlyRateInFullOrbs * 1} ORBS
+        </option>
+        <option value={3}>
+          3 months extension - {monthlyRateInFullOrbs * 3} ORBS
+        </option>
+        <option value={6}>
+          6 months extension - {monthlyRateInFullOrbs * 6} ORBS
+        </option>
       </TextField>
-      <br />
-      <br />
-
-      {/* DEV_NOTE : O.L : For now we do not allow advanced configurations */}
-      {/*<FormControlLabel*/}
-      {/*  className={classes.forControlLabel}*/}
-      {/*  control={*/}
-      {/*    <>*/}
-      {/*      <Checkbox*/}
-      {/*        className={classes.checkBoxes}*/}
-      {/*        checked={runOnCertifiedOnly}*/}
-      {/*        onChange={(e) => setRunOnCertifiedOnly(e.target.checked)}*/}
-      {/*        name="runOnlyOnCertifiedValidators"*/}
-      {/*        // color="primary"*/}
-      {/*        inputRef={register}*/}
-      {/*      />*/}
-      {/*    </>*/}
-      {/*  }*/}
-      {/*  label={*/}
-      {/*    <LabelWithIconTooltip*/}
-      {/*      text={"Run only on identified validators"}*/}
-      {/*      tooltipText={"Add content"}*/}
-      {/*    />*/}
-      {/*  }*/}
-      {/*/>*/}
-      {/*<br />*/}
-
-      {/*<FormControlLabel*/}
-      {/*  className={classes.forControlLabel}*/}
-      {/*  control={*/}
-      {/*    <Checkbox*/}
-      {/*      className={classes.checkBoxes}*/}
-      {/*      checked={runOnCanary}*/}
-      {/*      onChange={(e) => setRunOnCanary(e.target.checked)}*/}
-      {/*      name="runOnCanary"*/}
-      {/*      // color="primary"*/}
-      {/*      inputRef={register}*/}
-      {/*    />*/}
-      {/*  }*/}
-      {/*  label={*/}
-      {/*    <LabelWithIconTooltip*/}
-      {/*      text={"Run unstable early releases"}*/}
-      {/*      tooltipText={"add here as well"}*/}
-      {/*    />*/}
-      {/*  }*/}
-      {/*/>*/}
-      {/*<br />*/}
-      {/*<br />*/}
 
       <Typography
         className={classes.phaseInstructionLabel}
@@ -271,7 +206,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
         variant={"body1"}
         color={"secondary"}
       >
-        3) Create your new Virtual chain
+        3) Extend your subscription
       </Typography>
       <Button
         className={classes.actionButton}
@@ -280,7 +215,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
         type={"submit"}
         disabled={disableActionButtons}
       >
-        Create new VC
+        Extend VC subscription
       </Button>
     </form>
   );

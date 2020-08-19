@@ -25,6 +25,7 @@ import { ExistingVCPage } from "./pages/ExistingVCPage";
 import { RecoverVCPage } from "./pages/RecoverVcPage";
 import { ROUTES } from "./constants/routes";
 import { VcCreationSuccessPage } from "./pages/VcCreationSuccessPage";
+import { VcExtensionSuccessPage } from "./pages/VcExtensionSuccessPage";
 
 interface AppState {
   connected: boolean;
@@ -118,6 +119,10 @@ class App extends React.Component<{}, AppState> {
               <Route
                 path={`${ROUTES.vcCreated}/:vcId`}
                 component={VcCreationSuccessPage}
+              />
+              <Route
+                path={`${ROUTES.vcExtended}/:vcId`}
+                component={VcExtensionSuccessPage}
               />
               <Route path="/" component={NewVCPage} />
             </Switch>

@@ -10,8 +10,7 @@ export interface IMonthlySubscriptionPlanService {
   ): PromiEvent<TransactionReceipt>;
 
   extendSubscription(
-    vcid: number,
-    amount: number
+    virtualChainSubscriptionExtensionPayload: TVirtualChainSubscriptionExtensionPayload
   ): PromiEvent<TransactionReceipt>;
 
   // Contract instance specific data
@@ -24,4 +23,9 @@ export type TVirtualChainSubscriptionPayload = {
   amount: number;
   isCertified: boolean;
   deploymentSubset: string;
+};
+
+export type TVirtualChainSubscriptionExtensionPayload = {
+  vcId: string;
+  amount: number;
 };
