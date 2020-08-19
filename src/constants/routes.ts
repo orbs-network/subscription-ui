@@ -3,4 +3,5 @@ export const ROUTES = {
   existingVc: "/existing_vc",
   recoverVc: "/recover_vc",
   vcCreated: "/vc_created",
+  vcExtended: "/vc_extended",
 };

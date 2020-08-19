@@ -12,6 +12,7 @@ import { IOrbsTokenService, OrbsTokenService } from "orbs-pos-data";
 import { fullOrbsFromWeiOrbs } from "../cryptoUtils/unitConverter";
 import {
   IMonthlySubscriptionPlanService,
+  TVirtualChainSubscriptionExtensionPayload,
   TVirtualChainSubscriptionPayload,
 } from "../services/monthlySubscriptionPlanService/IMonthlySubscriptionPlanService";
 import { ISubscriptionsService } from "../services/subscriptionService/ISubscriptionsService";
@@ -144,6 +145,24 @@ export class OrbsAccountStore {
     );
 
     return vcId;
+  }
+
+  public async extendExistingVcSubscription(
+    virtualChainSubscriptionExtensionPayload: TVirtualChainSubscriptionExtensionPayload
+  ): Promise<void> {
+    const mspContractAddress = this.monthlySubscriptionPlanService
+      .contractAddress;
+    const promivent = this.monthlySubscriptionPlanService.extendSubscription(
+      virtualChainSubscriptionExtensionPayload
+    );
+
+    const recipt = await this.handlePromievent(
+      promivent,
+      "extendExistingVcSubscription"
+    ).then((val) => {
+      console.log({ val });
+      return val;
+    });
   }
 
   // **** Current address changed ****
