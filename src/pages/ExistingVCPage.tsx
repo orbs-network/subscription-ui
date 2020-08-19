@@ -91,7 +91,7 @@ export const ExistingVCPage = observer<React.FunctionComponent<IProps>>(
           enqueueSnackbar(`TX Error !`, { variant: "error" });
         }
       },
-      [enqueueSnackbar, orbsAccountStore, vcId]
+      [enqueueSnackbar, history, orbsAccountStore, vcId]
     );
 
     const showSelectVcForm = vcId.length === 0;
