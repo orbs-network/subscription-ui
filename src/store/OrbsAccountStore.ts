@@ -144,6 +144,9 @@ export class OrbsAccountStore {
       this.cryptoWalletIntegrationStore.mainAddress
     );
 
+    // DEV_NOTE : O.L : Re-Reading all relevant data, no need to wait
+    this.manuallyReadAccountData();
+
     return vcId;
   }
 
@@ -163,6 +166,9 @@ export class OrbsAccountStore {
       console.log({ val });
       return val;
     });
+
+    // DEV_NOTE : O.L : Re-Reading all relevant data, no need to wait
+    this.manuallyReadAccountData();
   }
 
   // **** Current address changed ****
