@@ -9,8 +9,8 @@ import MonthlySubscriptionPlanContractJson from "@orbs-network/orbs-ethereum-con
 import { AbiItem } from "web3-utils";
 import { PromiEvent, TransactionReceipt } from "web3-core";
 
-// TODO : O.L : Fill it up after deploying,
-const MAIN_NET_MONTHLY_SUBSCRIPTION_PLAN_CONTRACT_ADDRESS = "";
+const MAIN_NET_MONTHLY_SUBSCRIPTION_PLAN_CONTRACT_ADDRESS =
+  "0xb2e3e952ba99a3eab76eddf85a2d387e3d9d335b";
 
 export class MonthlySubscriptionPlanService
   implements IMonthlySubscriptionPlanService {
