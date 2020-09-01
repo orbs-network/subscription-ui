@@ -5,6 +5,7 @@ export const IS_DEV = process.env.NODE_ENV !== "production";
 const INFURA_KEY = process.env.REACT_APP_INFURA_KEY;
 
 export interface IConfig {
+  urlBase: string;
   network: TSupportedNets;
   minimalSubscriptionAmount: number;
   decimals: number;
@@ -41,6 +42,7 @@ const MAIN_NET_MINIMUM_SUBSCRIPTION_AMOUNT = 6200;
 const MAIN_NET_DECIMALS = 18;
 
 const configs: IConfig = {
+  urlBase: process.env.PUBLIC_BASE_PATH || "",
   network: "mainnet",
   minimalSubscriptionAmount: MAIN_NET_MINIMUM_SUBSCRIPTION_AMOUNT,
   decimals: MAIN_NET_DECIMALS,

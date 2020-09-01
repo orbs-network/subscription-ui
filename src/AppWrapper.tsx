@@ -11,6 +11,7 @@ import { baseTheme } from "./theme/Theme";
 import { SnackbarProvider } from "notistack";
 import { CssBaseline } from "@material-ui/core";
 import { BrowserRouter as Router } from "react-router-dom";
+import configs from "./configs";
 
 interface IProps {
   appComponent: React.ReactNode;
@@ -39,7 +40,7 @@ export const AppWrapper = React.memo<IProps>((props) => {
   const { children, appComponent } = props;
   return (
     <>
-      <Router>
+      <Router basename={configs.urlBase}>
         <Provider {...stores} {...services}>
           <StylesProvider injectFirst>
             <ThemeProvider theme={baseTheme}>
