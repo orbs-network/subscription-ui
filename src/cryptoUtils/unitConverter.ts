@@ -1,7 +1,7 @@
 import web3 from "web3";
 
-export function fullOrbsFromWeiOrbs(weiOrbs: bigint): number {
-  return parseInt(web3.utils.fromWei(weiOrbs.toString(), "ether"));
+export function fullOrbsFromWeiOrbs(weiOrbsString: string): number {
+  return parseInt(web3.utils.fromWei(weiOrbsString, "ether"));
 }
 
 export function weiOrbsFromFullOrbs(fullOrbs: number): bigint {

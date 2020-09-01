@@ -57,7 +57,7 @@ export class OrbsAccountStore {
         await this.reactToConnectedAddressChanged(address);
 
         this.monthlySubscriptionPlanService
-          .readMonthlyRate()
+          .readMonthlyRateInFullOrbs()
           .then((monthlyRate) => console.log({ monthlyRate }));
 
         this.monthlySubscriptionPlanService
@@ -198,7 +198,7 @@ export class OrbsAccountStore {
   private async readContractParameters() {
     try {
       const tierName = await this.monthlySubscriptionPlanService.readTier();
-      const monthlyRateInFullOrbs = await this.monthlySubscriptionPlanService.readMonthlyRate();
+      const monthlyRateInFullOrbs = await this.monthlySubscriptionPlanService.readMonthlyRateInFullOrbs();
 
       this.setMspContractParameters({ tierName, monthlyRateInFullOrbs });
     } catch (e) {
@@ -239,7 +239,9 @@ export class OrbsAccountStore {
       accountAddress,
       this.monthlySubscriptionPlanService.contractAddress
     );
-    this.setMSPContractAllowance(fullOrbsFromWeiOrbs(balanceInWeiOrbs));
+    this.setMSPContractAllowance(
+      fullOrbsFromWeiOrbs(balanceInWeiOrbs.toString())
+    );
   }
 
   // ****  Subscriptions ****
