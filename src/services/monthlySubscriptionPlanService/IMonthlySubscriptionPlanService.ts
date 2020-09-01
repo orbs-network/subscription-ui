@@ -20,12 +20,12 @@ export interface IMonthlySubscriptionPlanService {
 
 export type TVirtualChainSubscriptionPayload = {
   name: string;
-  amount: number;
+  amountInFullOrbs: number;
   isCertified: boolean;
   deploymentSubset: string;
 };
 
 export type TVirtualChainSubscriptionExtensionPayload = {
   vcId: string;
-  amount: number;
+  amountInFullOrbs: number;
 };

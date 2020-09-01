@@ -120,7 +120,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
 
       const virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload = {
         name: formData.name,
-        amount: currentCostOfPlan,
+        amountInFullOrbs: currentCostOfPlan,
         // TODO : O.L : Change these texts to proper values once decided.
         deploymentSubset: formData.runOnCanary ? "canary" : "main",
         isCertified: formData.runOnlyOnCertifiedValidators,

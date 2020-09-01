@@ -74,9 +74,9 @@ export const ExistingVCPage = observer<React.FunctionComponent<IProps>>(
     );
 
     const extendVcSubscription = useCallback(
-      async (amount: number) => {
+      async (amountInFullOrbs: number) => {
         const virtualChainSubscriptionExtensionPayload: TVirtualChainSubscriptionExtensionPayload = {
-          amount,
+          amountInFullOrbs,
           vcId,
         };
 

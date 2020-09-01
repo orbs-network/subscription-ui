@@ -44,17 +44,20 @@ export const SearchExistingVcForm = React.memo<IProps>((props) => {
 
   const { register, handleSubmit, errors } = useForm<TFormData>();
 
-  const submit = useCallback((formData: TFormData) => {
-    const virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload = {
-      name: formData.name,
-      amount: 0,
-      // TODO : O.L : Change these texts to proper values once decided.
-      deploymentSubset: formData.runOnCanary ? "Canary" : "All",
-      isCertified: formData.runOnlyOnCertifiedValidators,
-    };
+  const submit = useCallback(
+    (formData: TFormData) => {
+      const virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload = {
+        name: formData.name,
+        amountInFullOrbs: 0,
+        // TODO : O.L : Change these texts to proper values once decided.
+        deploymentSubset: formData.runOnCanary ? "Canary" : "All",
+        isCertified: formData.runOnlyOnCertifiedValidators,
+      };
 
-    subscribeNewVC(virtualChainSubscriptionPayload);
-  }, []);
+      subscribeNewVC(virtualChainSubscriptionPayload);
+    },
+    [subscribeNewVC]
+  );
 
   return (
     <form
