@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useMemo } from "react";
 import "./App.css";
 
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { Header } from "./components/structure/header/Header";
 import { HEADER_HEIGHT_REM } from "./theme/Theme";
 import { Route, RouteProps, Switch } from "react-router-dom";
@@ -12,6 +12,10 @@ import { ROUTES } from "./constants/routes";
 import { VcCreationSuccessPage } from "./pages/VcCreationSuccessPage";
 import { VcExtensionSuccessPage } from "./pages/VcExtensionSuccessPage";
 import { observer } from "mobx-react";
+import { useCryptoWalletIntegrationStore } from "./store/storeHooks";
+import { Page } from "./components/structure/Page";
+import { ContentFitting } from "./components/structure/ContentFitting";
+import { NoEthereumProviderSection } from "./pages/NoEthereumProviderSection";
 
 const drawerWidth = 240;
 
@@ -57,28 +61,50 @@ const useStyles = makeStyles((theme) => ({
 
 const App = observer(() => {
   const classes = useStyles();
+
+  const theme = useTheme();
+  console.log(theme.palette.secondary);
+  const cryptoWalletIntegrationStore = useCryptoWalletIntegrationStore();
+
+  const isConnected = cryptoWalletIntegrationStore.isConnectedToWallet;
+  console.log({ isConnected });
+
+  const appContent = useMemo(() => {
+    if (!isConnected) {
+      return (
+        <Page>
+          <NoEthereumProviderSection
+            walletConnectionPhase={"connect"}
+            actionFunction={() => cryptoWalletIntegrationStore.askToConnect()}
+          />
+        </Page>
+      );
+    } else {
+      return (
+        <Switch>
+          <Route exact path={ROUTES.newVc} component={NewVCPage} />
+          <Route exact path={ROUTES.existingVc} component={ExistingVCPage} />
+          <Route exact path={ROUTES.recoverVc} component={RecoverVCPage} />
+          <Route
+            path={`${ROUTES.vcCreated}/:vcId`}
+            component={VcCreationSuccessPage}
+          />
+          <Route
+            path={`${ROUTES.vcExtended}/:vcId`}
+            component={VcExtensionSuccessPage}
+          />
+          <Route path="/" component={NewVCPage} />
+        </Switch>
+      );
+    }
+  }, [cryptoWalletIntegrationStore, isConnected]);
+
   return (
     <>
       <Header />
       <div className={classes.headerSeparator} />
       <div className={classes.mainWrapper}>
-        <main className={classes.appMain}>
-          <Switch>
-            <Route exact path={ROUTES.newVc} component={NewVCPage} />
-            <Route exact path={ROUTES.existingVc} component={ExistingVCPage} />
-            <Route exact path={ROUTES.recoverVc} component={RecoverVCPage} />
-            <Route
-              path={`${ROUTES.vcCreated}/:vcId`}
-              component={VcCreationSuccessPage}
-            />
-            <Route
-              path={`${ROUTES.vcExtended}/:vcId`}
-              component={VcExtensionSuccessPage}
-            />
-            <Route path="/" component={NewVCPage} />
-          </Switch>
-          {/*)}*/}
-        </main>
+        <main className={classes.appMain}>{appContent}</main>
       </div>
     </>
   );

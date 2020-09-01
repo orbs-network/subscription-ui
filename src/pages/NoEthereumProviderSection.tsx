@@ -1,17 +1,16 @@
 import React from "react";
 import {
   Button,
-  FormControl,
   FormControlLabel,
   Typography,
-  useTheme,
   Checkbox,
 } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 import { useBoolean } from "react-hanger";
 import { renderToString } from "react-dom/server";
 import configs from "../configs";
 import { InTextLink } from "../components/InTextLink";
+import { baseTheme } from "../theme/Theme";
 
 type TWalletConnectionPhase = "install" | "connect";
 
@@ -20,8 +19,6 @@ interface IProps {
   actionFunction: () => void;
   pressedOnInstall?: boolean;
 }
-
-// TODO : ORL : Fix this page display
 
 const useStyles = makeStyles((theme) => ({
   noEthereumProviderSection: {
@@ -35,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "5%",
     // width: "clamp(20%, 40em, 100%)",
     width: "fit-content",
-    maxWidth: "90%",
+    maxWidth: "100%",
     boxSizing: "border-box",
     // height: "clamp(max(25%, 200px), 8em, 50%)",
   },
@@ -62,11 +59,13 @@ export const NoEthereumProviderSection = React.memo<IProps>((props) => {
     walletConnectionPhase === "install" ? "Install" : "Connect";
 
   const innerHtmlForLegalAgreement = renderToString(
-    <Typography>
-      I agree to the{" "}
-      <InTextLink href={configs.termsOfUseUrl} text={"Terms of Use"} /> and{" "}
-      <InTextLink href={configs.privacyPolicyUrl} text={"Privacy Policy"} />
-    </Typography>
+    <ThemeProvider theme={baseTheme}>
+      <Typography>
+        I agree to the{" "}
+        <InTextLink href={configs.termsOfUseUrl} text={"Terms of Use"} /> and{" "}
+        <InTextLink href={configs.privacyPolicyUrl} text={"Privacy Policy"} />
+      </Typography>
+    </ThemeProvider>
   );
 
   return (

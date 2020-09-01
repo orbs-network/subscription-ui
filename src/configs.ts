@@ -46,8 +46,8 @@ const configs: IConfig = {
   decimals: MAIN_NET_DECIMALS,
   v2contractsAddressesOverride: {},
   ETHEREUM_PROVIDER_WS: `wss://mainnet.infura.io/ws/v3/${INFURA_KEY}`,
-  termsOfUseUrl: "",
-  privacyPolicyUrl: "",
+  termsOfUseUrl: "https://www.orbs.com/vc-portal-terms-of-use/",
+  privacyPolicyUrl: "https://www.orbs.com/vc-portal-privacy-policy/",
 };
 
 // Webpack will remove this section on production build //
