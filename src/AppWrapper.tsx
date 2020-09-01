@@ -1,5 +1,4 @@
 import React from "react";
-import App from "./App";
 import { configureMobx, getStores } from "./store/storesInitialization";
 import { buildServices } from "./services/Services";
 import { Provider } from "mobx-react";
