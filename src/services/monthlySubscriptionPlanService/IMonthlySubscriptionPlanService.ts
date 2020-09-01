@@ -15,7 +15,7 @@ export interface IMonthlySubscriptionPlanService {
 
   // Contract instance specific data
   readTier(): Promise<string>;
-  readMonthlyRate(): Promise<number>;
+  readMonthlyRateInFullOrbs(): Promise<number>;
 }
 
 export type TVirtualChainSubscriptionPayload = {

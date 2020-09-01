@@ -6,6 +6,7 @@ import { toWei } from "web3-utils";
 import { Driver as OrbsV2Driver } from "@orbs-network/orbs-ethereum-contracts-v2";
 // import { Driver as OrbsV2Driver } from "@orbs-network/orbs-ethereum-contracts-v2/build/contracts/Rewards.json";
 import fs from "fs";
+import { weiOrbsFromFullOrbs } from "../src/cryptoUtils/unitConverter";
 
 const co = require("@orbs-network/orbs-ethereum-contracts-v2");
 const BN = require("bn.js");
@@ -22,7 +23,7 @@ const deployDriverScripts = async () => {
 
     const monthlySubscriptionPlanDeployedInstance = await driver.newSubscriber(
       "my_tier",
-      4000
+      new BN(weiOrbsFromFullOrbs(4000))
     );
 
     const addresses = {
