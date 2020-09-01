@@ -9,8 +9,8 @@ import { AbiItem } from "web3-utils";
 import { Subscriptions } from "../../contracts/Subscriptions";
 import { EventData } from "web3-eth-contract";
 
-// TODO : O.L : Fill it up after deploying,
-const MAIN_NET_SUBSCRIPTION_CONTRACT_ADDRESS = "";
+const MAIN_NET_SUBSCRIPTION_CONTRACT_ADDRESS =
+  "0x3b2c72d0d5fc8a7346091f449487cd0a7f0954d6";
 
 export class SubscriptionsService implements ISubscriptionsService {
   private subscriptionsContract: Subscriptions;
