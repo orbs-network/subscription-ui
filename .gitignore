@@ -8,8 +8,16 @@
 # testing
 /coverage
 
+# Genereated
+src/contracts/
+src/local/
+
 # production
 /build
+/local
+
+# IDE
+.idea
 
 # misc
 .DS_Store
