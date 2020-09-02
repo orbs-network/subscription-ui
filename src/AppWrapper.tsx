@@ -40,7 +40,7 @@ export const AppWrapper = React.memo<IProps>((props) => {
   const { children, appComponent } = props;
   return (
     <>
-      <Router basename={configs.urlBase}>
+      <Router>
         <Provider {...stores} {...services}>
           <StylesProvider injectFirst>
             <ThemeProvider theme={baseTheme}>
