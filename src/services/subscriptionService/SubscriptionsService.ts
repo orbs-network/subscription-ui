@@ -7,7 +7,6 @@ import Web3 from "web3";
 import SubscriptionContractJson from "@orbs-network/orbs-ethereum-contracts-v2/build/contracts/Subscriptions.json";
 import { AbiItem } from "web3-utils";
 import { Subscriptions } from "../../contracts/Subscriptions";
-import { EventData } from "web3-eth-contract";
 
 const MAIN_NET_SUBSCRIPTION_CONTRACT_ADDRESS =
   "0x3b2c72d0d5fc8a7346091f449487cd0a7f0954d6";
@@ -26,7 +25,6 @@ export class SubscriptionsService implements ISubscriptionsService {
   }
 
   setFromAccount(defaultAccountAddress: string): void {
-    console.log("Setthing default address", defaultAccountAddress);
     this.subscriptionsContract.options.from = defaultAccountAddress;
   }
 
