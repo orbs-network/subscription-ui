@@ -6,6 +6,7 @@
   "dependencies": {
     "@material-ui/core": "^4.11.0",
     "@material-ui/icons": "^4.9.1",
+    "@orbs-network/contracts-js": "0.0.9",
     "@orbs-network/orbs-ethereum-contracts-v2": "0.0.22",
     "@testing-library/jest-dom": "^5.11.2",
     "@testing-library/react": "^10.4.7",
@@ -46,10 +47,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "mkd": "mkdir -p ./src/local && mkdir -p ./ganache-env/_out",
-    "postinstall": "npm run generate_types && npm run mkd",
+    "postinstall": "npm run mkd",
     "predeploy": "yarn run build",
-    "deploy": "gh-pages -d build",
-    "generate_types": "typechain --target web3-v1 --outDir ./src/contracts './node_modules/@orbs-network/orbs-ethereum-contracts-v2/build/contracts/*.json'"
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": [
