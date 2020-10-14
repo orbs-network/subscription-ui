@@ -1,21 +1,16 @@
-import { IEthereumProvider } from "./cryptoWalletConnectionService/IEthereumProvider";
-import { CryptoWalletConnectionService } from "./cryptoWalletConnectionService/CryptoWalletConnectionService";
-import { ICryptoWalletConnectionService } from "./cryptoWalletConnectionService/ICryptoWalletConnectionService";
-// import {
-//   GuardiansService,
-//   IGuardiansService,
-//   IOrbsClientService,
-//   OrbsClientService,
-// } from "orbs-pos-data";
 import Web3 from "web3";
 import configs from "../configs";
-
-// import { BuildOrbsClient } from "./OrbsClientFactory";
-import { ISubscriptionsService } from "./subscriptionService/ISubscriptionsService";
-import { SubscriptionsService } from "./subscriptionService/SubscriptionsService";
-import { IOrbsTokenService, OrbsTokenService } from "orbs-pos-data";
-import { IMonthlySubscriptionPlanService } from "./monthlySubscriptionPlanService/IMonthlySubscriptionPlanService";
-import { MonthlySubscriptionPlanService } from "./monthlySubscriptionPlanService/MonthlySubscriptionPlanService";
+import {
+  CryptoWalletConnectionService,
+  ICryptoWalletConnectionService,
+  IEthereumProvider,
+  IMonthlySubscriptionPlanService,
+  IOrbsTokenService,
+  ISubscriptionsService,
+  MonthlySubscriptionPlanService,
+  OrbsTokenService,
+  SubscriptionsService,
+} from "@orbs-network/contracts-js";
 
 export interface IServices {
   cryptoWalletIntegrationService: ICryptoWalletConnectionService;
