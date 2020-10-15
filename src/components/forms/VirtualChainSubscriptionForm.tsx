@@ -247,7 +247,8 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
         2) Allow usage of your ORBS
       </Typography>
       <Typography variant={"caption"}>
-        Current allowance : {allowanceToMSPContract}/{currentCostOfPlan}
+        Current allowance : {allowanceToMSPContract.toLocaleString()} ORBS |
+        Cost : {currentCostOfPlan.toLocaleString()} ORBS
       </Typography>
       <Button
         className={classes.actionButton}
