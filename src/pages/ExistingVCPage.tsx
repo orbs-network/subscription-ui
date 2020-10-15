@@ -1,25 +1,18 @@
 import React, { useCallback, useMemo, useState } from "react";
 import { Page } from "../components/structure/Page";
-import ExistingVirtualChain from "../ExistingVirtualChain";
-import Web3 from "web3";
-import configs from "../configs";
 import { VcIdForm } from "../components/forms/VcIdForm";
-import { useVcDataHook } from "../services/subscriptionService/subscriptionServiceHooks";
 import { Typography } from "@material-ui/core";
 import { observer } from "mobx-react";
 import { VirtualChainSubscriptionForm } from "../components/forms/VirtualChainDetailsForm";
 import { useOrbsAccountStore } from "../store/storeHooks";
-import {
-  TVirtualChainSubscriptionExtensionPayload,
-  TVirtualChainSubscriptionPayload,
-} from "../services/monthlySubscriptionPlanService/IMonthlySubscriptionPlanService";
 import { useSnackbar } from "notistack";
 import { VcSubscriptionExtensionForm } from "../components/forms/VcSubscriptionExtensionForm";
 import { ActionConfirmationModal } from "../components/modals/ActionConfirmationModal";
-import { ContentFitting } from "../components/structure/ContentFitting";
 import { weiOrbsFromFullOrbs } from "../cryptoUtils/unitConverter";
 import { ROUTES } from "../constants/routes";
 import { useHistory } from "react-router-dom";
+import { useVcDataHook } from "../services/subscriptionsServiceHooks";
+import { TVirtualChainSubscriptionExtensionPayload } from "@orbs-network/contracts-js";
 
 interface IProps {}
 

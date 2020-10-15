@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
-import { TVirtualChainSubscriptionPayload } from "../../services/monthlySubscriptionPlanService/IMonthlySubscriptionPlanService";
 import { Button, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -10,6 +9,7 @@ import IconButton from "@material-ui/core/IconButton";
 import Tooltip from "@material-ui/core/Tooltip";
 import AddIcon from "@material-ui/icons/Add";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import { TVirtualChainSubscriptionPayload } from "@orbs-network/contracts-js";
 
 interface IProps {
   subscribeNewVC: (

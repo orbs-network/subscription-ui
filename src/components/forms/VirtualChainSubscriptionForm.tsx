@@ -1,15 +1,13 @@
 import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
-import { TVirtualChainSubscriptionPayload } from "../../services/monthlySubscriptionPlanService/IMonthlySubscriptionPlanService";
 import { Button, TextField } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Tooltip from "@material-ui/core/Tooltip";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import Typography from "@material-ui/core/Typography";
 import { useSnackbar } from "notistack";
 import CheckIcon from "@material-ui/icons/Check";
+import { TVirtualChainSubscriptionPayload } from "@orbs-network/contracts-js";
 
 interface IProps {
   // Form action

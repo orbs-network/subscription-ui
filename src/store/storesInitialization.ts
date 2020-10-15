@@ -2,14 +2,16 @@ import { configure } from "mobx";
 import { IStores } from "./stores";
 
 import { CryptoWalletConnectionStore } from "./CryptoWalletConnectionStore";
-import { ICryptoWalletConnectionService } from "../services/cryptoWalletConnectionService/ICryptoWalletConnectionService";
 import { OrbsAccountStore } from "./OrbsAccountStore";
 
 // This import ensures mobx batching
 import "mobx-react-lite/batchingForReactDom";
-import { ISubscriptionsService } from "../services/subscriptionService/ISubscriptionsService";
-import { IOrbsTokenService } from "orbs-pos-data";
-import { IMonthlySubscriptionPlanService } from "../services/monthlySubscriptionPlanService/IMonthlySubscriptionPlanService";
+import {
+  ICryptoWalletConnectionService,
+  IMonthlySubscriptionPlanService,
+  IOrbsTokenService,
+  ISubscriptionsService,
+} from "@orbs-network/contracts-js";
 
 /**
  * Builds and initializes all of the stores

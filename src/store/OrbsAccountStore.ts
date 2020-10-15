@@ -8,14 +8,14 @@ import {
 import { CryptoWalletConnectionStore } from "./CryptoWalletConnectionStore";
 import { PromiEvent, TransactionReceipt } from "web3-core";
 import { JSON_RPC_ERROR_CODES } from "../constants/ethereumErrorCodes";
-import { IOrbsTokenService, OrbsTokenService } from "orbs-pos-data";
 import { fullOrbsFromWeiOrbs } from "../cryptoUtils/unitConverter";
 import {
   IMonthlySubscriptionPlanService,
+  IOrbsTokenService,
+  ISubscriptionsService,
   TVirtualChainSubscriptionExtensionPayload,
   TVirtualChainSubscriptionPayload,
-} from "../services/monthlySubscriptionPlanService/IMonthlySubscriptionPlanService";
-import { ISubscriptionsService } from "../services/subscriptionService/ISubscriptionsService";
+} from "@orbs-network/contracts-js";
 
 type TMSPContractParameters = {
   tierName: string;
