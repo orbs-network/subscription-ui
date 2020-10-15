@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React from "react";
 import { ContentFitting } from "../components/structure/ContentFitting";
 import { Page } from "../components/structure/Page";
 import { VirtualChainSubscriptionForm } from "../components/forms/VirtualChainDetailsForm";
 import { Typography, useTheme } from "@material-ui/core";
 import { useParams } from "react-router-dom";
-import { useSubscriptionsService } from "../services/servicesHooks";
-import { useVcDataHook } from "../services/subscriptionService/subscriptionServiceHooks";
+import { useVcDataHook } from "../services/subscriptionsServiceHooks";
 
 interface IProps {}
 
