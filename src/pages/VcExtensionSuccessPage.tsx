@@ -37,6 +37,25 @@ export const VcExtensionSuccessPage = React.memo<IProps>((props) => {
         </ContentFitting>
       </Page>
     );
+  } else if (vcData == null) {
+    return (
+      <Page>
+        <ContentFitting
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            variant={"h3"}
+            style={{ color: theme.palette.warning.main }}
+          >
+            Could Not find VC {vcId}
+          </Typography>
+        </ContentFitting>
+      </Page>
+    );
   } else if (errorFindingVc) {
     return (
       <Page>

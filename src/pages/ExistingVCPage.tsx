@@ -14,6 +14,7 @@ import { useHistory } from "react-router-dom";
 import { useVcDataHook } from "../services/subscriptionsServiceHooks";
 import { TVirtualChainSubscriptionExtensionPayload } from "@orbs-network/contracts-js";
 import { createVerify } from "crypto";
+import useTheme from "@material-ui/core/styles/useTheme";
 
 interface IProps {}
 
@@ -23,7 +24,11 @@ export const ExistingVCPage = observer<React.FunctionComponent<IProps>>(
     const [vcId, setVcId] = useState("");
     const { enqueueSnackbar } = useSnackbar();
     const { vcData, errorFindingVc, isLoading } = useVcDataHook(vcId);
+    // console.log({ errorFindingVc });
+    // console.log({ isLoading });
+    // console.log({ vcData });
     const history = useHistory();
+    const theme = useTheme();
 
     // TODO : ORL : The whole modal logic is duplicated from 'NewVcPage' - Unite them properly
     const [showModal, setShowModal] = useState(false);
@@ -97,9 +102,20 @@ export const ExistingVCPage = observer<React.FunctionComponent<IProps>>(
         return <Typography>Loading...</Typography>;
       } else if (errorFindingVc) {
         return (
-          <Typography color={"error"}>
+          <Typography variant={"h3"} color="error">
             Error finding Virtual Chain {vcId}
           </Typography>
+        );
+      } else if (vcData == null) {
+        return (
+          <>
+            <Typography
+              variant={"h3"}
+              style={{ color: theme.palette.warning.main }}
+            >
+              Could not find VC with id {vcId}
+            </Typography>
+          </>
         );
       } else {
         return (
@@ -130,10 +146,7 @@ export const ExistingVCPage = observer<React.FunctionComponent<IProps>>(
       orbsAccountStore.mspContractParameters.monthlyRateInFullOrbs,
       showSelectVcForm,
       showSetMSPContractAllowanceDialog,
-      vcData.deploymentSubset,
-      vcData.id,
-      vcData.name,
-      vcData.payedUntil,
+      vcData,
       vcId,
     ]);
 

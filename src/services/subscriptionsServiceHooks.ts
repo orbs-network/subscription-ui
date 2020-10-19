@@ -9,7 +9,7 @@ type TVcData = {
 };
 
 type TUseVcDataHookResponse = {
-  vcData: TVcData;
+  vcData: TVcData | null;
   isLoading: boolean;
   errorFindingVc: boolean;
 };
@@ -17,17 +17,19 @@ type TUseVcDataHookResponse = {
 export function useVcDataHook(vcId: string): TUseVcDataHookResponse {
   const [isLoading, setIsLoading] = useState(true);
   const [errorFindingVc, setErrorFindingVc] = useState(false);
-  const [vcData, setVcData] = useState<TVcData>({
-    id: "",
-    name: "",
-    deploymentSubset: "",
-    payedUntil: 0,
-  });
+  const [vcData, setVcData] = useState<TVcData | null>(null);
   const subscriptionsService = useSubscriptionsService();
 
   const readVcData = useCallback(
     async (id) => {
+      console.log({ id });
       const readVcDataResponse = await subscriptionsService.readVcData(id);
+
+      // DEV_NOTE : O.L : We will assume that 0 gen ref time means - no such VC
+      if (readVcDataResponse.genRefTime === "0") {
+        return null;
+      }
+
       const vcData: TVcData = {
         id,
         name: readVcDataResponse.name,
