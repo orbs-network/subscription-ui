@@ -134,6 +134,7 @@ export const ExistingVCPage = observer<React.FunctionComponent<IProps>>(
               setMSPContractAllowance={showSetMSPContractAllowanceDialog}
               allowanceToMSPContract={orbsAccountStore.allowanceToMSPContract}
               extendVcSubscription={extendVcSubscription}
+              disableActionButtons={orbsAccountStore.txPending}
             />
           </>
         );
