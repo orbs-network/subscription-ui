@@ -1,13 +1,21 @@
 import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Button, TextField } from "@material-ui/core";
+import {
+  Button,
+  Checkbox,
+  FormControlLabel,
+  TextField,
+} from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
 import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import Typography from "@material-ui/core/Typography";
 import { useSnackbar } from "notistack";
 import CheckIcon from "@material-ui/icons/Check";
-import { TVirtualChainSubscriptionPayload } from "@orbs-network/contracts-js";
+import {
+  MONTHLY_SUBSCRIPTION_PLAN_SERVICE_CONSTANTS,
+  TVirtualChainSubscriptionPayload,
+} from "@orbs-network/contracts-js";
 
 interface IProps {
   // Form action
@@ -116,11 +124,15 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
         return;
       }
 
+      const { deploymentSubsets } = MONTHLY_SUBSCRIPTION_PLAN_SERVICE_CONSTANTS;
+
       const virtualChainSubscriptionPayload: TVirtualChainSubscriptionPayload = {
         name: formData.name,
         amountInFullOrbs: currentCostOfPlan,
-        // TODO : O.L : Change these texts to proper values once decided.
-        deploymentSubset: formData.runOnCanary ? "canary" : "main",
+
+        deploymentSubset: formData.runOnCanary
+          ? deploymentSubsets.canary
+          : deploymentSubsets.main,
         isCertified: formData.runOnlyOnCertifiedValidators,
       };
 
@@ -217,27 +229,27 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
       {/*/>*/}
       {/*<br />*/}
 
-      {/*<FormControlLabel*/}
-      {/*  className={classes.forControlLabel}*/}
-      {/*  control={*/}
-      {/*    <Checkbox*/}
-      {/*      className={classes.checkBoxes}*/}
-      {/*      checked={runOnCanary}*/}
-      {/*      onChange={(e) => setRunOnCanary(e.target.checked)}*/}
-      {/*      name="runOnCanary"*/}
-      {/*      // color="primary"*/}
-      {/*      inputRef={register}*/}
-      {/*    />*/}
-      {/*  }*/}
-      {/*  label={*/}
-      {/*    <LabelWithIconTooltip*/}
-      {/*      text={"Run unstable early releases"}*/}
-      {/*      tooltipText={"add here as well"}*/}
-      {/*    />*/}
-      {/*  }*/}
-      {/*/>*/}
-      {/*<br />*/}
-      {/*<br />*/}
+      <FormControlLabel
+        className={classes.forControlLabel}
+        control={
+          <Checkbox
+            className={classes.checkBoxes}
+            checked={runOnCanary}
+            onChange={(e) => setRunOnCanary(e.target.checked)}
+            name="runOnCanary"
+            // color="primary"
+            inputRef={register}
+          />
+        }
+        label={
+          <LabelWithIconTooltip
+            text={"Run unstable early releases"}
+            tooltipText={""}
+          />
+        }
+      />
+      <br />
+      <br />
 
       <Typography
         className={classes.phaseInstructionLabel}

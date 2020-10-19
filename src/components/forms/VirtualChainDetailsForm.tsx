@@ -6,6 +6,7 @@ import Moment from "moment";
 interface IProps {
   vcId: string;
   vcName: string;
+  deploymentSubset: string;
   paidUntil: number;
 }
 
@@ -62,9 +63,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
+export const VirtualChainDetailsForm = React.memo<IProps>((props) => {
   const classes = useStyles();
-  const { paidUntil, vcId, vcName } = props;
+  const { paidUntil, vcId, vcName, deploymentSubset } = props;
 
   console.log({ paidUntil });
   return (
@@ -90,6 +91,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
         {vcId}
       </Typography>
 
+      {/* Name */}
       <Typography
         className={classes.phaseInstructionLabel}
         variant={"h5"}
@@ -100,6 +102,19 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
       <Typography className={classes.phaseInstructionLabel} variant={"h6"}>
         {vcName}
       </Typography>
+
+      <Typography
+        className={classes.phaseInstructionLabel}
+        variant={"h5"}
+        color={"secondary"}
+      >
+        Deployment Subset
+      </Typography>
+      <Typography className={classes.phaseInstructionLabel} variant={"h6"}>
+        {deploymentSubset}
+      </Typography>
+
+      {/* Payment */}
       <Typography
         className={classes.phaseInstructionLabel}
         variant={"h5"}

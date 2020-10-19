@@ -21,6 +21,10 @@ const deployDriverScripts = async () => {
     console.log(`Assigning ORBS to ${orbsV2Account}`);
     driver.erc20.assign(orbsV2Account, new BN("1000000000000000000000000000"));
 
+    await driver.protocol.createDeploymentSubset("canary", 1, {
+      from: driver.functionalManager.address,
+    });
+
     const monthlySubscriptionPlanDeployedInstance = await driver.newSubscriber(
       "my_tier",
       new BN(weiOrbsFromFullOrbs(4000))

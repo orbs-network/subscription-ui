@@ -1,7 +1,7 @@
 import React from "react";
 import { ContentFitting } from "../components/structure/ContentFitting";
 import { Page } from "../components/structure/Page";
-import { VirtualChainSubscriptionForm } from "../components/forms/VirtualChainDetailsForm";
+import { VirtualChainDetailsForm } from "../components/forms/VirtualChainDetailsForm";
 import { Typography, useTheme } from "@material-ui/core";
 import { useParams } from "react-router-dom";
 import { useVcDataHook } from "../services/subscriptionsServiceHooks";
@@ -89,11 +89,12 @@ export const VcExtensionSuccessPage = React.memo<IProps>((props) => {
             marginLeft: "auto",
           }}
         >
-          <VirtualChainSubscriptionForm
+          <VirtualChainDetailsForm
             vcId={vcId}
             vcName={vcData.name}
             paidUntil={vcData.payedUntil}
-          />{" "}
+            deploymentSubset={vcData.deploymentSubset}
+          />
         </div>
       </ContentFitting>
     </Page>

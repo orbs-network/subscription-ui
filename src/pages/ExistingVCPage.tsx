@@ -3,7 +3,7 @@ import { Page } from "../components/structure/Page";
 import { VcIdForm } from "../components/forms/VcIdForm";
 import { Typography } from "@material-ui/core";
 import { observer } from "mobx-react";
-import { VirtualChainSubscriptionForm } from "../components/forms/VirtualChainDetailsForm";
+import { VirtualChainDetailsForm } from "../components/forms/VirtualChainDetailsForm";
 import { useOrbsAccountStore } from "../store/storeHooks";
 import { useSnackbar } from "notistack";
 import { VcSubscriptionExtensionForm } from "../components/forms/VcSubscriptionExtensionForm";
@@ -13,6 +13,7 @@ import { ROUTES } from "../constants/routes";
 import { useHistory } from "react-router-dom";
 import { useVcDataHook } from "../services/subscriptionsServiceHooks";
 import { TVirtualChainSubscriptionExtensionPayload } from "@orbs-network/contracts-js";
+import { createVerify } from "crypto";
 
 interface IProps {}
 
@@ -104,10 +105,11 @@ export const ExistingVCPage = observer<React.FunctionComponent<IProps>>(
         return (
           <>
             <br />
-            <VirtualChainSubscriptionForm
+            <VirtualChainDetailsForm
               paidUntil={vcData.payedUntil}
               vcName={vcData.name}
               vcId={vcData.id}
+              deploymentSubset={vcData.deploymentSubset}
             />
             <VcSubscriptionExtensionForm
               monthlyRateInFullOrbs={
@@ -128,6 +130,7 @@ export const ExistingVCPage = observer<React.FunctionComponent<IProps>>(
       orbsAccountStore.mspContractParameters.monthlyRateInFullOrbs,
       showSelectVcForm,
       showSetMSPContractAllowanceDialog,
+      vcData.deploymentSubset,
       vcData.id,
       vcData.name,
       vcData.payedUntil,

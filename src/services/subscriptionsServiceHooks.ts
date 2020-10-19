@@ -4,6 +4,7 @@ import { useSubscriptionsService } from "./servicesHooks";
 type TVcData = {
   id: string;
   name: string;
+  deploymentSubset: string;
   payedUntil: number;
 };
 
@@ -19,6 +20,7 @@ export function useVcDataHook(vcId: string): TUseVcDataHookResponse {
   const [vcData, setVcData] = useState<TVcData>({
     id: "",
     name: "",
+    deploymentSubset: "",
     payedUntil: 0,
   });
   const subscriptionsService = useSubscriptionsService();
@@ -30,6 +32,7 @@ export function useVcDataHook(vcId: string): TUseVcDataHookResponse {
         id,
         name: readVcDataResponse.name,
         payedUntil: parseInt(readVcDataResponse.expiresAt),
+        deploymentSubset: readVcDataResponse.deploymentSubset,
       };
 
       return vcData;
