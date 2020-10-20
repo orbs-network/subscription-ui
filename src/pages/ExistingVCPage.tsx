@@ -4,7 +4,10 @@ import { VcIdForm } from "../components/forms/VcIdForm";
 import { Typography } from "@material-ui/core";
 import { observer } from "mobx-react";
 import { VirtualChainDetailsForm } from "../components/forms/VirtualChainDetailsForm";
-import { useOrbsAccountStore } from "../store/storeHooks";
+import {
+  useCryptoWalletIntegrationStore,
+  useOrbsAccountStore,
+} from "../store/storeHooks";
 import { useSnackbar } from "notistack";
 import { VcSubscriptionExtensionForm } from "../components/forms/VcSubscriptionExtensionForm";
 import { ActionConfirmationModal } from "../components/modals/ActionConfirmationModal";
@@ -21,6 +24,7 @@ interface IProps {}
 export const ExistingVCPage = observer<React.FunctionComponent<IProps>>(
   (props) => {
     const orbsAccountStore = useOrbsAccountStore();
+    const cryptoWalletIntegrationStore = useCryptoWalletIntegrationStore();
     const [vcId, setVcId] = useState("");
     const { enqueueSnackbar } = useSnackbar();
     const { vcData, errorFindingVc, isLoading } = useVcDataHook(vcId);
@@ -95,6 +99,10 @@ export const ExistingVCPage = observer<React.FunctionComponent<IProps>>(
 
     const showSelectVcForm = vcId.length === 0;
 
+    const isOwnerOfVc =
+      vcData !== null &&
+      vcData.owner === cryptoWalletIntegrationStore.mainAddress;
+
     const vcContent = useMemo(() => {
       if (showSelectVcForm) {
         return null;
@@ -127,15 +135,25 @@ export const ExistingVCPage = observer<React.FunctionComponent<IProps>>(
               vcId={vcData.id}
               deploymentSubset={vcData.deploymentSubset}
             />
-            <VcSubscriptionExtensionForm
-              monthlyRateInFullOrbs={
-                orbsAccountStore.mspContractParameters.monthlyRateInFullOrbs
-              }
-              setMSPContractAllowance={showSetMSPContractAllowanceDialog}
-              allowanceToMSPContract={orbsAccountStore.allowanceToMSPContract}
-              extendVcSubscription={extendVcSubscription}
-              disableActionButtons={orbsAccountStore.txPending}
-            />
+            {isOwnerOfVc && (
+              <VcSubscriptionExtensionForm
+                monthlyRateInFullOrbs={
+                  orbsAccountStore.mspContractParameters.monthlyRateInFullOrbs
+                }
+                setMSPContractAllowance={showSetMSPContractAllowanceDialog}
+                allowanceToMSPContract={orbsAccountStore.allowanceToMSPContract}
+                extendVcSubscription={extendVcSubscription}
+                disableActionButtons={orbsAccountStore.txPending}
+              />
+            )}
+            {!isOwnerOfVc && (
+              <Typography
+                variant={"h5"}
+                style={{ color: theme.palette.warning.main }}
+              >
+                Read-only mode
+              </Typography>
+            )}
           </>
         );
       }
@@ -152,12 +170,14 @@ export const ExistingVCPage = observer<React.FunctionComponent<IProps>>(
     ]);
 
     return (
-      <Page>
+      <Page style={{ textAlign: "center" }}>
         {showSelectVcForm && (
           <VcIdForm onActionClick={onOpenVcClicked} actionButtonText={"Open"} />
         )}
         {/*<ExistingVirtualChain web3={{} as Web3} config={configs} />*/}
         {vcContent}
+
+        {/* Modal */}
         <ActionConfirmationModal
           open={showModal}
           onAccept={() => {

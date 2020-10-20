@@ -1,4 +1,4 @@
-import React from "react";
+import React, { DetailedHTMLProps } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 interface IProps {}
@@ -13,8 +13,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export const Page = React.memo<IProps>((props) => {
+export const Page = React.memo<
+  IProps &
+    DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+>((props) => {
   const classes = useStyles();
-  const { children } = props;
-  return <div className={classes.page}>{children}</div>;
+  const { children, ...rest } = props;
+  return (
+    <div className={classes.page} {...rest}>
+      {children}
+    </div>
+  );
 });

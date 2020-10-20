@@ -6,6 +6,11 @@ type TVcData = {
   name: string;
   deploymentSubset: string;
   payedUntil: number;
+  owner: string;
+  isCertified: boolean;
+  genRefTime: string;
+  rate: string;
+  tier: string;
 };
 
 type TUseVcDataHookResponse = {
@@ -32,6 +37,12 @@ export function useVcDataHook(vcId: string): TUseVcDataHookResponse {
 
       const vcData: TVcData = {
         id,
+        owner: readVcDataResponse.owner,
+        isCertified: readVcDataResponse.isCertified,
+        genRefTime: readVcDataResponse.genRefTime,
+        rate: readVcDataResponse.rate,
+        tier: readVcDataResponse.tier,
+
         name: readVcDataResponse.name,
         payedUntil: parseInt(readVcDataResponse.expiresAt),
         deploymentSubset: readVcDataResponse.deploymentSubset,
