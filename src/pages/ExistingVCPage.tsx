@@ -13,21 +13,30 @@ import { VcSubscriptionExtensionForm } from "../components/forms/VcSubscriptionE
 import { ActionConfirmationModal } from "../components/modals/ActionConfirmationModal";
 import { weiOrbsFromFullOrbs } from "../cryptoUtils/unitConverter";
 import { ROUTES } from "../constants/routes";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams, useLocation } from "react-router-dom";
 import { useVcDataHook } from "../services/subscriptionsServiceHooks";
 import { TVirtualChainSubscriptionExtensionPayload } from "@orbs-network/contracts-js";
 import { createVerify } from "crypto";
 import useTheme from "@material-ui/core/styles/useTheme";
+import { useQueryParam, NumberParam, StringParam } from "use-query-params";
 
 interface IProps {}
+
+type TRouteParams = {
+  vcId: string;
+};
 
 export const ExistingVCPage = observer<React.FunctionComponent<IProps>>(
   (props) => {
     const orbsAccountStore = useOrbsAccountStore();
     const cryptoWalletIntegrationStore = useCryptoWalletIntegrationStore();
-    const [vcId, setVcId] = useState("");
+    // const [vcId, setVcId] = useState("");
     const { enqueueSnackbar } = useSnackbar();
-    const { vcData, errorFindingVc, isLoading } = useVcDataHook(vcId);
+
+    const [vcId, setVcId] = useQueryParam("vcId", StringParam);
+    const vcIdToUse = vcId || "";
+    console.log({ vcIdToUse });
+    const { vcData, errorFindingVc, isLoading } = useVcDataHook(vcIdToUse);
     // console.log({ errorFindingVc });
     // console.log({ isLoading });
     // console.log({ vcData });
@@ -47,9 +56,12 @@ export const ExistingVCPage = observer<React.FunctionComponent<IProps>>(
       onCancelMessage?: string;
     }>({ title: "", content: "" });
 
-    const onOpenVcClicked = useCallback((vcId: string) => {
-      setVcId(vcId);
-    }, []);
+    const onOpenVcClicked = useCallback(
+      (vcId: string) => {
+        setVcId(vcId);
+      },
+      [setVcId]
+    );
 
     const setMSPContractAllowance = useCallback(
       (allowanceInFullOrbs: number) => {
@@ -80,7 +92,7 @@ export const ExistingVCPage = observer<React.FunctionComponent<IProps>>(
       async (amountInFullOrbs: number) => {
         const virtualChainSubscriptionExtensionPayload: TVirtualChainSubscriptionExtensionPayload = {
           amountInFullOrbs,
-          vcId,
+          vcId: vcIdToUse,
         };
 
         try {
@@ -94,10 +106,11 @@ export const ExistingVCPage = observer<React.FunctionComponent<IProps>>(
           enqueueSnackbar(`TX Error !`, { variant: "error" });
         }
       },
-      [enqueueSnackbar, history, orbsAccountStore, vcId]
+      [enqueueSnackbar, history, orbsAccountStore, vcId, vcIdToUse]
     );
 
-    const showSelectVcForm = vcId.length === 0;
+    console.log({ vcId });
+    const showSelectVcForm = vcIdToUse.length === 0;
 
     const isOwnerOfVc =
       vcData !== null &&
@@ -161,10 +174,13 @@ export const ExistingVCPage = observer<React.FunctionComponent<IProps>>(
       errorFindingVc,
       extendVcSubscription,
       isLoading,
+      isOwnerOfVc,
       orbsAccountStore.allowanceToMSPContract,
       orbsAccountStore.mspContractParameters.monthlyRateInFullOrbs,
+      orbsAccountStore.txPending,
       showSelectVcForm,
       showSetMSPContractAllowanceDialog,
+      theme.palette.warning.main,
       vcData,
       vcId,
     ]);

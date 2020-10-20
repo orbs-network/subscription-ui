@@ -10,8 +10,9 @@ import {
 import { baseTheme } from "./theme/Theme";
 import { SnackbarProvider } from "notistack";
 import { CssBaseline } from "@material-ui/core";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import configs from "./configs";
+import { QueryParamProvider } from "use-query-params";
 
 interface IProps {
   appComponent: React.ReactNode;
@@ -41,19 +42,21 @@ export const AppWrapper = React.memo<IProps>((props) => {
   return (
     <>
       <Router>
-        <Provider {...stores} {...services}>
-          <StylesProvider injectFirst>
-            <ThemeProvider theme={baseTheme}>
-              <SnackbarProvider
-                maxSnack={3}
-                classes={{ variantInfo: classes.snackbarInfo }}
-              >
-                {appComponent}
-                <CssBaseline />
-              </SnackbarProvider>
-            </ThemeProvider>
-          </StylesProvider>
-        </Provider>
+        <QueryParamProvider ReactRouterRoute={Route}>
+          <Provider {...stores} {...services}>
+            <StylesProvider injectFirst>
+              <ThemeProvider theme={baseTheme}>
+                <SnackbarProvider
+                  maxSnack={3}
+                  classes={{ variantInfo: classes.snackbarInfo }}
+                >
+                  {appComponent}
+                  <CssBaseline />
+                </SnackbarProvider>
+              </ThemeProvider>
+            </StylesProvider>
+          </Provider>
+        </QueryParamProvider>
       </Router>
     </>
   );
