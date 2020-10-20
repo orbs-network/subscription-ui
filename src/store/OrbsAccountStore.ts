@@ -16,6 +16,7 @@ import {
   TVirtualChainSubscriptionExtensionPayload,
   TVirtualChainSubscriptionPayload,
 } from "@orbs-network/contracts-js";
+import { TVcCreatedEvent } from "@orbs-network/contracts-js/src/ethereumContractsServices/subscriptionService/ISubscriptionsService";
 
 type TMSPContractParameters = {
   tierName: string;
@@ -35,6 +36,8 @@ export class OrbsAccountStore {
     monthlyRateInFullOrbs: 0,
     tierName: "",
   };
+
+  @observable public vcCreationEvents: TVcCreatedEvent[] = [];
 
   // TODO : O.L : Move all MSP related data to its own store when starting to work with more than 1.
   @observable public allowanceToMSPContract = 0;
@@ -112,6 +115,7 @@ export class OrbsAccountStore {
     );
 
     this.handlePromievent(
+      // @ts-ignore
       promivent,
       "setAllowanceForStakingContract"
     ).then(() =>
@@ -131,6 +135,7 @@ export class OrbsAccountStore {
       virtualChainSubscriptionPayload
     );
 
+    // @ts-ignore
     const recipt = await this.handlePromievent(promivent, "createNewVc").then(
       (val) => {
         console.log("Add handling of created vc");
@@ -160,6 +165,7 @@ export class OrbsAccountStore {
     );
 
     const recipt = await this.handlePromievent(
+      // @ts-ignore
       promivent,
       "extendExistingVcSubscription"
     ).then((val) => {
@@ -320,5 +326,10 @@ export class OrbsAccountStore {
     mspContractParameters: TMSPContractParameters
   ) {
     this.mspContractParameters = mspContractParameters;
+  }
+
+  @action("setVcCreationEvents")
+  public setVcCreationEvents(vcCreationsEvents: TVcCreatedEvent[]) {
+    this.vcCreationEvents = vcCreationsEvents;
   }
 }

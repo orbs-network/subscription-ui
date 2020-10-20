@@ -63,11 +63,9 @@ const App = observer(() => {
   const classes = useStyles();
 
   const theme = useTheme();
-  console.log(theme.palette.secondary);
   const cryptoWalletIntegrationStore = useCryptoWalletIntegrationStore();
 
   const isConnected = cryptoWalletIntegrationStore.isConnectedToWallet;
-  console.log({ isConnected });
 
   const appContent = useMemo(() => {
     if (!isConnected) {
