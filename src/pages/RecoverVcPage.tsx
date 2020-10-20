@@ -38,29 +38,33 @@ export const RecoverVCPage = observer<React.FunctionComponent<IProps>>(
       [orbsAccountStore, subscriptionsService]
     );
 
-    useEffect(() => {
-      if (!cryptoWalletIntegrationStore.mainAddress) {
-        return;
-      }
+    const readAndSetVcsAndState = useCallback(
+      async (address: string) => {
+        if (!address) {
+          return;
+        }
 
+        setIsReading(true);
+
+        try {
+          await readAndSetVcs(cryptoWalletIntegrationStore.mainAddress);
+        } catch (e) {
+          console.error(`Error while set-n-read vcs " ${e}`);
+          setHasErrors(true);
+        } finally {
+          setIsReading(false);
+        }
+      },
+      [cryptoWalletIntegrationStore.mainAddress, readAndSetVcs]
+    );
+
+    useEffect(() => {
       console.log(
         `Runn effect for ${cryptoWalletIntegrationStore.mainAddress}`
       );
 
-      const readNSet = async () => {
-        await readAndSetVcs(cryptoWalletIntegrationStore.mainAddress);
-      };
-
-      setIsReading(true);
-
-      readNSet()
-        .then()
-        .catch((e) => {
-          console.error(`Error while set-n-read vcs " ${e}`);
-          setHasErrors(true);
-        })
-        .finally(() => setIsReading(false));
-    }, [cryptoWalletIntegrationStore.mainAddress, readAndSetVcs]);
+      readAndSetVcsAndState(cryptoWalletIntegrationStore.mainAddress);
+    }, [cryptoWalletIntegrationStore.mainAddress, readAndSetVcsAndState]);
 
     if (isReading) {
       return (
@@ -79,7 +83,7 @@ export const RecoverVCPage = observer<React.FunctionComponent<IProps>>(
           <ActionButton
             onClick={() => {
               console.log("Re reading");
-              readAndSetVcs(cryptoWalletIntegrationStore.mainAddress);
+              readAndSetVcsAndState(cryptoWalletIntegrationStore.mainAddress);
             }}
           >
             Reload VC's
@@ -111,7 +115,7 @@ export const RecoverVCPage = observer<React.FunctionComponent<IProps>>(
         <ActionButton
           onClick={() => {
             console.log("Re reading");
-            readAndSetVcs(cryptoWalletIntegrationStore.mainAddress);
+            readAndSetVcsAndState(cryptoWalletIntegrationStore.mainAddress);
           }}
         >
           Reload VC's
