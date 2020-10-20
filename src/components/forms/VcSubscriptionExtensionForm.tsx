@@ -174,6 +174,8 @@ export const VcSubscriptionExtensionForm = React.memo<IProps>((props) => {
         </option>
       </TextField>
 
+      <br />
+      <br />
       <Typography
         className={classes.phaseInstructionLabel}
         variant={"body1"}

@@ -148,6 +148,8 @@ export const ExistingVCPage = observer<React.FunctionComponent<IProps>>(
               vcId={vcData.id}
               deploymentSubset={vcData.deploymentSubset}
             />
+            <br />
+            <br />
             {isOwnerOfVc && (
               <VcSubscriptionExtensionForm
                 monthlyRateInFullOrbs={
