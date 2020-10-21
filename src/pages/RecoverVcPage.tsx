@@ -59,12 +59,21 @@ export const RecoverVCPage = observer<React.FunctionComponent<IProps>>(
     );
 
     useEffect(() => {
+      // DEV_NOTE : Prevent re-seraching after already has data.
+      if (orbsAccountStore.vcCreationEvents.length) {
+        return;
+      }
+
       console.log(
         `Runn effect for ${cryptoWalletIntegrationStore.mainAddress}`
       );
 
       readAndSetVcsAndState(cryptoWalletIntegrationStore.mainAddress);
-    }, [cryptoWalletIntegrationStore.mainAddress, readAndSetVcsAndState]);
+    }, [
+      cryptoWalletIntegrationStore.mainAddress,
+      orbsAccountStore.vcCreationEvents.length,
+      readAndSetVcsAndState,
+    ]);
 
     if (isReading) {
       return (
