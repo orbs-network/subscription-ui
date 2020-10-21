@@ -16,7 +16,10 @@ import {
   TVirtualChainSubscriptionExtensionPayload,
   TVirtualChainSubscriptionPayload,
 } from "@orbs-network/contracts-js";
-import { TVcCreatedEvent } from "@orbs-network/contracts-js/src/ethereumContractsServices/subscriptionService/ISubscriptionsService";
+import {
+  TReadVcDataResponse,
+  TVcCreatedEvent,
+} from "@orbs-network/contracts-js/src/ethereumContractsServices/subscriptionService/ISubscriptionsService";
 
 type TMSPContractParameters = {
   tierName: string;
@@ -38,6 +41,10 @@ export class OrbsAccountStore {
   };
 
   @observable public vcCreationEvents: TVcCreatedEvent[] = [];
+  @observable public vcIdToData: Map<
+    String,
+    TReadVcDataResponse
+  > = observable.map();
 
   // TODO : O.L : Move all MSP related data to its own store when starting to work with more than 1.
   @observable public allowanceToMSPContract = 0;
@@ -256,6 +263,23 @@ export class OrbsAccountStore {
     );
   }
 
+  private async readDataForAllCreatedVcs() {
+    for (let vcCreatedEvent of this.vcCreationEvents) {
+      try {
+        const vcData = await this.subscriptionsService.readVcData(
+          vcCreatedEvent.vcId
+        );
+
+        console.log(`Setting for ${vcCreatedEvent.vcId}`);
+        this.setVcDataInMap(vcCreatedEvent.vcId, vcData);
+      } catch (e) {
+        console.error(
+          `Error trying reading vc data for ${vcCreatedEvent.vcId} : ${e}`
+        );
+      }
+    }
+  }
+
   // ****  Subscriptions ****
 
   private async refreshAccountListeners(accountAddress: string) {
@@ -265,6 +289,14 @@ export class OrbsAccountStore {
   private cancelAllCurrentSubscriptions() {}
 
   // ****  Complex setters ****
+  public setVcCreationEventsAndUpdateVcsData(
+    vcCreationsEvents: TVcCreatedEvent[]
+  ) {
+    this.setVcCreationEvents(vcCreationsEvents);
+
+    this.readDataForAllCreatedVcs();
+  }
+
   private failLoadingProcess(error: Error) {
     this.setErrorLoading(true);
     this.setDoneLoading(true);
@@ -329,7 +361,15 @@ export class OrbsAccountStore {
   }
 
   @action("setVcCreationEvents")
-  public setVcCreationEvents(vcCreationsEvents: TVcCreatedEvent[]) {
+  private setVcCreationEvents(vcCreationsEvents: TVcCreatedEvent[]) {
     this.vcCreationEvents = vcCreationsEvents;
+  }
+
+  @action("setVcDataInMap")
+  private setVcDataInMap(
+    vcId: string,
+    readVcDataResponse: TReadVcDataResponse
+  ) {
+    this.vcIdToData.set(vcId, readVcDataResponse);
   }
 }

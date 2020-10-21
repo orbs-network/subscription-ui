@@ -35,11 +35,9 @@ export const ExistingVCPage = observer<React.FunctionComponent<IProps>>(
 
     const [vcId, setVcId] = useQueryParam("vcId", StringParam);
     const vcIdToUse = vcId || "";
-    console.log({ vcIdToUse });
+
     const { vcData, errorFindingVc, isLoading } = useVcDataHook(vcIdToUse);
-    // console.log({ errorFindingVc });
-    // console.log({ isLoading });
-    // console.log({ vcData });
+
     const history = useHistory();
     const theme = useTheme();
 
@@ -109,7 +107,6 @@ export const ExistingVCPage = observer<React.FunctionComponent<IProps>>(
       [enqueueSnackbar, history, orbsAccountStore, vcId, vcIdToUse]
     );
 
-    console.log({ vcId });
     const showSelectVcForm = vcIdToUse.length === 0;
 
     const isOwnerOfVc =

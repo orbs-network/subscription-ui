@@ -10,8 +10,22 @@ import { ActionButton } from "../components/ActionButton/ActionButton";
 import { InTextLink } from "../components/InTextLink";
 import { ROUTES } from "../constants/routes";
 import { Typography } from "@material-ui/core";
+import { VcGistCard } from "../components/VcGistCard/VcGistCard";
+import { TReadVcDataResponse } from "@orbs-network/contracts-js";
+import { useHistory } from "react-router-dom";
 
 interface IProps {}
+
+const NO_DATA_VC_RESPONSE: TReadVcDataResponse = {
+  tier: "",
+  rate: "",
+  genRefTime: "",
+  isCertified: false,
+  owner: "",
+  deploymentSubset: "",
+  expiresAt: "",
+  name: "",
+};
 
 export const RecoverVCPage = observer<React.FunctionComponent<IProps>>(
   (props) => {
@@ -23,6 +37,15 @@ export const RecoverVCPage = observer<React.FunctionComponent<IProps>>(
     const [isReading, setIsReading] = useState(false);
     const hasAnyVcs = orbsAccountStore.vcCreationEvents.length > 0;
 
+    const history = useHistory();
+
+    const onOpenPageClick = useCallback(
+      (vcId: string) => {
+        history.push(`${ROUTES.existingVc}?vcId=${vcId}`);
+      },
+      [history]
+    );
+
     const readAndSetVcs = useCallback(
       async (address: string) => {
         console.log(`Looking for vcs for ${address}`);
@@ -33,7 +56,7 @@ export const RecoverVCPage = observer<React.FunctionComponent<IProps>>(
 
         console.log({ createdVcs });
 
-        orbsAccountStore.setVcCreationEvents(createdVcs);
+        orbsAccountStore.setVcCreationEventsAndUpdateVcsData(createdVcs);
       },
       [orbsAccountStore, subscriptionsService]
     );
@@ -102,26 +125,22 @@ export const RecoverVCPage = observer<React.FunctionComponent<IProps>>(
     }
 
     return (
-      <Page>
-        Recover VC Page
+      <Page
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant={"h2"}>Recover VC Page</Typography>
         <br />
-        Found {orbsAccountStore.vcCreationEvents.length} vcs created by you
-        <br />
-        <br />
-        {orbsAccountStore.vcCreationEvents.map((vcCreationEvent) => (
-          <React.Fragment key={vcCreationEvent.vcId}>
-            <br />
-            <InTextLink
-              target={"default"}
-              text={vcCreationEvent.vcId}
-              href={`${ROUTES.existingVc}?vcId=${vcCreationEvent.vcId}`}
-            />
-            <br />
-          </React.Fragment>
-        ))}
+        <Typography variant={"h4"}>
+          Found {orbsAccountStore.vcCreationEvents.length} vcs created by you
+        </Typography>
         <br />
         <br />
         <ActionButton
+          fullWidth={false}
           onClick={() => {
             console.log("Re reading");
             readAndSetVcsAndState(cryptoWalletIntegrationStore.mainAddress);
@@ -129,6 +148,29 @@ export const RecoverVCPage = observer<React.FunctionComponent<IProps>>(
         >
           Reload VC's
         </ActionButton>
+        <br />
+        {orbsAccountStore.vcCreationEvents.map((vcCreationEvent) => {
+          const vcData = orbsAccountStore.vcIdToData.get(vcCreationEvent.vcId);
+
+          return (
+            <React.Fragment key={vcCreationEvent.vcId}>
+              <br />
+              {/*<InTextLink*/}
+              {/*  target={"default"}*/}
+              {/*  text={text}*/}
+              {/*  href={`${ROUTES.existingVc}?vcId=${vcCreationEvent.vcId}`}*/}
+              {/*/>*/}
+              <VcGistCard
+                vcId={vcCreationEvent.vcId}
+                vcData={vcData || NO_DATA_VC_RESPONSE}
+                onOpenPageClick={onOpenPageClick}
+              />
+              <br />
+            </React.Fragment>
+          );
+        })}
+        <br />
+        <br />
       </Page>
     );
   }

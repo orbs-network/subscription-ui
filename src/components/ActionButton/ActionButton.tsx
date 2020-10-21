@@ -15,14 +15,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export const ActionButton = React.memo<IProps & ButtonProps>((props) => {
-  const { children, ...rest } = props;
+  const { children, fullWidth, ...rest } = props;
   const classes = useStyles();
 
   return (
     <Button
       className={classes.actionButton}
       variant={"outlined"}
-      fullWidth
+      fullWidth={fullWidth === undefined ? true : fullWidth}
       type={"submit"}
       {...rest}
     >
