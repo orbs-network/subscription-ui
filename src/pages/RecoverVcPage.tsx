@@ -10,7 +10,10 @@ import { ActionButton } from "../components/ActionButton/ActionButton";
 import { InTextLink } from "../components/InTextLink";
 import { ROUTES } from "../constants/routes";
 import { Typography } from "@material-ui/core";
-import { VcGistCard } from "../components/VcGistCard/VcGistCard";
+import {
+  VC_GIST_CARD_WIDTH_REM,
+  VcGistCard,
+} from "../components/VcGistCard/VcGistCard";
 import { TReadVcDataResponse } from "@orbs-network/contracts-js";
 import { useHistory } from "react-router-dom";
 
@@ -125,13 +128,7 @@ export const RecoverVCPage = observer<React.FunctionComponent<IProps>>(
     }
 
     return (
-      <Page
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
+      <Page style={{}}>
         <Typography variant={"h2"}>Recover VC Page</Typography>
         <br />
         <Typography variant={"h4"}>
@@ -149,26 +146,40 @@ export const RecoverVCPage = observer<React.FunctionComponent<IProps>>(
           Reload VC's
         </ActionButton>
         <br />
-        {orbsAccountStore.vcCreationEvents.map((vcCreationEvent) => {
-          const vcData = orbsAccountStore.vcIdToData.get(vcCreationEvent.vcId);
 
-          return (
-            <React.Fragment key={vcCreationEvent.vcId}>
-              <br />
-              {/*<InTextLink*/}
-              {/*  target={"default"}*/}
-              {/*  text={text}*/}
-              {/*  href={`${ROUTES.existingVc}?vcId=${vcCreationEvent.vcId}`}*/}
-              {/*/>*/}
+        <div
+          style={{
+            display: "grid",
+            width: `${VC_GIST_CARD_WIDTH_REM * 2 + 2}rem`,
+            maxWidth: "100%",
+            gridTemplateColumns: "repeat(auto-fill, minmax(15rem, 1fr))",
+            gridGap: "1rem",
+            justifyItems: "center",
+          }}
+        >
+          {orbsAccountStore.vcCreationEvents.map((vcCreationEvent) => {
+            const vcData = orbsAccountStore.vcIdToData.get(
+              vcCreationEvent.vcId
+            );
+
+            return (
+              // <div
+              //   key={vcCreationEvent.vcId}
+              //   style={{
+              //     alignItems: "center",
+              //     display: "flex",
+              //     flexDirection: "column",
+              //   }}
+              // >
               <VcGistCard
                 vcId={vcCreationEvent.vcId}
                 vcData={vcData || NO_DATA_VC_RESPONSE}
                 onOpenPageClick={onOpenPageClick}
               />
-              <br />
-            </React.Fragment>
-          );
-        })}
+              // </div>
+            );
+          })}
+        </div>
         <br />
         <br />
       </Page>

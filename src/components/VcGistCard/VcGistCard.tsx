@@ -3,7 +3,8 @@ import { Card, CardActions, CardContent, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { ActionButton } from "../ActionButton/ActionButton";
 import { TReadVcDataResponse } from "@orbs-network/contracts-js/src/ethereumContractsServices/subscriptionService/ISubscriptionsService";
-import { ROUTES } from "../../constants/routes";
+
+export const VC_GIST_CARD_WIDTH_REM = 15;
 
 interface IProps {
   vcId: string;
@@ -14,7 +15,7 @@ interface IProps {
 const useStyles = makeStyles({
   root: {
     // minWidth: 275,
-    width: "15rem",
+    width: `${VC_GIST_CARD_WIDTH_REM}rem`,
     maxWidth: "100%",
   },
   bullet: {
