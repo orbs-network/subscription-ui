@@ -6,6 +6,7 @@ import { TReadVcDataResponse } from "@orbs-network/contracts-js/src/ethereumCont
 import useHover from "@react-hook/hover";
 import useTheme from "@material-ui/core/styles/useTheme";
 import Color from "color";
+import { fullOrbsFromWeiOrbs } from "../../cryptoUtils/unitConverter";
 
 export const VC_GIST_CARD_WIDTH_REM = 15;
 
@@ -79,11 +80,76 @@ export const VcGistCard = React.memo<IProps>((props) => {
         >
           {vcData.name}
         </Typography>
+        {/* TODO : O.L : Add color warning to soon-to-be expired chains */}
         <Typography
+          variant={"caption"}
           className={classes.pos}
           style={{ color: secondaryDarkOrTextSecondary }}
         >
-          {vcData.expiresAt}
+          <Typography
+            variant={"caption"}
+            component={"span"}
+            style={{ fontWeight: "bold" }}
+          >
+            Paid until :{" "}
+          </Typography>{" "}
+          {new Date(parseInt(vcData.expiresAt) * 1000).toLocaleString(
+            undefined,
+            { year: "numeric", month: "long", day: "numeric" }
+          )}
+        </Typography>
+        <br />
+        <Typography
+          variant={"caption"}
+          className={classes.pos}
+          style={{ color: secondaryDarkOrTextSecondary, fontWeight: "bold" }}
+        >
+          {vcData.isCertified ? "Certified" : "Not certified"}
+        </Typography>
+        <br />
+        <Typography
+          variant={"caption"}
+          className={classes.pos}
+          style={{ color: secondaryDarkOrTextSecondary }}
+        >
+          <Typography
+            variant={"caption"}
+            component={"span"}
+            style={{ fontWeight: "bold" }}
+          >
+            Deployment subset :{" "}
+          </Typography>{" "}
+          {vcData.deploymentSubset}
+        </Typography>
+        <br />
+        <Typography
+          variant={"caption"}
+          className={classes.pos}
+          style={{ color: secondaryDarkOrTextSecondary }}
+        >
+          <Typography
+            variant={"caption"}
+            component={"span"}
+            style={{ fontWeight: "bold" }}
+          >
+            rate :{" "}
+          </Typography>
+          {fullOrbsFromWeiOrbs(vcData.rate)} ORBS / Month
+        </Typography>
+        <br />
+        <Typography
+          variant={"caption"}
+          className={classes.pos}
+          style={{ color: secondaryDarkOrTextSecondary }}
+        >
+          <Typography
+            variant={"caption"}
+            component={"span"}
+            style={{ fontWeight: "bold" }}
+          >
+            tier :{" "}
+          </Typography>
+          {vcData.tier}
         </Typography>
         {/*<Typography variant="body2" component="p">*/}
         {/*  well meaning and kindly.*/}
@@ -91,8 +157,12 @@ export const VcGistCard = React.memo<IProps>((props) => {
         {/*  {'"a benevolent smile"'}*/}
         {/*</Typography>*/}
       </CardContent>
-      <CardActions>
-        <ActionButton size="small" onClick={() => onOpenPageClick(vcId)}>
+      <CardActions style={{ marginTop: "auto" }}>
+        <ActionButton
+          style={{ marginTop: "auto" }}
+          size="small"
+          onClick={() => onOpenPageClick(vcId)}
+        >
           Open VC page
         </ActionButton>
       </CardActions>
