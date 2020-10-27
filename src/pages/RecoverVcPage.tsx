@@ -172,6 +172,7 @@ export const RecoverVCPage = observer<React.FunctionComponent<IProps>>(
               //   }}
               // >
               <VcGistCard
+                key={vcCreationEvent.vcId}
                 vcId={vcCreationEvent.vcId}
                 vcData={vcData || NO_DATA_VC_RESPONSE}
                 onOpenPageClick={onOpenPageClick}
