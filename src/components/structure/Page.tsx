@@ -6,10 +6,15 @@ interface IProps {}
 const useStyles = makeStyles((theme) => ({
   page: {
     height: "100%",
-    width: "fit-content",
+    // width: "fit-content",
+    width: "60rem",
     maxWidth: "100%",
     boxSizing: "border-box",
     paddingBottom: "2em",
+
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
   },
 }));
 

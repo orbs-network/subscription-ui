@@ -27,6 +27,9 @@ interface IProps {
   // Form parameters
   monthlyRateInFullOrbs: number;
 
+  // Form options
+  subscriptionsLengthsOptions: number[];
+
   // Orbs account
   allowanceToMSPContract: number;
 
@@ -94,6 +97,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
     disableActionButtons,
     allowanceToMSPContract,
     setMSPContractAllowance,
+    subscriptionsLengthsOptions,
   } = props;
 
   const { monthlyRateInFullOrbs } = props;
@@ -197,10 +201,12 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
         fullWidth
         className={classes.textField}
       >
-        {/* TODO : Add proper dynamic values when dealing with the real contract */}
-        <option value={1}>1 month - {monthlyRateInFullOrbs * 1} ORBS</option>
-        <option value={3}>3 months - {monthlyRateInFullOrbs * 3} ORBS</option>
-        <option value={6}>6 months - {monthlyRateInFullOrbs * 6} ORBS</option>
+        {subscriptionsLengthsOptions.map((lengthOption) => (
+          <option value={lengthOption} key={lengthOption}>
+            {lengthOption} month{lengthOption !== 1 ? "s" : ""} -{" "}
+            {monthlyRateInFullOrbs * lengthOption} ORBS
+          </option>
+        ))}
       </TextField>
       <br />
       <br />
