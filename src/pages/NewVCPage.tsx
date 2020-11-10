@@ -123,6 +123,7 @@ export const NewVCPage = observer<React.FunctionComponent<IProps>>((props) => {
           monthlyRateInFullOrbs={
             orbsAccountStore.mspContractParameters.monthlyRateInFullOrbs
           }
+          subscriptionsLengthsOptions={[6, 12, 18]}
           disableActionButtons={orbsAccountStore.txPending}
         />
         <ActionConfirmationModal
