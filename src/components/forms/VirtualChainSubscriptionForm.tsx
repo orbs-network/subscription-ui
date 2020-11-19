@@ -204,7 +204,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
         {subscriptionsLengthsOptions.map((lengthOption) => (
           <option value={lengthOption} key={lengthOption}>
             {lengthOption} month{lengthOption !== 1 ? "s" : ""} -{" "}
-            {monthlyRateInFullOrbs * lengthOption} ORBS
+            {(monthlyRateInFullOrbs * lengthOption).toLocaleString()} ORBS
           </option>
         ))}
       </TextField>
