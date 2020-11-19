@@ -164,13 +164,16 @@ export const VcSubscriptionExtensionForm = React.memo<IProps>((props) => {
       >
         {/* TODO : Add proper dynamic values when dealing with the real contract */}
         <option value={1}>
-          1 month extension - {monthlyRateInFullOrbs * 1} ORBS
+          1 month extension - {(monthlyRateInFullOrbs * 1).toLocaleString()}{" "}
+          ORBS
         </option>
         <option value={3}>
-          3 months extension - {monthlyRateInFullOrbs * 3} ORBS
+          3 months extension - {(monthlyRateInFullOrbs * 3).toLocaleString()}{" "}
+          ORBS
         </option>
         <option value={6}>
-          6 months extension - {monthlyRateInFullOrbs * 6} ORBS
+          6 months extension - {(monthlyRateInFullOrbs * 6).toLocaleString()}{" "}
+          ORBS
         </option>
       </TextField>
 

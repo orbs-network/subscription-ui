@@ -98,9 +98,8 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
     allowanceToMSPContract,
     setMSPContractAllowance,
     subscriptionsLengthsOptions,
+    monthlyRateInFullOrbs,
   } = props;
-
-  const { monthlyRateInFullOrbs } = props;
 
   // TODO : O.L : Move this and provide as prop.
   const { enqueueSnackbar } = useSnackbar();
@@ -109,13 +108,14 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
   const [name, setName] = useState<string>("");
   const [monthsToPayForInAdvance, setMonthsToPayForInAdvance] = useState<
     number
-  >(1);
+  >(subscriptionsLengthsOptions[0]);
   const [runOnCertifiedOnly, setRunOnCertifiedOnly] = useState<boolean>(false);
   const [runOnCanary, setRunOnCanary] = useState<boolean>(false);
 
   const { register, handleSubmit, errors } = useForm<TFormData>();
 
   const currentCostOfPlan = monthsToPayForInAdvance * monthlyRateInFullOrbs;
+  console.log({ currentCostOfPlan });
   const hasEnoughAllowance = allowanceToMSPContract >= currentCostOfPlan;
 
   const submit = useCallback(
