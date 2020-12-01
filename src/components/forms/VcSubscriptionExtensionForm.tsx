@@ -209,7 +209,7 @@ export const VcSubscriptionExtensionForm = React.memo<IProps>((props) => {
         variant={"body1"}
         color={"secondary"}
       >
-        3) Extend your subscription
+        3) Extend VC subscription
       </Typography>
       <Button
         className={classes.actionButton}
