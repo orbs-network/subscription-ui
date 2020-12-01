@@ -129,7 +129,7 @@ export const RecoverVCPage = observer<React.FunctionComponent<IProps>>(
 
     return (
       <Page style={{}}>
-        <Typography variant={"h2"}>Recover VC Page</Typography>
+        <Typography variant={"h2"}>Your VCs</Typography>
         <br />
         <Typography variant={"h4"}>
           Found {orbsAccountStore.vcCreationEvents.length} vcs created by you

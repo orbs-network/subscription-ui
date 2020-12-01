@@ -250,7 +250,7 @@ export const VirtualChainSubscriptionForm = React.memo<IProps>((props) => {
         label={
           <LabelWithIconTooltip
             text={"Run unstable early releases"}
-            tooltipText={""}
+            tooltipText={"Canary virtual chains run the unstable early releases that includes the latest features and fixes. The unstable early releases is useful for protocol and application developers that want to experience the latest release"}
           />
         }
       />

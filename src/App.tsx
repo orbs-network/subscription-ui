@@ -82,7 +82,7 @@ const App = observer(() => {
         <Switch>
           <Route exact path={ROUTES.newVc} component={NewVCPage} />
           <Route exact path={ROUTES.existingVc} component={ExistingVCPage} />
-          <Route exact path={ROUTES.recoverVc} component={RecoverVCPage} />
+          <Route exact path={ROUTES.ownVcs} component={RecoverVCPage} />
           <Route
             path={`${ROUTES.vcCreated}/:vcId`}
             component={VcCreationSuccessPage}
