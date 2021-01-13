@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import {ROUTES} from '../../../constants/routes';
+import { ROUTES } from "../../../constants/routes";
 
 const links = [
   { translationKey: "New Virtual Chain", url: "/new_vc" },
