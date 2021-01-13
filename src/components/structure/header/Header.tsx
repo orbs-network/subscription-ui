@@ -36,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.drawer + 1,
     // padding: `${theme.spacing(2)}px ${theme.spacing(8)}px`,
     padding: theme.spacing(1),
+    backgroundColor: theme.palette.background.default,
   },
   logo: {
     width: 70,
@@ -119,11 +120,19 @@ export const Header = React.memo((props) => {
   return (
     <AppBar position="fixed" data-testid="header" className={classes.appBar}>
       <Toolbar className={classes.toolbar}>
-        <NavLink to="/">
+        <NavLink to="/" style={{ position: "absolute" }}>
           <img className={classes.logo} src={logo} alt="Orbs" />
         </NavLink>
-        {/*<Typography variant={"h4"}>VC Console</Typography>*/}
-        {menu}
+        <Typography
+          variant={"h4"}
+          style={{
+            marginRight: "auto",
+            marginLeft: "auto",
+          }}
+        >
+          VC Console
+        </Typography>
+        {/*{menu}*/}
       </Toolbar>
     </AppBar>
   );
